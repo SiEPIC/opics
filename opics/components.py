@@ -117,11 +117,13 @@ class componentModel:
             _, i, j = each_port.split('_')
             if(scale == "log"):
                 plt.plot(x_data,10*np.log10(np.square(np.abs(self.s_[:,int(i),int(j)]))))
-                plt.ylabel('dB')
+                plt.ylabel('Transmission (dB)')
             elif(scale=="abs"):
                 plt.plot(x_data, np.abs(self.s_[:,int(i),int(j)]))
+                plt.ylabel('Transmission (normalized)')
             elif(scale=="abs_sq"):
                 plt.plot(x_data, np.square(np.abs(self.s_[:,int(i),int(j)])))
+                plt.ylabel('Transmission (normalized^2)')
         plt.xlabel(xlabel)
         plt.xlim(left=np.min(x_data), right=np.max(x_data))
         plt.tight_layout()
