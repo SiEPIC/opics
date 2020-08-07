@@ -5,9 +5,11 @@ Credits
 Development Lead
 ----------------
 
-* Mustafa Hammood <mustafa@siepic.com>
+* Jaspreet Jhoja <jaspreet@siepic.com>
 
 Contributors
 ------------
 
-None yet. Why not be the first?
+* Stephen Lin <slin@siepic.com>
+* Mustafa Hammood <mustafa@siepic.com>
+
