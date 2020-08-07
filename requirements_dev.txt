@@ -10,3 +10,5 @@ twine==1.14.0
 Click==7.0
 pytest==4.6.5
 pytest-runner==5.1
+numpy>=1.18.5
+scipy>=1.4.1
