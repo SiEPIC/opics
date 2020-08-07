@@ -20,7 +20,7 @@ OPICS
 
 
 
-Open-source frequency domain solver for photonic integrated circuits.
+OPICS (Open Photonic Integrated Circuits Solver) is an Open-source frequency domain solver for simulating photonic integrated circuits.
 
 
 * Free software: MIT license
@@ -30,12 +30,20 @@ Open-source frequency domain solver for photonic integrated circuits.
 Features
 --------
 
-* TODO
+* Add S-parameters export method for a sub-circuit made in OPICS
 
-Credits
+Citing
 -------
 
-This package was created with Cookiecutter_ and the `audreyr/cookiecutter-pypackage`_ project template.
+`OPICS` is written by Jaspreet Jhoja. You can cite the package as
 
-.. _Cookiecutter: https://github.com/audreyr/cookiecutter
-.. _`audreyr/cookiecutter-pypackage`: https://github.com/audreyr/cookiecutter-pypackage
+```
+@misc{jhoja-2020-opics,
+  author = {Jaspreet Jhoja},
+  title = {OPICS: An Open Photonic Integrated Circuit Solver},
+  year = {2020},
+  publisher = {GitHub},
+  journal = {GitHub repository},
+  howpublished = {\url{https://github.com/SiEPIC-Kits/OPICS}}
+}
+```
