@@ -3,10 +3,11 @@ OPICS
 =====
 
 
+
 .. image:: https://img.shields.io/pypi/v/opics.svg
         :target: https://pypi.python.org/pypi/opics
 
-.. image:: https://img.shields.io/travis/mustafacc/opics.svg
+.. image:: https://img.shields.io/travis/siepic/opics.svg
         :target: https://travis-ci.com/mustafacc/opics
 
 .. image:: https://readthedocs.org/projects/opics/badge/?version=latest
@@ -14,11 +15,14 @@ OPICS
         :alt: Documentation Status
 
 
-.. image:: https://pyup.io/repos/github/mustafacc/opics/shield.svg
+.. image:: https://pyup.io/repos/github/siepic/opics/shield.svg
      :target: https://pyup.io/repos/github/mustafacc/opics/
      :alt: Updates
 
 
+
+.. image:: docs/api_logo.png
+		:target: https://www.aperturephotonics.com/
 
 OPICS (Open Photonic Integrated Circuits Solver) is an Open-source frequency domain solver for simulating photonic integrated circuits.
 

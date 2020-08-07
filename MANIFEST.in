@@ -3,6 +3,7 @@ include CONTRIBUTING.rst
 include HISTORY.rst
 include LICENSE
 include README.rst
+recursive-include *.png
 recursive-include opics *.sparam *.npz *.xml *.txt
 
 
