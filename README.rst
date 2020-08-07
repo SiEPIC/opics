@@ -37,13 +37,13 @@ Citing
 
 `OPICS` is written by Jaspreet Jhoja. You can cite the package as
 
-```
-@misc{jhoja-2020-opics,
-  author = {Jaspreet Jhoja},
-  title = {OPICS: An Open Photonic Integrated Circuit Solver},
-  year = {2020},
-  publisher = {GitHub},
-  journal = {GitHub repository},
-  howpublished = {\url{https://github.com/SiEPIC-Kits/OPICS}}
-}
-```
+
+	@misc{jhoja-2020-opics,
+	author = {Jaspreet Jhoja},
+	title = {OPICS: An Open Photonic Integrated Circuit Solver},
+	year = {2020},
+	publisher = {GitHub},
+	journal = {GitHub repository},
+	howpublished = {\url{https://github.com/SiEPIC/OPICS}}
+	}
+
