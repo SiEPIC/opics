@@ -1,6 +1,4 @@
-# OPICS [![](https://img.shields.io/pypi/v/opics.svg)](https://pypi.python.org/pypi/opics)
-
-
+# OPICS [![](https://img.shields.io/pypi/v/opics.svg)](https://pypi.python.org/pypi/opics) [![](https://img.shields.io/travis/siepic/opics.svg)](https://travis-ci.com/mustafacc/opics) [![Documentation Status](https://readthedocs.org/projects/opics/badge/?version=latest)](https://opics.readthedocs.io/en/latest/?badge=latest)
 
 <img src="/docs/opics_logo.svg" title="opics" alt="opics">
 
