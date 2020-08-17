@@ -1,6 +1,8 @@
 OPICS |image1| |image2| |Documentation Status|
 ==============================================
 
+|opics_logo|
+
 Open Photonic Integrated Circuit Simulator (OPICS)
 ==================================================
 
@@ -73,3 +75,5 @@ Citing
    :target: https://travis-ci.com/mustafacc/opics
 .. |Documentation Status| image:: https://readthedocs.org/projects/opics/badge/?version=latest
    :target: https://opics.readthedocs.io/en/latest/?badge=latest
+
+.. |opics_logo| image:: /docs/opics_logo.svg
