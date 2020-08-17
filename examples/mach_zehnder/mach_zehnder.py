@@ -1,30 +1,30 @@
-from opics.library import libraries
-from opics.network import Network
-from opics.globals import c_ as c
 import time, warnings
 import numpy as np
 import matplotlib.pyplot as plt
+from opics import c_ as c
+from opics import Network
+import opics
 
 warnings.filterwarnings('ignore') #ignore all/complex number warnings from numpy or scipy
 sim_start = time.time()
+
 
 #define frequency range and resolution
 freq = np.linspace(c*1e6/1.5, c*1e6/1.6, 2000)
 
 #import component library
-library = libraries['ebeam']
-library_components = library['components']
+ebeam = opics.libs.ebeam
 
 #initialize an empty circuit
 circuit = Network()
 
 #define component instances
-gc_  = circuit.add_component(library_components['GC'](freq))
-y_ =   circuit.add_component(library_components['Y'](freq))
-wg2 =  circuit.add_component(library_components['Waveguide'](freq, 150e-6))
-wg1 =  circuit.add_component(library_components['Waveguide'](freq, 50e-6))
-y2_ =  circuit.add_component(library_components['Y'](freq))
-gc2_ = circuit.add_component(library_components['GC'](freq))
+gc_  = circuit.add_component(ebeam.GC(freq))
+y_ =   circuit.add_component(ebeam.Y(freq))
+wg2 =  circuit.add_component(ebeam.Waveguide(freq, 150e-6))
+wg1 =  circuit.add_component(ebeam.Waveguide(freq, 50e-6))
+y2_ =  circuit.add_component(ebeam.Y(freq))
+gc2_ = circuit.add_component(ebeam.GC(freq))
 
 #define circuit connectivity
 circuit.connect(gc_, 1, y_, 0)
