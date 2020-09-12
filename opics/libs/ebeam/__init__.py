@@ -4,13 +4,12 @@ from pathlib import Path
 from copy import deepcopy
 datadir =  Path(str(Path(__file__).parent)) / "data"
 
-
 class BDC(componentModel):
     cls_attrs = {"height":0, "width":0}
     valid_OID = [1]
     ports = 4
     def __init__(self, f_, height = 220e-9, width = 500e-9, OID = 1):
-        data_folder=datadir
+        data_folder=datadir / "bdc_TE_source"
         filename="bdc_lookup_table.xml"
 
         LUT_attrs_ = deepcopy(self.cls_attrs)
@@ -23,8 +22,7 @@ class BDC(componentModel):
             self.s_ = np.zeros((self.f_.shape[0], self.ports, self.ports))
         self.componentID = "Ebeam_BDC"
 
-
-class DC(componentModel):
+class DC_temp(componentModel):
     cls_attrs = {"Lc":0}
     valid_OID = [1]
     ports = 4
@@ -40,7 +38,6 @@ class DC(componentModel):
         else:
             self.s_ = np.zeros((self.f_.shape[0], self.ports, self.ports))
         self.componentID = "Ebeam_DC"
-
 
 class DC_halfring(componentModel):
     cls_attrs = {"CoupleLength" : 0, "gap" : 100e-9, "radius" : 5e-6, "thickness" : 220e-9, "width" : 500e-9}

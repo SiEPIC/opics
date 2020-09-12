@@ -1,7 +1,6 @@
-from opics.library import libraries
-from opics.network import Network
-from opics.globals import c_ as c
-import time, warnings
+from opics import c_ as c
+from opics import Network
+import opics, time, warnings
 import numpy as np
 import matplotlib.pyplot as plt
 
@@ -11,11 +10,10 @@ warnings.filterwarnings('ignore')
 freq = np.linspace(c*1e6/1.5, c*1e6/1.6, 2000)
 
 #import component library
-library = libraries['ebeam']
-data_folder = library['datafolder']
-library_components = library['components']
+library = opics.libs.ebeam
 
-power_values = [ 0, 3e-3, 9e-3, 12e-3];
+power_values = [ 0, 3e-3, 9e-3, 12e-3]
+
 for power_sweep in power_values:
     sim_start = time.time()
 
@@ -23,12 +21,12 @@ for power_sweep in power_values:
     circuit = Network()
 
     #define component instances
-    gc_  = circuit.add_component(library_components['GC'](freq))
-    y_ =   circuit.add_component(library_components['Y'](freq))
-    wg2 =  circuit.add_component(library_components['TunableWG'](freq, 150e-6, power_sweep))
-    wg1 =  circuit.add_component(library_components['Waveguide'](freq, 50e-6))
-    y2_ =  circuit.add_component(library_components['Y'](freq))
-    gc2_ = circuit.add_component(library_components['GC'](freq))
+    gc_  = circuit.add_component(library.GC(freq))
+    y_ =   circuit.add_component(library.Y(freq))
+    wg2 =  circuit.add_component(library.TunableWG(freq, 150e-6, power_sweep))
+    wg1 =  circuit.add_component(library.Waveguide(freq, 50e-6))
+    y2_ =  circuit.add_component(library.Y(freq))
+    gc2_ = circuit.add_component(library.GC(freq))
 
     #connect components
     circuit.connect(gc_, 1, y_, 0)

@@ -53,6 +53,20 @@ class componentModel:
         func = interp1d(source_f, source_s, kind='cubic', axis=0)
         return func(target_f)
 
+    def write_sparameters(self, dirpath, filename, f_data, s_data):
+        with open(dirpath/filename, 'w') as datafile_id:
+            datalen = s_data.shape[0]
+
+            for i in range(s_data.shape[1]):
+                for j in range(s_data.shape[2]):
+                    datafile_id.write("('port %d','TE',1,'port %d',1,'transmission')\n"%(i,j))
+                    datafile_id.write("(%d,3)\n"%(datalen))
+
+                    temp_data = s_data[:,i,j]
+                    data = np.array([f_data, temp_data.real, temp_data.imag])
+                    data = data.T
+                    np.savetxt(datafile_id, data, fmt=['%d','%f', '%f'])
+
     def get_data(self,ports=None, xscale="freq", yscale = "log"):
         """
         get data for specific [input,output] port combinations

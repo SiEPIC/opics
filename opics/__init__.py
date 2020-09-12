@@ -4,6 +4,7 @@ from opics import libs
 from opics.network import Network
 from opics.globals import *
 
+"Register ebeam library"
 import opics.libs.ebeam
 
 __author__ = 'Jaspreet Jhoja'

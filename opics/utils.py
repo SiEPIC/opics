@@ -16,7 +16,7 @@ def uni_sparser(nports, sfilename, sfiledir, format_type = "auto"):
     This function is a unified version of sparameter reader function defined in https://github.com/BYUCamachoLab/simphony
     """
     numports = nports
-    filename = Path(str(sfiledir) + "/"+sfilename)
+    filename = sfiledir / sfilename 
 
     if(format_type=="auto"):
         try:
@@ -146,7 +146,7 @@ def uni_sparser(nports, sfilename, sfiledir, format_type = "auto"):
         return (np.array(F), S)
 
 def LUT_reader(filedir, lutfilename, lutdata):
-    xml = ET.parse(Path(str(filedir) + '/'+ lutfilename))
+    xml = ET.parse(filedir/ lutfilename)
     root = xml.getroot()
 
     for node in root.iter('association'):
@@ -165,7 +165,7 @@ def LUT_processor(filedir, lutfilename, lutdata, nports, sparam_attr, verbose=Fa
     #read data
     if('.npz' in sparam_file[0] or '.npz' in sparam_file[-1]):
         npzfile = [each for each in sparam_file if ".npz" in each][0]
-        tempdata = np.load(Path(str(filedir)+'/'+npzfile))
+        tempdata = np.load(filedir/npzfile)
         sdata = (tempdata['f'], tempdata['s'])
         npz_file=npzfile
       
@@ -178,7 +178,7 @@ def LUT_processor(filedir, lutfilename, lutdata, nports, sparam_attr, verbose=Fa
         npz_file = sparam_file[-1].split('.')[0]
 
         #save as npz file
-        np.savez(Path(str(filedir)+'/'+npz_file), f=sdata[0], s=sdata[1])
+        np.savez(filedir/npz_file, f=sdata[0], s=sdata[1])
         
         #update xml file
         sparam_file.append(npz_file+'.npz')
@@ -187,7 +187,7 @@ def LUT_processor(filedir, lutfilename, lutdata, nports, sparam_attr, verbose=Fa
         for each in node.iter('value'):
             if each.attrib['name'] == sparam_attr:
                 each.text = ';'.join(sparam_file)
-        xml.write(Path(str(filedir)+ '/' + lutfilename))
+        xml.write(filedir/lutfilename)
     
     if verbose:
         print("SParam data extracted in ", time.time()-start)
@@ -347,7 +347,7 @@ class netlistParser:
                                 #they are component parameters
                             elif("library" in temp_data[i]):
                                 print(temp_data[i])                           
-                                temp_lib = temp_data[i].replace('"',"").split("=")[1].split("/")
+                                temp_lib = temp_data[i].replace('"',"").split("=")[1].split()
                                 componentLibs.append(temp_lib[-1])
                                 found_library = 1
 
