@@ -6,11 +6,14 @@ from .components import compoundElement
 import os, binascii
 
 def interpolate(output_freq = None, input_freq= None, s_parameters = None):
+    """interpolates s-parameters"""
     func = interp1d(input_freq, s_parameters, kind='cubic', axis=0)
     return [output_freq, func(output_freq)]
 
 
 class Network:
+    """ specifies the network
+    """
     def __init__(self, networkID = None):
         self.networkID = networkID if networkID != None else str(binascii.hexlify(os.urandom(4)))[2:-1]
         self.current_components = []
@@ -20,6 +23,8 @@ class Network:
 
 
     def add_component(self, cls, componentID = None):
+        """add component to a network
+        """
         count = 0
         for each in self.current_components:
             if type(cls) == type(each):
@@ -30,12 +35,14 @@ class Network:
         return cls
 
     def connect(self, component_A, port_A, component_B, port_B):
+        """connect two components together
+        """
         self.current_connections.append([self.current_components.index(component_A), port_A, self.current_components.index(component_B), port_B])
 
 
-    def initiate_global_netlist(self): 
-    #initiates a global netlist with negative indices, overwrite indices that 
-    #are used in the circuit with positive values
+    def initiate_global_netlist(self):
+        """initiates a global netlist with negative indices, overwrite indices that are used in the circuit with positive values
+        """
         gnetlist = []
         net_start = 0
         for component_idx in range(len(self.current_components)):
@@ -67,6 +74,8 @@ class Network:
         return [filtered_nets[0], net_idx[0], filtered_nets[1], net_idx[1]]
 
     def simulate_network(self):
+        """ function to trigger the simulation of the network
+        """
 
         if self.global_netlist == []:
             self.initiate_global_netlist()

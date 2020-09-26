@@ -2,7 +2,7 @@
 
 from opics import libs
 from opics.network import Network
-from opics.globals import *
+from opics.globals import c, f
 
 "Register ebeam library"
 import opics.libs.ebeam
@@ -15,5 +15,5 @@ __version__ = '0.1.5'
 
 name = "opics"
 
-__all__ = ['Network', 'libs']
+__all__ = ['Network', 'libs', "globals"]
 

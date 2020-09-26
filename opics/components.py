@@ -13,9 +13,6 @@ class componentModel:
 
     :param data_folder: The location of the data folder containing s-parameter data files and a look up table.
     :type data_folder: class:`pathlib.Path`
-    
-
-    TO DO
     """
     def __init__(self, f_, data_folder, filename, nports=0, sparam_attr="", **kwargs):
         self.f_ = f_
@@ -54,6 +51,9 @@ class componentModel:
         return func(target_f)
 
     def write_sparameters(self, dirpath, filename, f_data, s_data):
+        """
+        write simulated s-parameters to a file
+        """
         with open(dirpath/filename, 'w') as datafile_id:
             datalen = s_data.shape[0]
 
@@ -110,6 +110,9 @@ class componentModel:
 
 
     def plot_sparameters(self, ports=None, show_freq=True, scale = "log"):
+        """ plot sparameters of the component
+        """
+
         ports_ = [] #ports the plot
 
         if (show_freq):
@@ -145,6 +148,8 @@ class componentModel:
         plt.show()
 
 class compoundElement(componentModel):
+    """defines the properties of a compound element or simulated component
+    """
     def __init__(self, f_, s_, nets = None):
         self.f_ = f_
         self.c = 299792458
@@ -154,6 +159,8 @@ class compoundElement(componentModel):
         #components_loaded.append(self)
 
 class Waveguide(componentModel):
+    """defines the properties of a waveguide component
+    """
     def __init__(self, f_, length, data_folder, filename, TE_loss, **kwargs):
         self.ng_ = None
         self.alpha_ = None
@@ -171,6 +178,9 @@ class Waveguide(componentModel):
         #components_loaded.append(self)
 
     def load_sparameters(self, length, data_folder, filename, TE_loss):
+
+        """read sparameters
+        """
 
         sfilename,_,_ = LUT_reader(data_folder, filename, self.componentParameters)
         self.sparam_file = sfilename[-1]

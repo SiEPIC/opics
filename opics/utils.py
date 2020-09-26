@@ -146,6 +146,8 @@ def uni_sparser(nports, sfilename, sfiledir, format_type = "auto"):
         return (np.array(F), S)
 
 def LUT_reader(filedir, lutfilename, lutdata):
+    """reads look up table data
+    """
     xml = ET.parse(filedir/ lutfilename)
     root = xml.getroot()
 
@@ -158,7 +160,8 @@ def LUT_reader(filedir, lutfilename, lutdata):
     
 
 def LUT_processor(filedir, lutfilename, lutdata, nports, sparam_attr, verbose=False):
-    
+    """process look up table data
+    """
     start = time.time()
     sparam_file, xml, node = LUT_reader(filedir, lutfilename, lutdata)
 
@@ -195,7 +198,8 @@ def LUT_processor(filedir, lutfilename, lutdata, nports, sparam_attr, verbose=Fa
 
 
 def NetlistProcessor(spice_filepath, Network, libraries, c_, circuitData):
-    
+    """process a spice netlist to setup and simulate a circuit.
+    """
     for key,value in circuitData.items():
         print(key, str(value))
 

@@ -1,4 +1,4 @@
-from opics import c_ as c
+from opics import c
 from opics import Network
 import opics, time, warnings
 import numpy as np
