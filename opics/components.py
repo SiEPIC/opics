@@ -6,12 +6,12 @@ from .utils import LUT_reader, LUT_processor
 
 class componentModel:
     def __init__(self, f, data_folder, filename, nports=0, sparam_attr="", **kwargs):
-        """This is a base component model class that can be used to create new components.
+        """This is a base component model class that can be used to create new components in the circuit.
 
         Args:
             f (numpy.ndarray): Frequency datapoints.
             data_folder (pathlib.Path): The location of the data folder containing s-parameter data files and a look up table.
-            filename (string): File name of the component
+            filename (str): File name of the component
             nports (int, optional): Number of ports in the component. Defaults to 0.
             sparam_attr (str, optional): XML LUT attribute for the s-parameter data file name. Defaults to "".
         """
@@ -31,8 +31,14 @@ class componentModel:
         #components_loaded.append(self)
 
     def load_sparameters(self, data_folder, filename):
-        """
-        decides whether to load sparameters from npz file or raw sparam file
+        """Decides whether to load sparameters from npz file or from a raw sparam file or from a look-up table (for tunable components with attributes).
+
+        Args:
+            data_folder (pathlib.Path): The location of the data folder containing s-parameter data files and a look up table.
+            filename (str): File name of the component
+
+        Returns:
+            sparameters (numpy.ndarray): Array of the component's s-parameters.
         """
 
         if('.npz' in filename):
@@ -43,16 +49,28 @@ class componentModel:
             return self.interpolate_sparameters(self.f, componentData[0], componentData[1])
 
     def interpolate_sparameters(self, target_f, source_f, source_s):
-        """
-        cubic interpolation of the component sparameter data to match frequency
+        """Cubic interpolation of the component sparameter data to match the desired simulation frequency range.
+
+        Args:
+            target_f (numpy.ndarray): The target frequency range onto which the s-parameters will be interpereted on.
+            source_f (numpy.ndarray): The source frequency range that the component data has stored.
+            source_s (numpy.ndarray): The source s-parameters that the component data has stored.
+
+        Returns:
+            sparameters (numpy.ndarray): Interpolated s-parameters value over the target frequency range.
         """
 
         func = interp1d(source_f, source_s, kind='cubic', axis=0)
         return func(target_f)
 
     def write_sparameters(self, dirpath, filename, f_data, s_data):
-        """
-        write simulated s-parameters to a file
+        """Export the simulated s-parameters to a file.
+
+        Args:
+            dirpath (pathlib.Path): Directory of the filed to be saved.
+            filename (str): Name of the file to be saved.
+            f_data (numpy.ndarray): Frequency range data to be exported.
+            s_data (numpy.ndarray): S-parameter data to be exported.
         """
         with open(dirpath/filename, 'w') as datafile_id:
             datalen = s_data.shape[0]
@@ -68,10 +86,17 @@ class componentModel:
                     np.savetxt(datafile_id, data, fmt=['%d','%f', '%f'])
 
     def get_data(self,ports=None, xscale="freq", yscale = "log"):
+        """Get the S-parameters data for specific [input,output] port combinations, to be used for plotting functionalities.
+        (WARNING: unused, to be used in plot_sparameters)
+
+        Args:
+            ports (list, optional): List of lists that contains the desired S-parameters, e.g., [[1,1],[1,2],[2,1],[2,2]]. Defaults to None.
+            xscale (str, optional): Plotting x axis label. Defaults to "freq".
+            yscale (str, optional): Plotting Y axis label. Defaults to "log".
+
+        Returns:
+            temp_data (dict): Dictionary containing the plotting information to be used, including S-parameters data and plotting labels. 
         """
-        get data for specific [input,output] port combinations
-        """
-        
         temp_data = {} # reformat data in an array
         
         ports_ = [] #ports the plot
