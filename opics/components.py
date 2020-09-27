@@ -5,16 +5,16 @@ import matplotlib.pyplot as plt
 from .utils import LUT_reader, LUT_processor
 
 class componentModel:
-    """
-    This is a base component model class that can be used to create new components.
-
-    :param f_: Frequency datapoints.
-    :type f_: class:`numpy.ndarray`
-
-    :param data_folder: The location of the data folder containing s-parameter data files and a look up table.
-    :type data_folder: class:`pathlib.Path`
-    """
     def __init__(self, f_, data_folder, filename, nports=0, sparam_attr="", **kwargs):
+        """This is a base component model class that can be used to create new components.
+
+        Args:
+            f_ (numpy.ndarray): Frequency datapoints.
+            data_folder (pathlib.Path): The location of the data folder containing s-parameter data files and a look up table.
+            filename (string): File name of the component
+            nports (int, optional): Number of ports in the component. Defaults to 0.
+            sparam_attr (str, optional): XML LUT attribute for the s-parameter data file name. Defaults to "".
+        """
         self.f_ = f_
         self.c = 299792458
         self.lambda_= self.c*1e6/self.f_
@@ -26,7 +26,6 @@ class componentModel:
         for key,value in kwargs.items():
             self.componentParameters.append([key, str(value)])
             
-        
         #add component to the loaded components' list
         #components_loaded.append(self)
 
