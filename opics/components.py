@@ -5,19 +5,20 @@ import matplotlib.pyplot as plt
 from .utils import LUT_reader, LUT_processor
 
 class componentModel:
-    def __init__(self, f_, data_folder, filename, nports=0, sparam_attr="", **kwargs):
+    def __init__(self, f, data_folder, filename, nports=0, sparam_attr="", **kwargs):
         """This is a base component model class that can be used to create new components.
 
         Args:
-            f_ (numpy.ndarray): Frequency datapoints.
+            f (numpy.ndarray): Frequency datapoints.
             data_folder (pathlib.Path): The location of the data folder containing s-parameter data files and a look up table.
             filename (string): File name of the component
             nports (int, optional): Number of ports in the component. Defaults to 0.
             sparam_attr (str, optional): XML LUT attribute for the s-parameter data file name. Defaults to "".
         """
-        self.f_ = f_
+        self.f = f
         self.c = 299792458
-        self.lambda_= self.c*1e6/self.f_
+        self.s = np.array((2,2))
+        self.lambda_= self.c*1e6/self.f
         self.componentParameters = []
         self.componentID = ""
         self.nports = nports
@@ -36,10 +37,10 @@ class componentModel:
 
         if('.npz' in filename):
                 componentData = np.load(data_folder/filename)
-                return self.interpolate_sparameters(self.f_, componentData['f'], componentData['f'])
+                return self.interpolate_sparameters(self.f, componentData['f'], componentData['f'])
         else:
             componentData, self.sparam_file = LUT_processor(data_folder, filename, self.componentParameters, self.nports, self.sparam_attr)
-            return self.interpolate_sparameters(self.f_, componentData[0], componentData[1])
+            return self.interpolate_sparameters(self.f, componentData[0], componentData[1])
 
     def interpolate_sparameters(self, target_f, source_f, source_s):
         """
@@ -76,17 +77,17 @@ class componentModel:
         ports_ = [] #ports the plot
 
         if (xscale == "freq"):
-            x_data = self.f_ 
+            x_data = self.f 
             xlabel = "Frequency (Hz)" 
         else:
-            x_data = self.c*1e6/self.f_
+            x_data = self.c*1e6/self.f
             xlabel = "Wavelength (um)"
 
         temp_data["xdata"] = x_data
         temp_data["xunit"] = xlabel
 
         if(ports==None):
-            nports = self.s_.shape[-1]
+            nports = self.s.shape[-1]
             for i in range(nports):
                 for j in range(nports):
                     ports_.append('S_%d_%d'%(i,j))
@@ -96,13 +97,13 @@ class componentModel:
         for each_port in ports_:
             _, i, j = each_port.split('_')
             if(yscale == "log"):
-                temp_data[each_port] = 10*np.log10(np.square(np.abs(self.s_[:,int(i),int(j)])))
+                temp_data[each_port] = 10*np.log10(np.square(np.abs(self.s[:,int(i),int(j)])))
                 temp_data['yunit']='dB'
             elif(yscale=="abs"):
-                temp_data[each_port] = np.abs(self.s_[:,int(i),int(j)])
+                temp_data[each_port] = np.abs(self.s[:,int(i),int(j)])
                 temp_data['yunit']='abs'
             elif(yscale=="abs_sq"):
-                temp_data[each_port] = np.square(np.abs(self.s_[:,int(i),int(j)]))
+                temp_data[each_port] = np.square(np.abs(self.s[:,int(i),int(j)]))
                 temp_data['yunit']='abs_sq'
 
         return temp_data
@@ -115,14 +116,14 @@ class componentModel:
         ports_ = [] #ports the plot
 
         if (show_freq):
-            x_data = self.f_ 
+            x_data = self.f 
             xlabel = "Frequency (Hz)" 
         else:
-            x_data = self.c*1e6/self.f_
+            x_data = self.c*1e6/self.f
             xlabel = "Wavelength (um)"
 
         if(ports==None):
-            nports = self.s_.shape[-1]
+            nports = self.s.shape[-1]
             for i in range(nports):
                 for j in range(nports):
                     ports_.append('S_%d_%d'%(i,j))
@@ -132,13 +133,13 @@ class componentModel:
         for each_port in ports_:
             _, i, j = each_port.split('_')
             if(scale == "log"):
-                plt.plot(x_data,10*np.log10(np.square(np.abs(self.s_[:,int(i),int(j)]))))
+                plt.plot(x_data,10*np.log10(np.square(np.abs(self.s[:,int(i),int(j)]))))
                 plt.ylabel('Transmission (dB)')
             elif(scale=="abs"):
-                plt.plot(x_data, np.abs(self.s_[:,int(i),int(j)]))
+                plt.plot(x_data, np.abs(self.s[:,int(i),int(j)]))
                 plt.ylabel('Transmission (normalized)')
             elif(scale=="abs_sq"):
-                plt.plot(x_data, np.square(np.abs(self.s_[:,int(i),int(j)])))
+                plt.plot(x_data, np.square(np.abs(self.s[:,int(i),int(j)])))
                 plt.ylabel('Transmission (normalized^2)')
         plt.xlabel(xlabel)
         plt.xlim(left=np.min(x_data), right=np.max(x_data))
@@ -149,27 +150,27 @@ class componentModel:
 class compoundElement(componentModel):
     """defines the properties of a compound element or simulated component
     """
-    def __init__(self, f_, s_, nets = None):
-        self.f_ = f_
+    def __init__(self, f, s, nets = None):
+        self.f = f
         self.c = 299792458
-        self.lambda_= self.c*1e6/self.f_ 
-        self.s_ = s_
-        self.nets = [i for i in s_.shape[-1]] if nets == None else nets
+        self.lambda_= self.c*1e6/self.f 
+        self.s = s
+        self.nets = [i for i in s.shape[-1]] if nets == None else nets
         #components_loaded.append(self)
 
 class Waveguide(componentModel):
     """defines the properties of a waveguide component
     """
-    def __init__(self, f_, length, data_folder, filename, TE_loss, **kwargs):
+    def __init__(self, f, length, data_folder, filename, TE_loss, **kwargs):
         self.ng_ = None
         self.alpha_ = None
         self.ne_ = None
         self.nd_ = None
-        self.f_ = f_
+        self.f = f
         self.componentID = ""
         self.c = 299792458
         self.sparam_file = ""
-        self.lambda_= self.c*1e6/self.f_
+        self.lambda_= self.c*1e6/self.f
         self.componentParameters = []
         for key,value in kwargs.items():
             self.componentParameters.append([key, str(value)])
@@ -178,7 +179,7 @@ class Waveguide(componentModel):
 
     def load_sparameters(self, length, data_folder, filename, TE_loss):
 
-        """read sparameters
+        """read s_parameters
         """
 
         sfilename,_,_ = LUT_reader(data_folder, filename, self.componentParameters)
@@ -192,12 +193,12 @@ class Waveguide(componentModel):
         nports = 2
 
         # Initialize array to hold s-params
-        temp_s_ = np.zeros((len(self.f_), nports, nports), dtype=complex) 
+        temp_s_ = np.zeros((len(self.f), nports, nports), dtype=complex) 
 
         alpha = TE_loss/(20*np.log10(np.exp(1)))
 
         # calculate angular frequency from frequency 
-        w = np.asarray(self.f_) * 2 * np.pi
+        w = np.asarray(self.f) * 2 * np.pi
 
         # calculate center wavelength, effective index, group index, group dispersion
         lam0, ne, ng, nd = float(coeffs[0]),  float(coeffs[1]), float(coeffs[3]), float(coeffs[5])
@@ -209,7 +210,7 @@ class Waveguide(componentModel):
         K = 2*np.pi*ne/lam0 + (ng/self.c)*(w - w0) - (nd*lam0**2/(4*np.pi*self.c))*((w - w0)**2)
 
         # compute s-matrix from K and waveguide length
-        for x in range(0, len(self.f_)):
+        for x in range(0, len(self.f)):
             temp_s_[x,0,1] = temp_s_[x,1,0] = np.exp(-alpha*length + (K[x]*length*1j))
 
         s = temp_s_

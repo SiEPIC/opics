@@ -1,8 +1,7 @@
 # This example is a benchmark test to evaluate the runtime of OPICS
 # Benchmark circuit is 100 microring resonators connected in series
-from opics.library import libraries
 from opics.network import Network
-from opics.globals import c_ as c
+from opics.globals import c
 import warnings
 import numpy as np
 import time

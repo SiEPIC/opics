@@ -47,7 +47,7 @@ class Network:
         net_start = 0
         for component_idx in range(len(self.current_components)):
             temp_net = []
-            for i in range(self.current_components[component_idx].s_.shape[-1]):
+            for i in range(self.current_components[component_idx].s.shape[-1]):
                 net_start -=1
                 temp_net.append(net_start)
             gnetlist.append(temp_net)
@@ -91,9 +91,9 @@ class Network:
         
             # If pin occurances are in the same component:
             if ntp[0] == ntp[2]:
-                #print(t_components[ca].s_.shape)
-                new_s = innerconnect_s(t_components[ntp[0]].s_, ntp[1], ntp[3])
-                t_components[ntp[0]].s_ = new_s
+                #print(t_components[ca].s.shape)
+                new_s = innerconnect_s(t_components[ntp[0]].s, ntp[1], ntp[3])
+                t_components[ntp[0]].s = new_s
                 del t_nets[ntp[0]][ntp[1]]
                 if(ntp[1] < ntp[3]): #if the current index occurs before the second one, shifting all nets to the left
                     del t_nets[ntp[2]][ntp[3]-1]
@@ -102,8 +102,8 @@ class Network:
 
             # If pin occurances are in different components:
             else:
-                combination_f = t_components[0].f_
-                combination_s = connect_s(t_components[ntp[0]].s_, ntp[1], t_components[ntp[2]].s_, ntp[3])
+                combination_f = t_components[0].f
+                combination_s = connect_s(t_components[ntp[0]].s, ntp[1], t_components[ntp[2]].s, ntp[3])
                 #nets of newest component
                 del t_nets[ntp[0]][ntp[1]], t_nets[ntp[2]][ntp[3]]
                 new_net = t_nets[ntp[0]] + t_nets[ntp[2]]
