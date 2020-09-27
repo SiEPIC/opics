@@ -11,7 +11,7 @@ class componentModel:
         Args:
             f (numpy.ndarray): Frequency datapoints.
             data_folder (pathlib.Path): The location of the data folder containing s-parameter data files and a look up table.
-            filename (str): File name of the component
+            filename (str): File name of the component.
             nports (int, optional): Number of ports in the component. Defaults to 0.
             sparam_attr (str, optional): XML LUT attribute for the s-parameter data file name. Defaults to "".
         """
@@ -35,7 +35,7 @@ class componentModel:
 
         Args:
             data_folder (pathlib.Path): The location of the data folder containing s-parameter data files and a look up table.
-            filename (str): File name of the component
+            filename (str): File name of the component.
 
         Returns:
             sparameters (numpy.ndarray): Array of the component's s-parameters.
@@ -135,7 +135,12 @@ class componentModel:
 
 
     def plot_sparameters(self, ports=None, show_freq=True, scale = "log"):
-        """ plot sparameters of the component
+        """Plot the component's S-parameters.
+
+        Args:
+            ports (list, optional): List of lists that contains the desired S-parameters, e.g., [[1,1],[1,2],[2,1],[2,2]]. Defaults to None.
+            show_freq (bool, optional): Flag to determine whether to plot with respect to frequency or wavelength. Defaults to True.
+            scale (str, optional): Plotting y axis scale, options available: ["log", "abs", "abs_sq"]. Defaults to "log".
         """
 
         ports_ = [] #ports the plot
@@ -173,9 +178,14 @@ class componentModel:
         plt.show()
 
 class compoundElement(componentModel):
-    """defines the properties of a compound element or simulated component
-    """
     def __init__(self, f, s, nets = None):
+        """Defines the properties of a compound element or simulated component. A compound element is a collection of connected components, inherits componentModel OPICS class.
+
+        Args:
+            f (numpy.ndarray): Frequency range data of the compound element.
+            s (numpy.ndarray): S-parameters data of the compound element.
+            nets (list, optional): List of nets available in the compound element. Defaults to None.
+        """
         self.f = f
         self.c = 299792458
         self.lambda_= self.c*1e6/self.f 
@@ -184,9 +194,16 @@ class compoundElement(componentModel):
         #components_loaded.append(self)
 
 class Waveguide(componentModel):
-    """defines the properties of a waveguide component
-    """
     def __init__(self, f, length, data_folder, filename, TE_loss, **kwargs):
+        """Defines the properties of a waveguide component, can be used in the interconnected between components. 
+
+        Args:
+            f (numpy.ndarray): Frequency range data of the waveguide element.
+            length (float): Length of the waveguide, in meters.
+            data_folder (pathlib.Path): The location of the data folder containing waveguide data files and a look up table.
+            filename (str): File name of the waveguide data file.
+            TE_loss (float): Value that defines the loss of the waveguide in dB/cm.
+        """
         self.ng_ = None
         self.alpha_ = None
         self.ne_ = None
