@@ -1,4 +1,4 @@
-|last_commit| |license| |pypi| |Documentation Status|
+|last_commit| |license| |pypi| 
 ==============================================
 
 |opics_logo|
