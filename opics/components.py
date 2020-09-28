@@ -5,10 +5,10 @@ import matplotlib.pyplot as plt
 from .utils import LUT_reader, LUT_processor
 
 class componentModel:
-    """This is a base component model class that can be used to create new components in the circuit.
+    """Defines the base component model class used to create new components for a library.
     """
     def __init__(self, f, data_folder, filename, nports=0, sparam_attr="", **kwargs):
-        """This is a base component model class that can be used to create new components in the circuit.
+        """Defines the base component model class used to create new components for a library.
 
         Args:
             f (numpy.ndarray): Frequency datapoints.

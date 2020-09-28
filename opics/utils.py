@@ -6,7 +6,14 @@ import xml.etree.ElementTree as ET
 from copy import deepcopy
 
 def fromSI(value_):
-    "converts from SI unit values to metric"
+    """converts from SI unit values to metric
+
+    Args:
+        value_ (str): a value in SI units, e.g. 1.3u
+
+    Returns:
+        float: the value in metric units.
+    """
     return value_.replace("u", "e-6")
 
 def universal_sparam_filereader(nports, sfilename, sfiledir, format_type = "auto"):

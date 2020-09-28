@@ -78,6 +78,6 @@ Citing
 .. |Documentation Status| image:: https://readthedocs.org/projects/opics/badge/?version=latest
    :target: https://opics.readthedocs.io/en/latest/?badge=latest
 
-.. |opics_logo| image:: /docs/opics_logo.svg
+.. |opics_logo| image:: /docs/_static/opics_logo.png
 
 .. |dog_gif| image:: https://media.giphy.com/media/Y0G6gc8CJu1ynAZ1nr/giphy.gif

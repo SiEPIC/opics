@@ -4,11 +4,16 @@
 
 from setuptools import setup, find_packages
 
+def parse_requirements(requirements):
+    with open(requirements) as f:
+        return [l.strip('\n') for l in f if l.strip('\n') and not l.startswith('#')]
+
+
 with open('README.rst') as readme_file:
     readme = readme_file.read()
 
 
-requirements = ['Click>=7.0', ]
+requirements = ['Click>=7.0', ]+parse_requirements('requirements.txt')
 
 setup_requirements = ['pytest-runner', ]
 
