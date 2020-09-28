@@ -1,4 +1,4 @@
-OPICS |last_commit| |pypi| |Documentation Status|
+|last_commit| |license| |pypi| |Documentation Status|
 ==============================================
 
 |opics_logo|
@@ -84,3 +84,4 @@ Citing
 .. |dog_gif| image:: https://media.giphy.com/media/Y0G6gc8CJu1ynAZ1nr/giphy.gif
 .. |last_commit| image:: https://badgen.net/github/last-commit/siepic/opics
 .. |pypi| image:: https://badgen.net/pypi/v/opics
+.. |license| image:: https://badgen.net/pypi/license/opics
