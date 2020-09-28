@@ -2,14 +2,12 @@
 Credits
 =======
 
-Development Lead
+Main Author
 ----------------
-
-* Jaspreet Jhoja <jaspreet@siepic.com>
+* Jaspreet Jhoja <jaspreet@siepic.com> <jj@alumni.ubc.ca>
 
 Contributors
 ------------
-
-* Stephen Lin <slin@siepic.com>
 * Mustafa Hammood <mustafa@siepic.com>
+* Stephen Lin <slin@siepic.com>
 
