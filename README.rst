@@ -8,7 +8,7 @@ Open Photonic Integrated Circuit Simulator (OPICS)
 
 **OPICS** aims at providing open and reliable solutions for designing
 and simulating silicon photonic integrated circuits and systems. To know more,
-refer to `Documentation <https://siepic.github.io/opics>`__
+refer to OPICS  `Documentation <https://siepic.github.io/opics>`__
 
 Requirements
 ~~~~~~~~~~~~
