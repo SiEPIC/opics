@@ -9,6 +9,13 @@ datadir =  Path(str(Path(__file__).parent)) / "data"
 
 
 class BDC(componentModel):
+    """50/50% broadband directional 3-dB couplers. Two 3-dB couplers can be used to make an unbalanced Mach-Zehnder Interferometer (MZI), \
+        showing a large extinction ratio. The advantage of this device compared to the Y-Branch is that it has 2x2 ports, \
+        thus the MZI has two outputs. Compared to the directional coupler, it is less wavelength sensitive.
+
+    """
+
+
     cls_attrs = {"height":0, "width":0}
     valid_OID = [1]
     ports = 4
@@ -27,6 +34,11 @@ class BDC(componentModel):
         self.componentID = "Ebeam_BDC"
 
 class DC_temp(componentModel):
+    """The directional coupler is commonly used for splitting and combining light in photonics. \
+        It consists of two parallel waveguides where the coupling coefficient is influenced by the \
+            waveguide length and the distance between waveguides. 
+
+    """
     cls_attrs = {"Lc":0}
     valid_OID = [1]
     ports = 4
@@ -44,6 +56,9 @@ class DC_temp(componentModel):
         self.componentID = "Ebeam_DC"
 
 class DC_halfring(componentModel):
+    """Models evanescent coupling region between a straight waveguide and a bent radius of length pi*radius um. Useful for filters, sensors.
+
+    """
     cls_attrs = {"CoupleLength" : 0, "gap" : 100e-9, "radius" : 5e-6, "thickness" : 220e-9, "width" : 500e-9}
     valid_OID = [1]
     ports = 4
@@ -69,6 +84,10 @@ class DC_halfring(componentModel):
 
 
 class GC(componentModel):
+    """Fully-etched fibre-waveguide grating couplers with sub-wavelength gratings showing high coupling efficiency as well as low \
+        back reflections for both transverse electric (TE) and transverse magnetic (TM) modes. EBeam fabrication cost is reduced \
+            by ~2-3X when eliminating the shallow etch.
+    """
     cls_attrs = {"deltaw" : 0, "height" : 2.2e-07}
     valid_OID = [1]
     ports = 2
@@ -105,6 +124,13 @@ class Multimode(componentModel):
 
 
 class Terminator(componentModel):
+    """This component is used to terminate a waveguide. This terminator is a nano-taper that spreads \
+        the light into the oxide and is used for efficient edge coupling. Even if a waveguide crosses near\
+             this taper end, the reflection is minimal. This is included in this model, 1 µm away, therefore, \
+                 the model is a worst-case reflection. To terminate unused ports on components to avoid reflections,\
+                      refer to Disconnected Waveguides. 
+
+    """
     valid_OID = [1]
     ports  = 1
     def __init__(self, f=f, OID=1):
@@ -139,6 +165,10 @@ class TunableWG(Waveguide):
 
 
 class Waveguide(Waveguide):
+    """Waveguides are components that guide waves. Although these are individual components that can\
+         be adjusted for use, it is recommended to draw paths in KLayout and convert them to waveguides\
+              using the built-in SiEPIC features. 
+    """
     cls_attrs = {"length":0e-6, "height":220e-9, "width":500e-9}
     valid_OID = [1,2]
     ports = 2
@@ -163,6 +193,9 @@ class Waveguide(Waveguide):
 
 
 class Y(componentModel):
+    """50/50% 3dB splitter. Useful for splitting light, Mach-Zehner Interferometers, etc.\
+         The layout parameters for the device were taken from the journal paper below, and implemented in EBeam lithography.
+    """
     cls_attrs = {"height":220e-9, "width":500e-9}
     valid_OID = [1]
     ports = 3

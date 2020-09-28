@@ -5,6 +5,8 @@ import matplotlib.pyplot as plt
 from .utils import LUT_reader, LUT_processor
 
 class componentModel:
+    """This is a base component model class that can be used to create new components in the circuit.
+    """
     def __init__(self, f, data_folder, filename, nports=0, sparam_attr="", **kwargs):
         """This is a base component model class that can be used to create new components in the circuit.
 
@@ -178,6 +180,9 @@ class componentModel:
         plt.show()
 
 class compoundElement(componentModel):
+    """Defines the properties of a compound element or simulated component. A compound element is a collection of connected components, inherits componentModel OPICS class.
+    """
+
     def __init__(self, f, s, nets = None):
         """Defines the properties of a compound element or simulated component. A compound element is a collection of connected components, inherits componentModel OPICS class.
 
@@ -194,6 +199,8 @@ class compoundElement(componentModel):
         #components_loaded.append(self)
 
 class Waveguide(componentModel):
+    """Defines the properties of a waveguide component, can be used in the interconnected between components. 
+    """
     def __init__(self, f, length, data_folder, filename, TE_loss, **kwargs):
         """Defines the properties of a waveguide component, can be used in the interconnected between components. 
 

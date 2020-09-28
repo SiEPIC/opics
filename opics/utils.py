@@ -9,7 +9,7 @@ def fromSI(value_):
     "converts from SI unit values to metric"
     return value_.replace("u", "e-6")
 
-def uni_sparser(nports, sfilename, sfiledir, format_type = "auto"):
+def universal_sparam_filereader(nports, sfilename, sfiledir, format_type = "auto"):
     """
     Function to automatically detect the sparameter file format and use appropriate method to delimit and format sparam data
     
@@ -21,16 +21,16 @@ def uni_sparser(nports, sfilename, sfiledir, format_type = "auto"):
     if(format_type=="auto"):
         try:
             #print("try A")
-            result = uni_sparser(nports, sfilename, sfiledir, "A")
+            result = universal_sparam_filereader(nports, sfilename, sfiledir, "A")
             return result
         except Exception:
             try:
                 #print("try B")
-                result = uni_sparser(nports, sfilename, sfiledir, "B")
+                result = universal_sparam_filereader(nports, sfilename, sfiledir, "B")
                 return result
             except Exception:
                 #print("try C")
-                result = uni_sparser(nports, sfilename, sfiledir, "C")
+                result = universal_sparam_filereader(nports, sfilename, sfiledir, "C")
                 return result
 
     elif(format_type=="A"):
@@ -176,7 +176,7 @@ def LUT_processor(filedir, lutfilename, lutdata, nports, sparam_attr, verbose=Fa
         if verbose:
             print("numpy datafile not found. reading sparam file instead..")
     
-        sdata = uni_sparser(nports, sparam_file[-1],filedir, "auto")
+        sdata = universal_sparam_filereader(nports, sparam_file[-1],filedir, "auto")
         #create npz file name
         npz_file = sparam_file[-1].split('.')[0]
 

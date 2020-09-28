@@ -2,6 +2,7 @@
 
 from opics import libs
 from opics.network import Network
+from opics.utils import universal_sparam_filereader, LUT_processor, LUT_reader, netlistParser
 from opics.globals import c, f
 
 "Register ebeam library"
