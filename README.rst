@@ -1,4 +1,4 @@
-OPICS |image1| |image2| |Documentation Status|
+|last_commit| |license| |pypi| |Documentation Status|
 ==============================================
 
 |opics_logo|
@@ -7,7 +7,8 @@ Open Photonic Integrated Circuit Simulator (OPICS)
 ==================================================
 
 **OPICS** aims at providing open and reliable solutions for designing
-and simulating silicon photonic integrated circuits and systems.
+and simulating silicon photonic integrated circuits and systems. To know more,
+refer to OPICS  `Documentation <https://siepic.github.io/opics>`__
 
 Requirements
 ~~~~~~~~~~~~
@@ -81,3 +82,6 @@ Citing
 .. |opics_logo| image:: /docs/_static/opics_logo.png
 
 .. |dog_gif| image:: https://media.giphy.com/media/Y0G6gc8CJu1ynAZ1nr/giphy.gif
+.. |last_commit| image:: https://badgen.net/github/last-commit/siepic/opics
+.. |pypi| image:: https://badgen.net/pypi/v/opics
+.. |license| image:: https://badgen.net/pypi/license/opics
