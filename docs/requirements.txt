@@ -17,4 +17,4 @@ sphinx-autodoc-typehints==1.11.0
 myst-parser>=0.12.10
 nbsphinx>=0.7.1
 ipython>=7.18.1
-opics>=0.2.0
+opics>=0.1.6
