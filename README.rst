@@ -31,14 +31,11 @@ or
 Package setup
 ~~~~~~~~~~~~~
 
-Currently, the package is not available through ``pip``. Invoke the
-following block of code before importing OPICS package in a
-script/notebook:
+The package is available through ``pip``:
 
 .. code:: python
 
-   import sys
-   sys.path.append('path/to/opics')
+   pip install opics
 
 After this, you should be able to access and import OPICS package using
 the
