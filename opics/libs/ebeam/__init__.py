@@ -216,3 +216,22 @@ class Y(componentModel):
         self.componentID = "Ebeam_Y"
 
 
+class Switch(componentModel):
+    """2x2 tunable optical switch component. Useful for switching the input optical power between two output ports.
+
+    """
+    cls_attrs = {"power": 0}
+    valid_OID = [1]
+    ports = 4
+    def __init__(self, f=f, power = 0e-3, OID = 1):
+        data_folder=datadir / "2x2_switch"
+        filename="2x2_switch.xml"
+
+        LUT_attrs_ = deepcopy(self.cls_attrs)
+        LUT_attrs_["power"] = power
+        super().__init__(f, data_folder, filename, 4, "switch_sparam", **LUT_attrs_)
+        if(OID in self.valid_OID):
+            self.s = self.load_sparameters(data_folder, filename)
+        else:
+            self.s = np.zeros((self.f.shape[0], self.ports, self.ports))
+        self.componentID = "Ebeam_switch"
