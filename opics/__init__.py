@@ -18,3 +18,5 @@ name = "opics"
 
 __all__ = ['Network', 'libs', "globals"]
 
+
+print("OPICS version", __version__)

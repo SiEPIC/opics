@@ -83,7 +83,7 @@ class componentModel:
                     datafile_id.write("(%d,3)\n"%(datalen))
 
                     temp_data = s_data[:,i,j]
-                    data = np.array([f_data, temp_data.real, temp_data.imag])
+                    data = np.array([f_data, np.abs(temp_data), np.angle(temp_data)])
                     data = data.T
                     np.savetxt(datafile_id, data, fmt=['%d','%f', '%f'])
 
@@ -195,7 +195,7 @@ class compoundElement(componentModel):
         self.c = 299792458
         self.lambda_= self.c*1e6/self.f 
         self.s = s
-        self.nets = [i for i in s.shape[-1]] if nets == None else nets
+        self.nets = [i for i in s.shape] if nets == None else nets
         #components_loaded.append(self)
 
 class Waveguide(componentModel):
