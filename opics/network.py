@@ -1,7 +1,7 @@
 
 from scipy.interpolate import interp1d
 from copy import deepcopy
-from .sparam_ops import connect_s, innerconnect_s
+from .sparam_ops import connect_s
 from .components import compoundElement
 import os, binascii
 
@@ -92,7 +92,7 @@ class Network:
             # If pin occurances are in the same component:
             if ntp[0] == ntp[2]:
                 #print(t_components[ca].s.shape)
-                new_s = innerconnect_s(t_components[ntp[0]].s, ntp[1], ntp[3])
+                new_s = connect_s(t_components[ntp[0]].s, ntp[1], None, ntp[3], create_composite_matrix = False)
                 t_components[ntp[0]].s = new_s
                 del t_nets[ntp[0]][ntp[1]]
                 if(ntp[1] < ntp[3]): #if the current index occurs before the second one, shifting all nets to the left

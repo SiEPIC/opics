@@ -1,19 +1,7 @@
-"""
-Copyright (c) 2010, Alexander Arsenovic All rights reserved.
-
-Copyright (c) 2017, scikit-rf Developers All rights reserved.
-
-Redistribution and use in source and binary forms, with or without modification, are permitted provided that the following conditions are met:
-
-Redistributions of source code must retain the above copyright notice, this list of conditions and the following disclaimer.
-Redistributions in binary form must reproduce the above copyright notice, this list of conditions and the following disclaimer in the documentation and/or other materials provided with the distribution.
-Neither the name of the scikit-rf nor the names of its contributors may be used to endorse or promote products derived from this software without specific prior written permission.
-THIS SOFTWARE IS PROVIDED BY THE COPYRIGHT HOLDERS AND CONTRIBUTORS “AS IS” AND ANY EXPRESS OR IMPLIED WARRANTIES, INCLUDING, BUT NOT LIMITED TO, THE IMPLIED WARRANTIES OF MERCHANTABILITY AND FITNESS FOR A PARTICULAR PURPOSE ARE DISCLAIMED. IN NO EVENT SHALL THE COPYRIGHT HOLDER OR CONTRIBUTORS BE LIABLE FOR ANY DIRECT, INDIRECT, INCIDENTAL, SPECIAL, EXEMPLARY, OR CONSEQUENTIAL DAMAGES (INCLUDING, BUT NOT LIMITED TO, PROCUREMENT OF SUBSTITUTE GOODS OR SERVICES; LOSS OF USE, DATA, OR PROFITS; OR BUSINESS INTERRUPTION) HOWEVER CAUSED AND ON ANY THEORY OF LIABILITY, WHETHER IN CONTRACT, STRICT LIABILITY, OR TORT (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
-"""
 import numpy as np
 
 ## Functions operating on s-parameter matrices
-def connect_s(A, k, B, l):
+def connect_s(A, k, B, l, create_composite_matrix = True):
     '''
     connect two n-port networks' s-matrices together.
 
@@ -54,28 +42,32 @@ def connect_s(A, k, B, l):
 
     '''
 
-    if k > A.shape[-1] - 1 or l > B.shape[-1] - 1:
-        raise (ValueError('port indices are out of range'))
+    if(create_composite_matrix):
+        if k > A.shape[-1] - 1 or l > B.shape[-1] - 1:
+            raise (ValueError('port indices are out of range'))
 
-    nf = A.shape[0]  # num frequency points
-    nA = A.shape[1]  # num ports on A
-    nB = B.shape[1]  # num ports on B
-    nC = nA + nB  # num ports on C
+        nf = A.shape[0]  # num frequency points
+        nA = A.shape[1]  # num ports on A
+        nB = B.shape[1]  # num ports on B
+        nC = nA + nB  # num ports on C
 
-    # create composite matrix, appending each sub-matrix diagonally
-    C = np.zeros((nf, nC, nC), dtype='complex')
-    C[:, :nA, :nA] = A.copy()
-    C[:, nA:, nA:] = B.copy()
+        # create composite matrix, appending each sub-matrix diagonally
+        C = np.zeros((nf, nC, nC), dtype='complex')
+        C[:, :nA, :nA] = A.copy()
+        C[:, nA:, nA:] = B.copy()
 
-    # call innerconnect_s() on composit matrix C
-    return innerconnect_s(C, k, nA + l)
+        # call innerconnect_s() on composit matrix C
+        return innerconnect_s(C, k, nA + l)
+    else:
+        # call innerconnect_s() on non-composit matrix A
+        return innerconnect_s(A, k, l)
 
 
 def innerconnect_s(A, k, l):
     '''
     connect two ports of a single n-port network's s-matrix.
 
-    Specifically, connect port `k`  to port `l` on `A`. This results in
+    Specifically, connect port `k` to port `l` on `A`. This results in
     a (n-2)-port network.  This     function operates on, and returns
     s-matrices. The function :func:`innerconnect` operates on
     :class:`Network` types.
@@ -105,27 +97,20 @@ def innerconnect_s(A, k, l):
     .. [#] Compton, R.C.; , "Perspectives in microwave circuit analysis," Circuits and Systems, 1989., Proceedings of the 32nd Midwest Symposium on , vol., no., pp.716-718 vol.2, 14-16 Aug 1989. URL: http://ieeexplore.ieee.org/stamp/stamp.jsp?tp=&arnumber=101955&isnumber=3167
 
     .. [#] Filipsson, Gunnar; , "A New General Computer Algorithm for S-Matrix Calculation of Interconnected Multiports," Microwave Conference, 1981. 11th European , vol., no., pp.700-704, 7-11 Sept. 1981. URL: http://ieeexplore.ieee.org/stamp/stamp.jsp?tp=&arnumber=4131699&isnumber=4131585
-
-
     '''
 
     if k > A.shape[-1] - 1 or l > A.shape[-1] - 1:
         raise (ValueError('port indices are out of range'))
 
     nA = A.shape[1]  # num of ports on input s-matrix
+
     # create an empty s-matrix, to store the result
     C = np.zeros(shape=A.shape, dtype='complex')
 
     # loop through ports and calulates resultant s-parameters
     for i in range(nA):
         for j in range(nA):
-            C[:, i, j] = \
-                A[:, i, j] + \
-                (A[:, k, j] * A[:, i, l] * (1 - A[:, l, k]) + \
-                 A[:, l, j] * A[:, i, k] * (1 - A[:, k, l]) + \
-                 A[:, k, j] * A[:, l, l] * A[:, i, k] + \
-                 A[:, l, j] * A[:, k, k] * A[:, i, l]) / \
-                ((1 - A[:, k, l]) * (1 - A[:, l, k]) - A[:, k, k] * A[:, l, l])
+            C[:, i, j] = (A[:, i, j]*(A[:, l, l]*A[:, k, k] - (A[:, l, k] - 1)*(A[:, k, l] - 1)) + A[:, k, j]*A[:, i, l]*(A[:, l, k] - 1) - A[:, k, j]*A[:, i, k]*A[:, l, l] - A[:, i, l]*A[:, l, j]*A[:, k, k] + A[:, l, j]*A[:, i, k]*(A[:, k, l] - 1))/(A[:, l, l]*A[:, k, k] - (A[:, l, k] - 1)*(A[:, k, l] - 1))
 
     # remove ports that were `connected`
     C = np.delete(C, (k, l), 1)
