@@ -172,7 +172,7 @@
 <span></span>
 <span class="kn">from</span> <span class="nn">scipy.interpolate</span> <span class="kn">import</span> <span class="n">interp1d</span>
 <span class="kn">from</span> <span class="nn">copy</span> <span class="kn">import</span> <span class="n">deepcopy</span>
-<span class="kn">from</span> <span class="nn">.sparam_ops</span> <span class="kn">import</span> <span class="n">connect_s</span><span class="p">,</span> <span class="n">innerconnect_s</span>
+<span class="kn">from</span> <span class="nn">.sparam_ops</span> <span class="kn">import</span> <span class="n">connect_s</span>
 <span class="kn">from</span> <span class="nn">.components</span> <span class="kn">import</span> <span class="n">compoundElement</span>
 <span class="kn">import</span> <span class="nn">os</span><span class="o">,</span> <span class="nn">binascii</span>
 
@@ -263,7 +263,7 @@
             <span class="c1"># If pin occurances are in the same component:</span>
             <span class="k">if</span> <span class="n">ntp</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span> <span class="o">==</span> <span class="n">ntp</span><span class="p">[</span><span class="mi">2</span><span class="p">]:</span>
                 <span class="c1">#print(t_components[ca].s.shape)</span>
-                <span class="n">new_s</span> <span class="o">=</span> <span class="n">innerconnect_s</span><span class="p">(</span><span class="n">t_components</span><span class="p">[</span><span class="n">ntp</span><span class="p">[</span><span class="mi">0</span><span class="p">]]</span><span class="o">.</span><span class="n">s</span><span class="p">,</span> <span class="n">ntp</span><span class="p">[</span><span class="mi">1</span><span class="p">],</span> <span class="n">ntp</span><span class="p">[</span><span class="mi">3</span><span class="p">])</span>
+                <span class="n">new_s</span> <span class="o">=</span> <span class="n">connect_s</span><span class="p">(</span><span class="n">t_components</span><span class="p">[</span><span class="n">ntp</span><span class="p">[</span><span class="mi">0</span><span class="p">]]</span><span class="o">.</span><span class="n">s</span><span class="p">,</span> <span class="n">ntp</span><span class="p">[</span><span class="mi">1</span><span class="p">],</span> <span class="kc">None</span><span class="p">,</span> <span class="n">ntp</span><span class="p">[</span><span class="mi">3</span><span class="p">],</span> <span class="n">create_composite_matrix</span> <span class="o">=</span> <span class="kc">False</span><span class="p">)</span>
                 <span class="n">t_components</span><span class="p">[</span><span class="n">ntp</span><span class="p">[</span><span class="mi">0</span><span class="p">]]</span><span class="o">.</span><span class="n">s</span> <span class="o">=</span> <span class="n">new_s</span>
                 <span class="k">del</span> <span class="n">t_nets</span><span class="p">[</span><span class="n">ntp</span><span class="p">[</span><span class="mi">0</span><span class="p">]][</span><span class="n">ntp</span><span class="p">[</span><span class="mi">1</span><span class="p">]]</span>
                 <span class="k">if</span><span class="p">(</span><span class="n">ntp</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span> <span class="o">&lt;</span> <span class="n">ntp</span><span class="p">[</span><span class="mi">3</span><span class="p">]):</span> <span class="c1">#if the current index occurs before the second one, shifting all nets to the left</span>

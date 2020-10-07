@@ -387,6 +387,25 @@
         <span class="bp">self</span><span class="o">.</span><span class="n">componentID</span> <span class="o">=</span> <span class="s2">&quot;Ebeam_Y&quot;</span></div>
 
 
+<div class="viewcode-block" id="Switch"><a class="viewcode-back" href="../../../opics.lib.ebeam.html#opics.libs.ebeam.Switch">[docs]</a><span class="k">class</span> <span class="nc">Switch</span><span class="p">(</span><span class="n">componentModel</span><span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot;2x2 tunable optical switch component. Useful for switching the input optical power between two output ports.</span>
+
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="n">cls_attrs</span> <span class="o">=</span> <span class="p">{</span><span class="s2">&quot;power&quot;</span><span class="p">:</span> <span class="mi">0</span><span class="p">}</span>
+    <span class="n">valid_OID</span> <span class="o">=</span> <span class="p">[</span><span class="mi">1</span><span class="p">]</span>
+    <span class="n">ports</span> <span class="o">=</span> <span class="mi">4</span>
+    <span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">f</span><span class="o">=</span><span class="n">f</span><span class="p">,</span> <span class="n">power</span> <span class="o">=</span> <span class="mf">0e-3</span><span class="p">,</span> <span class="n">OID</span> <span class="o">=</span> <span class="mi">1</span><span class="p">):</span>
+        <span class="n">data_folder</span><span class="o">=</span><span class="n">datadir</span> <span class="o">/</span> <span class="s2">&quot;2x2_switch&quot;</span>
+        <span class="n">filename</span><span class="o">=</span><span class="s2">&quot;2x2_switch.xml&quot;</span>
+
+        <span class="n">LUT_attrs_</span> <span class="o">=</span> <span class="n">deepcopy</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">cls_attrs</span><span class="p">)</span>
+        <span class="n">LUT_attrs_</span><span class="p">[</span><span class="s2">&quot;power&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="n">power</span>
+        <span class="nb">super</span><span class="p">()</span><span class="o">.</span><span class="fm">__init__</span><span class="p">(</span><span class="n">f</span><span class="p">,</span> <span class="n">data_folder</span><span class="p">,</span> <span class="n">filename</span><span class="p">,</span> <span class="mi">4</span><span class="p">,</span> <span class="s2">&quot;switch_sparam&quot;</span><span class="p">,</span> <span class="o">**</span><span class="n">LUT_attrs_</span><span class="p">)</span>
+        <span class="k">if</span><span class="p">(</span><span class="n">OID</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">valid_OID</span><span class="p">):</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">s</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">load_sparameters</span><span class="p">(</span><span class="n">data_folder</span><span class="p">,</span> <span class="n">filename</span><span class="p">)</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">s</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">zeros</span><span class="p">((</span><span class="bp">self</span><span class="o">.</span><span class="n">f</span><span class="o">.</span><span class="n">shape</span><span class="p">[</span><span class="mi">0</span><span class="p">],</span> <span class="bp">self</span><span class="o">.</span><span class="n">ports</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">ports</span><span class="p">))</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">componentID</span> <span class="o">=</span> <span class="s2">&quot;Ebeam_switch&quot;</span></div>
 </pre></div>
 
            </div>

@@ -387,16 +387,9 @@
 </div>
 <div class="section" id="module-opics.sparam_ops">
 <span id="opics-sparam-ops-module"></span><h2>opics.sparam_ops module<a class="headerlink" href="#module-opics.sparam_ops" title="Permalink to this headline">¶</a></h2>
-<p>Copyright (c) 2010, Alexander Arsenovic All rights reserved.</p>
-<p>Copyright (c) 2017, scikit-rf Developers All rights reserved.</p>
-<p>Redistribution and use in source and binary forms, with or without modification, are permitted provided that the following conditions are met:</p>
-<p>Redistributions of source code must retain the above copyright notice, this list of conditions and the following disclaimer.
-Redistributions in binary form must reproduce the above copyright notice, this list of conditions and the following disclaimer in the documentation and/or other materials provided with the distribution.
-Neither the name of the scikit-rf nor the names of its contributors may be used to endorse or promote products derived from this software without specific prior written permission.
-THIS SOFTWARE IS PROVIDED BY THE COPYRIGHT HOLDERS AND CONTRIBUTORS “AS IS” AND ANY EXPRESS OR IMPLIED WARRANTIES, INCLUDING, BUT NOT LIMITED TO, THE IMPLIED WARRANTIES OF MERCHANTABILITY AND FITNESS FOR A PARTICULAR PURPOSE ARE DISCLAIMED. IN NO EVENT SHALL THE COPYRIGHT HOLDER OR CONTRIBUTORS BE LIABLE FOR ANY DIRECT, INDIRECT, INCIDENTAL, SPECIAL, EXEMPLARY, OR CONSEQUENTIAL DAMAGES (INCLUDING, BUT NOT LIMITED TO, PROCUREMENT OF SUBSTITUTE GOODS OR SERVICES; LOSS OF USE, DATA, OR PROFITS; OR BUSINESS INTERRUPTION) HOWEVER CAUSED AND ON ANY THEORY OF LIABILITY, WHETHER IN CONTRACT, STRICT LIABILITY, OR TORT (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.</p>
 <dl class="py function">
 <dt id="opics.sparam_ops.connect_s">
-<code class="sig-prename descclassname">opics.sparam_ops.</code><code class="sig-name descname">connect_s</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">A</span></em>, <em class="sig-param"><span class="n">k</span></em>, <em class="sig-param"><span class="n">B</span></em>, <em class="sig-param"><span class="n">l</span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/opics/sparam_ops.html#connect_s"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#opics.sparam_ops.connect_s" title="Permalink to this definition">¶</a></dt>
+<code class="sig-prename descclassname">opics.sparam_ops.</code><code class="sig-name descname">connect_s</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">A</span></em>, <em class="sig-param"><span class="n">k</span></em>, <em class="sig-param"><span class="n">B</span></em>, <em class="sig-param"><span class="n">l</span></em>, <em class="sig-param"><span class="n">create_composite_matrix</span><span class="o">=</span><span class="default_value">True</span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/opics/sparam_ops.html#connect_s"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#opics.sparam_ops.connect_s" title="Permalink to this definition">¶</a></dt>
 <dd><p>connect two n-port networks’ s-matrices together.</p>
 <p>specifically, connect port <cite>k</cite> on network <cite>A</cite> to port <cite>l</cite> on network
 <cite>B</cite>. The resultant network has nports = (A.rank + B.rank-2). This
@@ -434,7 +427,7 @@ details about the implementation</p>
 <dt id="opics.sparam_ops.innerconnect_s">
 <code class="sig-prename descclassname">opics.sparam_ops.</code><code class="sig-name descname">innerconnect_s</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">A</span></em>, <em class="sig-param"><span class="n">k</span></em>, <em class="sig-param"><span class="n">l</span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/opics/sparam_ops.html#innerconnect_s"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#opics.sparam_ops.innerconnect_s" title="Permalink to this definition">¶</a></dt>
 <dd><p>connect two ports of a single n-port network’s s-matrix.</p>
-<p>Specifically, connect port <cite>k</cite>  to port <cite>l</cite> on <cite>A</cite>. This results in
+<p>Specifically, connect port <cite>k</cite> to port <cite>l</cite> on <cite>A</cite>. This results in
 a (n-2)-port network.  This     function operates on, and returns
 s-matrices. The function <code class="xref py py-func docutils literal notranslate"><span class="pre">innerconnect()</span></code> operates on
 <code class="xref py py-class docutils literal notranslate"><span class="pre">Network</span></code> types.</p>
