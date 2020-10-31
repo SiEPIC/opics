@@ -1,7 +1,7 @@
 import numpy as np
 from pathlib import Path
 import cmath as cm
-import time, re, itertools, os, warnings
+import time, re, itertools, os, warnings, inspect
 import xml.etree.ElementTree as ET
 from copy import deepcopy
 
@@ -14,7 +14,7 @@ def fromSI(value_):
     Returns:
         float: the value in metric units.
     """
-    return value_.replace("u", "e-6")
+    return float(value_.replace("u", "e-6"))
 
 def universal_sparam_filereader(nports, sfilename, sfiledir, format_type = "auto"):
     """
@@ -216,20 +216,28 @@ def NetlistProcessor(spice_filepath, Network, libraries, c_, circuitData):
     #define frequency range and resolution
     freq = np.linspace(c_/circuitData["sim_params"][0], c_/circuitData["sim_params"][1], circuitData["sim_params"][2])
 
+
+    #get library
+    all_libraries = dict(inspect.getmembers(libraries, inspect.ismodule))
+    libs_comps = {}
+    for each_lib in list(set(circuitData["compLibs"])):
+        temp_comps = dict(inspect.getmembers(all_libraries[each_lib], inspect.isclass))
+        libs_comps[each_lib] = temp_comps
+   
     #add circuit components
     for i in range(len(circuitData["compModels"])):
 
         # get component model
-        comp_model = libraries[circuitData["compLibs"][i]]['components'][circuitData["compModels"][i]]
+        comp_model = libs_comps[circuitData["compLibs"][i]][circuitData["compModels"][i]]
         # clean attributes
         cls_attrs = deepcopy(comp_model.cls_attrs) #class attributes
         comp_attrs = circuitData["compAttrs"][i] #component attributes
         # clean up attributes
         for each_attrs in cls_attrs.keys():
             if(each_attrs in comp_attrs.keys()):
-                cls_attrs[each_attrs] = comp_attrs[each_attrs]
+                cls_attrs[each_attrs] = fromSI(comp_attrs[each_attrs])
 
-        subckt.add_component(libraries[circuitData["compLibs"][i]]['components'][circuitData["compModels"][i]](freq, **cls_attrs), circuitData["compLabels"][i])
+        subckt.add_component(libs_comps[circuitData["compLibs"][i]][circuitData["compModels"][i]](freq, **cls_attrs), circuitData["compLabels"][i])
 
     #add circuit netlist
     subckt.global_netlist = circuitData["circuitNets"]
@@ -359,7 +367,7 @@ class netlistParser:
                             elif("library" in temp_data[i]):
                                 print(temp_data[i])                           
                                 temp_lib = temp_data[i].replace('"',"").split("=")[1].split()
-                                componentLibs.append(temp_lib[-1])
+                                componentLibs.append(temp_lib[-1].split("/")[-1])
                                 found_library = 1
 
                             elif("=" in temp_data[i] and found_library==1):

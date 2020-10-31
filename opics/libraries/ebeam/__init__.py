@@ -169,10 +169,10 @@ class Waveguide(Waveguide):
          be adjusted for use, it is recommended to draw paths in KLayout and convert them to waveguides\
               using the built-in SiEPIC features. 
     """
-    cls_attrs = {"length":0e-6, "height":220e-9, "width":500e-9}
+    cls_attrs = {"wg_length":0e-6, "height":220e-9, "width":500e-9}
     valid_OID = [1,2]
     ports = 2
-    def __init__(self, f=f, length = 0e-6, height = 220e-9, width=500e-9, TE_loss = 700, OID=1):
+    def __init__(self, f=f, wg_length = 0e-6, height = 220e-9, width=500e-9, TE_loss = 700, OID=1):
         data_folder=datadir / "wg_integral_source"
         filename="wg_strip_lookup_table.xml"
 
@@ -181,11 +181,11 @@ class Waveguide(Waveguide):
         LUT_attrs_["width"] = width
 
         #length is not part of LUT attributes
-        del LUT_attrs_["length"]
+        del LUT_attrs_["wg_length"]
 
-        super().__init__(f, length = length, data_folder= data_folder, filename= filename, TE_loss= TE_loss, **LUT_attrs_)
+        super().__init__(f, length = wg_length, data_folder= data_folder, filename= filename, TE_loss= TE_loss, **LUT_attrs_)
         if(OID in self.valid_OID):
-            self.s = self.load_sparameters(length, data_folder, filename, TE_loss)
+            self.s = self.load_sparameters(wg_length, data_folder, filename, TE_loss)
         else:
             self.s = np.zeros((self.f.shape[0], self.ports, self.ports))
         

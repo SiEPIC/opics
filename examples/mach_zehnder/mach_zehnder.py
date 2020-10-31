@@ -1,7 +1,7 @@
 import time, warnings
 import numpy as np
 import matplotlib.pyplot as plt
-from opics import c_ as c
+from opics import c
 from opics import Network
 import opics
 
@@ -13,7 +13,7 @@ sim_start = time.time()
 freq = np.linspace(c*1e6/1.5, c*1e6/1.6, 2000)
 
 #import component library
-ebeam = opics.libs.ebeam
+ebeam = opics.libraries.ebeam
 
 #initialize an empty circuit
 circuit = Network()
@@ -21,8 +21,8 @@ circuit = Network()
 #define component instances
 gc_  = circuit.add_component(ebeam.GC(freq))
 y_ =   circuit.add_component(ebeam.Y(freq))
-wg2 =  circuit.add_component(ebeam.Waveguide(freq, 150e-6))
-wg1 =  circuit.add_component(ebeam.Waveguide(freq, 50e-6))
+wg2 =  circuit.add_component(ebeam.Waveguide(freq, 0e-6))
+wg1 =  circuit.add_component(ebeam.Waveguide(freq, 15e-6))
 y2_ =  circuit.add_component(ebeam.Y(freq))
 gc2_ = circuit.add_component(ebeam.GC(freq))
 

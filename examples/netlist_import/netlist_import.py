@@ -1,7 +1,7 @@
-from opics.library import libraries
+from opics import libraries
 from opics.network import Network
 from opics.utils import netlistParser, NetlistProcessor
-from opics.globals import c_ 
+from opics.globals import c as c_
 import time, os
 from pathlib import Path
 #warnings.filterwarnings('ignore') #ignore all/complex number warnings from numpy or scipy
@@ -9,13 +9,16 @@ from pathlib import Path
 sim_start = time.time()
 
 # read netlist
-spice_filepath = Path(os.path.dirname(__file__) + r"\\spice_netlist.spi")
+spice_filepath = Path(os.path.dirname(__file__) + r"\\test_sample.spi")
 
 # get netlist data
 circuitData = netlistParser(spice_filepath).readfile()
 
+print(circuitData)
+
 # process netlist data
 subckt = NetlistProcessor(spice_filepath, Network, libraries, c_, circuitData)
+
 
 #simulate network
 subckt.simulate_network()
@@ -28,4 +31,3 @@ ports = [[each_output, inp_idx] for each_output in out_idx]
 
 #plot results
 subckt.sim_result.plot_sparameters(ports=ports)
-

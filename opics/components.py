@@ -216,6 +216,7 @@ class Waveguide(componentModel):
         self.ne_ = None
         self.nd_ = None
         self.f = f
+        self.length = length
         self.componentID = ""
         self.c = 299792458
         self.sparam_file = ""
@@ -259,8 +260,7 @@ class Waveguide(componentModel):
         K = 2*np.pi*ne/lam0 + (ng/self.c)*(w - w0) - (nd*lam0**2/(4*np.pi*self.c))*((w - w0)**2)
 
         # compute s-matrix from K and waveguide length
-        for x in range(0, len(self.f)):
-            temp_s_[x,0,1] = temp_s_[x,1,0] = np.exp(-alpha*length + (K[x]*length*1j))
+        temp_s_[:,0,1] = temp_s_[:,1,0] = np.exp(-alpha*length + (K*length*1j))
 
         s = temp_s_
         self.ng_ = ng

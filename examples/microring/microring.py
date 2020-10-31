@@ -1,4 +1,5 @@
-from opics import c_ as c
+import time, warnings, sys
+from opics import c
 from opics import Network
 import opics, warnings
 import numpy as np
@@ -9,7 +10,7 @@ warnings.filterwarnings('ignore')
 #define frequency range and resolution
 freq = np.linspace(c*1e6/1.5, c*1e6/1.6, 2000)
 
-ebeam = opics.libs.ebeam
+ebeam = opics.libraries.ebeam
 
 circuit = Network()
 
