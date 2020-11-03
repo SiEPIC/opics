@@ -20,6 +20,5 @@ Install the OPICS package using ``pip``::
     pip install ./opics
 
 Once the package is installed, it is ready to use and can be imported using::
-    
-    import opics as op
 
+    import opics as op

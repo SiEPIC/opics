@@ -4,7 +4,8 @@ from opics.utils import netlistParser, NetlistProcessor
 from opics.globals import c as c_
 import time, os
 from pathlib import Path
-#warnings.filterwarnings('ignore') #ignore all/complex number warnings from numpy or scipy
+
+# warnings.filterwarnings('ignore') #ignore all/complex number warnings from numpy or scipy
 
 sim_start = time.time()
 
@@ -20,14 +21,14 @@ print(circuitData)
 subckt = NetlistProcessor(spice_filepath, Network, libraries, c_, circuitData)
 
 
-#simulate network
+# simulate network
 subckt.simulate_network()
 
-#get input and output net labels
+# get input and output net labels
 inp_idx = subckt.sim_result.nets[0].index(circuitData["inp_net"])
 out_idx = [subckt.sim_result.nets[0].index(each) for each in circuitData["out_net"]]
 
 ports = [[each_output, inp_idx] for each_output in out_idx]
 
-#plot results
+# plot results
 subckt.sim_result.plot_sparameters(ports=ports)

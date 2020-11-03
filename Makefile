@@ -53,6 +53,10 @@ lint: ## check style with flake8
 test: ## run tests quickly with the default Python
 	pytest
 
+test-force:
+	echo 'Regenerating component metadata for regression test. Make sure there are not any unwanted regressions because this will overwrite them'
+	pytest --force-regen
+
 test-all: ## run tests on every Python version with tox
 	tox
 
@@ -82,4 +86,7 @@ dist: clean ## builds source and wheel package
 	ls -l dist
 
 install: clean ## install the package to the active Python's site-packages
-	python setup.py install
+	pip install -e .
+	pip install -r requirements_dev.txt
+	pre-commit install
+	pip ins

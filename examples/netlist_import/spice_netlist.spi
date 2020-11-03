@@ -2,15 +2,15 @@
 
 .subckt spice_netlist ebeam_gc_te1550_laser1 ebeam_gc_te1550_detector2 ebeam_gc_te1550_detector3
 
- ebeam_gc_te1550_0  ebeam_gc_te1550_laser1 N$0 GC library="Design kits/ebeam"  lay_x=-233.61999999999986E-6 lay_y=-10.639999999999993E-6 sch_x=-9.31169884E0 sch_y=-424.0924389999999E-3 
- ebeam_y_1550_1  N$0 N$1 N$None Y library="Design kits/ebeam"  lay_x=-209.71999999999986E-6 lay_y=-10.639999999999993E-6 sch_x=-8.359085184E0 sch_y=-424.0924389999999E-3 
- ebeam_y_1550_2  N$1 N$2 N$3 Y library="Design kits/ebeam"  lay_x=-194.9199999999999E-6 lay_y=-7.889999999999996E-6 sch_x=-7.769182167E0 sch_y=-314.48208099999994E-3 
+ ebeam_gc_te1550_0  ebeam_gc_te1550_laser1 N$0 GC library="Design kits/ebeam"  lay_x=-233.61999999999986E-6 lay_y=-10.639999999999993E-6 sch_x=-9.31169884E0 sch_y=-424.0924389999999E-3
+ ebeam_y_1550_1  N$0 N$1 N$None Y library="Design kits/ebeam"  lay_x=-209.71999999999986E-6 lay_y=-10.639999999999993E-6 sch_x=-8.359085184E0 sch_y=-424.0924389999999E-3
+ ebeam_y_1550_2  N$1 N$2 N$3 Y library="Design kits/ebeam"  lay_x=-194.9199999999999E-6 lay_y=-7.889999999999996E-6 sch_x=-7.769182167E0 sch_y=-314.48208099999994E-3
  ebeam_gc_te1550_3  ebeam_gc_te1550_detector2 N$2 GC library="Design kits/ebeam"  lay_x=-171.0199999999999E-6 lay_y=-5.139999999999997E-6 sch_x=-6.816568511E0 sch_y=-204.87172299999995E-3  sch_r=180
- ebeam_wg_integral_1550_4  N$3 N$4 Waveguide library="Design kits/ebeam" wg_length=62.517u wg_width=0.500u points="[[-187.52,-10.64],[-180.37,-10.64],[-180.37,-60.55],[-188.93,-60.55]]" radius=5.0 lay_x=-184.2749999999999E-6 lay_y=-35.59499999999998E-6 sch_x=-7.344890436E0 sch_y=-1.418756614E0 
- ebeam_gc_te1550_5  ebeam_gc_te1550_detector3 N$4 GC library="Design kits/ebeam"  lay_x=-205.42999999999986E-6 lay_y=-60.54999999999997E-6 sch_x=-8.188093026E0 sch_y=-2.413420789E0 
+ ebeam_wg_integral_1550_4  N$3 N$4 Waveguide library="Design kits/ebeam" wg_length=62.517u wg_width=0.500u points="[[-187.52,-10.64],[-180.37,-10.64],[-180.37,-60.55],[-188.93,-60.55]]" radius=5.0 lay_x=-184.2749999999999E-6 lay_y=-35.59499999999998E-6 sch_x=-7.344890436E0 sch_y=-1.418756614E0
+ ebeam_gc_te1550_5  ebeam_gc_te1550_detector3 N$4 GC library="Design kits/ebeam"  lay_x=-205.42999999999986E-6 lay_y=-60.54999999999997E-6 sch_x=-8.188093026E0 sch_y=-2.413420789E0
 .ends spice_netlist
 
-spice_netlist   ebeam_gc_te1550_laser1 ebeam_gc_te1550_detector2 ebeam_gc_te1550_detector3 spice_netlist sch_x=-1 sch_y=-1 
+spice_netlist   ebeam_gc_te1550_laser1 ebeam_gc_te1550_detector2 ebeam_gc_te1550_detector3 spice_netlist sch_x=-1 sch_y=-1
 
 
 .ona input_unit=wavelength input_parameter=start_and_stop
@@ -23,4 +23,3 @@ spice_netlist   ebeam_gc_te1550_laser1 ebeam_gc_te1550_detector2 ebeam_gc_te1550
  + input = spice_netlist,ebeam_gc_te1550_laser1
  + output(1) = test2_2,ebeam_gc_te1550_detector2
  + output(2) = test2_2,ebeam_gc_te1550_detector3
-
