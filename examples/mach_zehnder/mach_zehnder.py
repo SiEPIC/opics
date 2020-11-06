@@ -1,13 +1,16 @@
-import time, warnings
+import time, warnings, sys
+sys.path.append(r"C:\Users\root\Documents\siepic\OPICS")
 import numpy as np
 import matplotlib.pyplot as plt
 from opics.globals import c
 from opics import Network
 import opics
 
+
 warnings.filterwarnings(
     "ignore"
 )  # ignore all/complex number warnings from numpy or scipy
+
 sim_start = time.time()
 
 
