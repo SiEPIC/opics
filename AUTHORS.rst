@@ -10,4 +10,3 @@ Contributors
 ------------
 * Mustafa Hammood <mustafa@siepic.com>
 * Stephen Lin <slin@siepic.com>
-

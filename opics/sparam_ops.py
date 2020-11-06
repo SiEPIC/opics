@@ -1,8 +1,10 @@
+""" Functions operating on s-parameter matrices
+"""
 import numpy as np
 
-## Functions operating on s-parameter matrices
-def connect_s(A, k, B, l, create_composite_matrix = True):
-    '''
+
+def connect_s(A, k, B, l, create_composite_matrix=True):
+    """
     connect two n-port networks' s-matrices together.
 
     specifically, connect port `k` on network `A` to port `l` on network
@@ -40,11 +42,11 @@ def connect_s(A, k, B, l, create_composite_matrix = True):
             connection algorithm
 
 
-    '''
+    """
 
-    if(create_composite_matrix):
+    if create_composite_matrix:
         if k > A.shape[-1] - 1 or l > B.shape[-1] - 1:
-            raise (ValueError('port indices are out of range'))
+            raise (ValueError("port indices are out of range"))
 
         nf = A.shape[0]  # num frequency points
         nA = A.shape[1]  # num ports on A
@@ -52,7 +54,7 @@ def connect_s(A, k, B, l, create_composite_matrix = True):
         nC = nA + nB  # num ports on C
 
         # create composite matrix, appending each sub-matrix diagonally
-        C = np.zeros((nf, nC, nC), dtype='complex')
+        C = np.zeros((nf, nC, nC), dtype="complex")
         C[:, :nA, :nA] = A.copy()
         C[:, nA:, nA:] = B.copy()
 
@@ -64,7 +66,7 @@ def connect_s(A, k, B, l, create_composite_matrix = True):
 
 
 def innerconnect_s(A, k, l):
-    '''
+    """
     connect two ports of a single n-port network's s-matrix.
 
     Specifically, connect port `k` to port `l` on `A`. This results in
@@ -94,23 +96,38 @@ def innerconnect_s(A, k, l):
 
     References
     ----------
-    .. [#] Compton, R.C.; , "Perspectives in microwave circuit analysis," Circuits and Systems, 1989., Proceedings of the 32nd Midwest Symposium on , vol., no., pp.716-718 vol.2, 14-16 Aug 1989. URL: http://ieeexplore.ieee.org/stamp/stamp.jsp?tp=&arnumber=101955&isnumber=3167
+    - Compton, R.C.; , "Perspectives in microwave circuit analysis,"
+    Circuits and Systems, 1989.,
+    Proceedings of the 32nd Midwest Symposium on , vol., no., pp.716-718 vol.2, 14-16
+    Aug 1989.
+    http://ieeexplore.ieee.org/stamp/stamp.jsp?tp=&arnumber=101955&isnumber=3167
 
-    .. [#] Filipsson, Gunnar; , "A New General Computer Algorithm for S-Matrix Calculation of Interconnected Multiports," Microwave Conference, 1981. 11th European , vol., no., pp.700-704, 7-11 Sept. 1981. URL: http://ieeexplore.ieee.org/stamp/stamp.jsp?tp=&arnumber=4131699&isnumber=4131585
-    '''
+    - Filipsson, Gunnar;
+    "A New General Computer Algorithm for S-Matrix Calculation of Interconnected
+    Multiports," Microwave Conference, 1981. 11th European , vol., no., pp.700-704,
+    7-11 Sept. 1981.
+    http://ieeexplore.ieee.org/stamp/stamp.jsp?tp=&arnumber=4131699&isnumber=4131585
+    """
 
     if k > A.shape[-1] - 1 or l > A.shape[-1] - 1:
-        raise (ValueError('port indices are out of range'))
+        raise (ValueError("port indices are out of range"))
 
     nA = A.shape[1]  # num of ports on input s-matrix
 
     # create an empty s-matrix, to store the result
-    C = np.zeros(shape=A.shape, dtype='complex')
+    C = np.zeros(shape=A.shape, dtype="complex")
 
     # loop through ports and calulates resultant s-parameters
     for i in range(nA):
         for j in range(nA):
-            C[:, i, j] = (A[:, i, j]*(A[:, l, l]*A[:, k, k] - (A[:, l, k] - 1)*(A[:, k, l] - 1)) + A[:, k, j]*A[:, i, l]*(A[:, l, k] - 1) - A[:, k, j]*A[:, i, k]*A[:, l, l] - A[:, i, l]*A[:, l, j]*A[:, k, k] + A[:, l, j]*A[:, i, k]*(A[:, k, l] - 1))/(A[:, l, l]*A[:, k, k] - (A[:, l, k] - 1)*(A[:, k, l] - 1))
+            C[:, i, j] = (
+                A[:, i, j]
+                * (A[:, l, l] * A[:, k, k] - (A[:, l, k] - 1) * (A[:, k, l] - 1))
+                + A[:, k, j] * A[:, i, l] * (A[:, l, k] - 1)
+                - A[:, k, j] * A[:, i, k] * A[:, l, l]
+                - A[:, i, l] * A[:, l, j] * A[:, k, k]
+                + A[:, l, j] * A[:, i, k] * (A[:, k, l] - 1)
+            ) / (A[:, l, l] * A[:, k, k] - (A[:, l, k] - 1) * (A[:, k, l] - 1))
 
     # remove ports that were `connected`
     C = np.delete(C, (k, l), 1)
