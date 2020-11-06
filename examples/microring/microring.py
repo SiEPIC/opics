@@ -1,4 +1,5 @@
 import time, warnings, sys
+sys.path.append(r"C:\Users\root\Documents\siepic\OPICS")
 from opics import c
 from opics import Network
 import opics, warnings
