@@ -1,7 +1,7 @@
 OPICS reference documentation
 ================================
 
-For an introduction to OPICS, start at the 
+For an introduction to OPICS, start at the
 `OPICS GitHub page <https://github.com/SiEPIC/OPICS>`_.
 
 
@@ -20,7 +20,7 @@ For an introduction to OPICS, start at the
 .. toctree::
    :maxdepth: 2
    :caption: Tutorials
-   
+
    notebooks/01-Mach-Zehnder_Interferometer
    notebooks/02-Micro_Ring_Resonator
 
@@ -44,4 +44,3 @@ Indices and tables
 * :ref:`genindex`
 * :ref:`modindex`
 * :ref:`search`
-
