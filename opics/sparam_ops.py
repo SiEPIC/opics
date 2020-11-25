@@ -1,11 +1,17 @@
 """ Functions operating on s-parameter matrices
 """
+from typing import Optional
 import numpy as np
 from numpy import ndarray
-from typing import Optional
 
 
-def connect_s(A: ndarray, k: int, B: Optional[ndarray], l: int, create_composite_matrix: bool=True) -> ndarray:
+def connect_s(
+    A: ndarray,
+    k: int,
+    B: Optional[ndarray],
+    l: int,
+    create_composite_matrix: bool = True,
+) -> ndarray:
     """
     connect two n-port networks' s-matrices together.
 

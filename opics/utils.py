@@ -1,11 +1,14 @@
-import numpy as np
+from typing import Any, Dict, List, Tuple
 import cmath as cm
-import time, re, itertools, inspect
-import xml.etree.ElementTree as ET
+import time
+import re
+import itertools
+import inspect
 from copy import deepcopy
+import numpy as np
 from numpy import ndarray
 from pathlib import PosixPath
-from typing import Any, Dict, List, Tuple
+import xml.etree.ElementTree as ET
 from xml.etree.ElementTree import Element, ElementTree
 
 
@@ -158,7 +161,9 @@ def universal_sparam_filereader(nports, sfilename, sfiledir, format_type="auto")
         return (np.array(F), S)
 
 
-def LUT_reader(filedir: PosixPath, lutfilename: str, lutdata: List[List[str]]) -> Tuple[List[str], ElementTree, Element]:
+def LUT_reader(
+    filedir: PosixPath, lutfilename: str, lutdata: List[List[str]]
+) -> Tuple[List[str], ElementTree, Element]:
     """reads look up table data
     """
     xml = ET.parse(filedir / lutfilename)
@@ -172,7 +177,14 @@ def LUT_reader(filedir: PosixPath, lutfilename: str, lutdata: List[List[str]]) -
     return (sparam_file, xml, node)
 
 
-def LUT_processor(filedir: PosixPath, lutfilename: str, lutdata: List[List[str]], nports: int, sparam_attr: str, verbose: bool=False) -> Tuple[Tuple[ndarray, ndarray], str]:
+def LUT_processor(
+    filedir: PosixPath,
+    lutfilename: str,
+    lutdata: List[List[str]],
+    nports: int,
+    sparam_attr: str,
+    verbose: bool = False,
+) -> Tuple[Tuple[ndarray, ndarray], str]:
     """process look up table data
     """
     start = time.time()

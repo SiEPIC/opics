@@ -22,7 +22,13 @@ class BDC(componentModel):
     valid_OID = [1]
     ports = 4
 
-    def __init__(self, f: ndarray=f, height: float=220e-9, width: float=500e-9, OID: int=1) -> None:
+    def __init__(
+        self,
+        f: ndarray = f,
+        height: float = 220e-9,
+        width: float = 500e-9,
+        OID: int = 1,
+    ) -> None:
         data_folder = datadir / "bdc_TE_source"
         filename = "bdc_lookup_table.xml"
 
@@ -77,13 +83,13 @@ class DC_halfring(componentModel):
 
     def __init__(
         self,
-        f: ndarray=f,
-        CoupleLength: int=0,
-        gap: float=100e-9,
-        radius: float=5e-6,
-        thickness: float=220e-9,
-        width: float=500e-9,
-        OID: int=1,
+        f: ndarray = f,
+        CoupleLength: int = 0,
+        gap: float = 100e-9,
+        radius: float = 5e-6,
+        thickness: float = 220e-9,
+        width: float = 500e-9,
+        OID: int = 1,
     ) -> None:
         data_folder = datadir / "ebeam_dc_halfring_straight"
         filename = "te_ebeam_dc_halfring_straight.xml"
@@ -113,7 +119,9 @@ class GC(componentModel):
     valid_OID = [1]
     ports = 2
 
-    def __init__(self, f: ndarray=f, deltaw: int=0, height: float=2.2e-07, OID: int=1) -> None:
+    def __init__(
+        self, f: ndarray = f, deltaw: int = 0, height: float = 2.2e-07, OID: int = 1
+    ) -> None:
 
         data_folder = datadir / "gc_source"
         filename = "GC_TE_lookup_table.xml"
@@ -173,7 +181,14 @@ class TunableWG(Waveguide):
     valid_OID = [1, 2]
     ports = 2
 
-    def __init__(self, length: float=5e-6, f: ndarray=f, power: float=0e-3, TE_loss: int=700, OID: int=1) -> None:
+    def __init__(
+        self,
+        length: float = 5e-6,
+        f: ndarray = f,
+        power: float = 0e-3,
+        TE_loss: int = 700,
+        OID: int = 1,
+    ) -> None:
         data_folder = datadir / "tunable_wg"
         filename = "wg_strip_tunable.xml"
         LUT_attrs_ = deepcopy(self.cls_attrs)
@@ -198,7 +213,13 @@ class Waveguide(Waveguide):
     ports = 2
 
     def __init__(
-        self, f: ndarray=f, wg_length: float=5e-6, height: float=220e-9, width: float=500e-9, TE_loss: int=700, OID: int=1
+        self,
+        f: ndarray = f,
+        wg_length: float = 5e-6,
+        height: float = 220e-9,
+        width: float = 500e-9,
+        TE_loss: int = 700,
+        OID: int = 1,
     ) -> None:
         data_folder = datadir / "wg_integral_source"
         filename = "wg_strip_lookup_table.xml"
@@ -235,7 +256,13 @@ class Y(componentModel):
     valid_OID = [1]
     ports = 3
 
-    def __init__(self, f: ndarray=f, height: float=220e-9, width: float=500e-9, OID: int=1) -> None:
+    def __init__(
+        self,
+        f: ndarray = f,
+        height: float = 220e-9,
+        width: float = 500e-9,
+        OID: int = 1,
+    ) -> None:
 
         data_folder = datadir / "y_branch_source"
         filename = "y_lookup_table.xml"
@@ -259,7 +286,7 @@ class Switch(componentModel):
     valid_OID = [1]
     ports = 4
 
-    def __init__(self, f: ndarray=f, power: float=0e-3, OID: int=1) -> None:
+    def __init__(self, f: ndarray = f, power: float = 0e-3, OID: int = 1) -> None:
         data_folder = datadir / "2x2_switch"
         filename = "2x2_switch.xml"
 
@@ -276,12 +303,12 @@ class Switch(componentModel):
 component_factory = dict(
     BDC=BDC,
     DC_halfring=DC_halfring,
-    #DC_temp=DC_temp,
+    # DC_temp=DC_temp,
     GC=GC,
-    #Multimode=Multimode,
-    #Path=Path,
+    # Multimode=Multimode,
+    # Path=Path,
     Switch=Switch,
-    #Terminator=Terminator,
+    # Terminator=Terminator,
     TunableWG=TunableWG,
     Waveguide=Waveguide,
     Y=Y,
@@ -292,7 +319,6 @@ __all__ = components_list
 
 
 if __name__ == "__main__":
-    import numpy as np
     import opics as op
 
     w = np.linspace(1.52, 1.58, 3) * 1e-6

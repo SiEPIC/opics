@@ -1,9 +1,10 @@
+import time
+import os
+from pathlib import Path
 from opics import libraries
 from opics.network import Network
 from opics.utils import netlistParser, NetlistProcessor
 from opics.globals import c as c_
-import time, os
-from pathlib import Path
 
 # warnings.filterwarnings('ignore') #ignore all/complex number warnings from numpy or scipy
 

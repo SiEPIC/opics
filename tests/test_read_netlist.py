@@ -13,7 +13,6 @@ def test_read_netlist() -> None:
     cwd = pathlib.Path(__file__).absolute().parent
     spice_filepath = cwd / "test_read_netlist" / "test_sample.spi"
 
-
     # get netlist data
     circuitData = netlistParser(spice_filepath).readfile()
 
@@ -31,7 +30,8 @@ def test_read_netlist() -> None:
     out_idx = [subckt.sim_result.nets[0].index(each) for each in circuitData["out_net"]]
 
     ports = [[each_output, inp_idx] for each_output in out_idx]
+    assert len(ports) > 0
 
 
-if __name__ == "__main__": 
+if __name__ == "__main__":
     test_read_netlist()
