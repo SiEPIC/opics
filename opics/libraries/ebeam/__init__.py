@@ -154,7 +154,7 @@ class Terminator(componentModel):
     """
 
     valid_OID = [1]
-    ports = 1
+    ports = 2
 
     def __init__(self, f=f, OID=1):
         data_folder = datadir / "ebeam_terminator_te1550"
@@ -275,19 +275,19 @@ class Switch(componentModel):
 component_factory = dict(
     BDC=BDC,
     DC_halfring=DC_halfring,
-    DC_temp=DC_temp,
+    #DC_temp=DC_temp,
     GC=GC,
-    Multimode=Multimode,
-    Path=Path,
+    #Multimode=Multimode,
+    #Path=Path,
     Switch=Switch,
-    Terminator=Terminator,
+    #Terminator=Terminator,
     TunableWG=TunableWG,
     Waveguide=Waveguide,
     Y=Y,
 )
 
-components = list(component_factory.keys())
-__all__ = components
+components_list = list(component_factory.keys())
+__all__ = components_list
 
 
 if __name__ == "__main__":
