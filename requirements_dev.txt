@@ -3,7 +3,6 @@ flake8>=3.7.8
 tox>=3.14.0
 coverage>=4.5.4
 sphinx>=3.2.1
-twine=>1.14.0
 pytest=>4.6.5
 numpy>=1.19.2
 scipy>=1.5.2
