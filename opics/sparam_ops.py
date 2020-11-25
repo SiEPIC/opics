@@ -1,9 +1,11 @@
 """ Functions operating on s-parameter matrices
 """
 import numpy as np
+from numpy import ndarray
+from typing import Optional
 
 
-def connect_s(A, k, B, l, create_composite_matrix=True):
+def connect_s(A: ndarray, k: int, B: Optional[ndarray], l: int, create_composite_matrix: bool=True) -> ndarray:
     """
     connect two n-port networks' s-matrices together.
 
@@ -65,7 +67,7 @@ def connect_s(A, k, B, l, create_composite_matrix=True):
         return innerconnect_s(A, k, l)
 
 
-def innerconnect_s(A, k, l):
+def innerconnect_s(A: ndarray, k: int, l: int) -> ndarray:
     """
     connect two ports of a single n-port network's s-matrix.
 

@@ -3,6 +3,9 @@ from copy import deepcopy
 from .sparam_ops import connect_s
 from .components import compoundElement
 import os, binascii
+from opics.components import compoundElement
+from opics.libraries.ebeam import GC, Waveguide, Y
+from typing import List, Optional, Union
 
 
 def interpolate(output_freq=None, input_freq=None, s_parameters=None):
@@ -15,7 +18,7 @@ class Network:
     """ specifies the network
     """
 
-    def __init__(self, networkID=None):
+    def __init__(self, networkID: Optional[str]=None) -> None:
         self.networkID = (
             networkID
             if networkID != None
@@ -26,7 +29,7 @@ class Network:
         self.global_netlist = []
         self.sim_result = None
 
-    def add_component(self, cls, componentID=None):
+    def add_component(self, cls: Union[Y, GC, Waveguide], componentID: Optional[str]=None) -> Union[Y, GC, Waveguide]:
         """add component to a network
         """
         count = 0
@@ -71,7 +74,7 @@ class Network:
 
         self.global_netlist = gnetlist
 
-    def global_to_local_ports(self, net_id, nets):
+    def global_to_local_ports(self, net_id: int, nets: List[List[int]]) -> List[int]:
         """
         returns which components the net_id refers to and their corresponding local ports
         """
@@ -86,7 +89,7 @@ class Network:
 
         return [filtered_nets[0], net_idx[0], filtered_nets[1], net_idx[1]]
 
-    def simulate_network(self):
+    def simulate_network(self) -> compoundElement:
         """ function to trigger the simulation of the network
         """
 

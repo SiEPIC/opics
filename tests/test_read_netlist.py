@@ -7,7 +7,7 @@ from opics.globals import c as c_
 # warnings.filterwarnings('ignore') #ignore all/complex number warnings from numpy or scipy
 
 
-def test_read_netlist():
+def test_read_netlist() -> None:
 
     # read netlist
     cwd = pathlib.Path(__file__).absolute().parent

@@ -2,13 +2,17 @@ import numpy as np
 from scipy.interpolate import interp1d
 import matplotlib.pyplot as plt
 from .utils import LUT_reader, LUT_processor
+from numpy import ndarray
+from pathlib import PosixPath
+from typing import Dict, List, Optional, Union
 
 
 class componentModel:
     """Defines the base component model class used to create new components for a library.
     """
 
-    def __init__(self, f, data_folder, filename, nports=0, sparam_attr="", **kwargs):
+    def __init__(self, f: ndarray, data_folder: PosixPath, filename: str, nports: int=0, sparam_attr: str="", **kwargs
+    ) -> None:
         """Defines the base component model class used to create new components for a library.
 
         Args:
@@ -33,7 +37,7 @@ class componentModel:
         # add component to the loaded components' list
         # components_loaded.append(self)
 
-    def load_sparameters(self, data_folder, filename):
+    def load_sparameters(self, data_folder: PosixPath, filename: str) -> ndarray:
         """Decides whether to load sparameters from npz file or from a raw sparam file or from a look-up table (for tunable components with attributes).
 
         Args:
@@ -61,7 +65,7 @@ class componentModel:
                 self.f, componentData[0], componentData[1]
             )
 
-    def interpolate_sparameters(self, target_f, source_f, source_s):
+    def interpolate_sparameters(self, target_f: ndarray, source_f: ndarray, source_s: ndarray) -> ndarray:
         """Cubic interpolation of the component sparameter data to match the desired simulation frequency range.
 
         Args:
@@ -100,7 +104,7 @@ class componentModel:
                     data = data.T
                     np.savetxt(datafile_id, data, fmt=["%d", "%f", "%f"])
 
-    def get_data(self, ports=None, xscale="freq", yscale="log"):
+    def get_data(self, ports: None=None, xscale: str="freq", yscale: str="log") -> Dict[str, Union[ndarray, str]]:
         """Get the S-parameters data for specific [input,output] port combinations, to be used for plotting functionalities.
         (WARNING: unused, to be used in plot_sparameters)
 
@@ -200,7 +204,7 @@ class compoundElement(componentModel):
     """Defines the properties of a compound element or simulated component. A compound element is a collection of connected components, inherits componentModel OPICS class.
     """
 
-    def __init__(self, f, s, nets=None):
+    def __init__(self, f: ndarray, s: ndarray, nets: Optional[List[List[int]]]=None) -> None:
         """Defines the properties of a compound element or simulated component. A compound element is a collection of connected components, inherits componentModel OPICS class.
 
         Args:
@@ -220,7 +224,8 @@ class Waveguide(componentModel):
     """Defines the properties of a waveguide component, can be used in the interconnected between components.
     """
 
-    def __init__(self, f, length, data_folder, filename, TE_loss, **kwargs):
+    def __init__(self, f: ndarray, length: float, data_folder: PosixPath, filename: str, TE_loss: int, **kwargs
+    ) -> None:
         """Defines the properties of a waveguide component, can be used in the interconnected between components.
 
         Args:
@@ -246,7 +251,7 @@ class Waveguide(componentModel):
 
         # components_loaded.append(self)
 
-    def load_sparameters(self, length, data_folder, filename, TE_loss):
+    def load_sparameters(self, length: float, data_folder: PosixPath, filename: str, TE_loss: int) -> ndarray:
         """read s_parameters
         """
 
