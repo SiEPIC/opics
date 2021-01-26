@@ -1,0 +1,29 @@
+* Spice output from KLayout SiEPIC-Tools v0.4.0, 2020-10-31 03:00:33.
+
+.subckt test ebeam_gc_te1550_detector2 ebeam_gc_te1550_laser1
+.param MC_uniformity_width=0
+.param MC_uniformity_thickness=0
+.param MC_resolution_x=100
+.param MC_resolution_y=100
+.param MC_grid=10e-6
+.param MC_non_uniform=99
+ ebeam_gc_te1550_0  ebeam_gc_te1550_detector2 N$0 GC library="Design kits/ebeam"  lay_x=-18.52E-6 lay_y=2.02E-6 sch_x=-464.937238E-3 sch_y=50.711297E-3
+ ebeam_y_1550_1  N$0 N$1 N$2 Y library="Design kits/ebeam"  lay_x=5.38E-6 lay_y=2.02E-6 sch_x=135.062762E-3 sch_y=50.711297E-3
+ ebeam_y_1550_2  N$3 N$5 N$4 Y library="Design kits/ebeam"  lay_x=5.38E-6 lay_y=129.02E-6 sch_x=135.062762E-3 sch_y=3.238995816E0
+ ebeam_gc_te1550_3  ebeam_gc_te1550_laser1 N$3 GC library="Design kits/ebeam"  lay_x=-18.52E-6 lay_y=129.02E-6 sch_x=-464.937238E-3 sch_y=3.238995816E0
+ ebeam_wg_integral_1550_4  N$4 N$1 Waveguide library="Design kits/ebeam" wg_length=157.666u wg_width=0.500u points="[[12.78,126.27],[33.01,126.27],[33.01,4.77],[12.78,4.77]]" radius=5.0 lay_x=23.52E-6 lay_y=65.52E-6 sch_x=590.460251E-3 sch_y=1.644853556E0
+ ebeam_wg_integral_1550_5  N$5 N$2 Waveguide library="Design kits/ebeam" wg_length=317.206u wg_width=0.500u points="[[12.78,131.77],[107.28,131.77],[107.28,-0.73],[12.78,-0.73]]" radius=5.0 lay_x=60.655E-6 lay_y=65.52E-6 sch_x=1.522719665E0 sch_y=1.644853556E0
+.ends test
+
+test   ebeam_gc_te1550_detector2 ebeam_gc_te1550_laser1 test sch_x=-1 sch_y=-1
+
+
+.ona input_unit=wavelength input_parameter=start_and_stop
+ + interconnect_loss = -0.5
+ + analysis_type = scattering_data
+ + orthogonal_identifier = 1
+ + start = 0.00000153
+ + stop = 0.00000158
+ + number_of_points = 2000
+ + input = spice_netlist,ebeam_gc_te1550_laser1
+ + output(1) = test2_2,ebeam_gc_te1550_detector2

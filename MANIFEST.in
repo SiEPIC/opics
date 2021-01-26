@@ -1,15 +1,4 @@
-include AUTHORS.rst
-include CONTRIBUTING.rst
-include HISTORY.rst
-include LICENSE
-include README.rst
+global-include *.csv
+global-include *.yaml
 include requirements.txt
-recursive-include *.png
-recursive-include opics *.sparam *.npz *.xml *.txt
-
-
-recursive-include tests *
-recursive-exclude * __pycache__
-recursive-exclude * *.py[co]
-
-recursive-include docs *.rst conf.py Makefile make.bat *.jpg *.png *.gif
+include requirements_dev.txt

@@ -1,8 +1,10 @@
-from opics import c
-from opics import Network
-import opics, time, warnings
+import time
+import warnings
 import numpy as np
 import matplotlib.pyplot as plt
+from opics import c
+from opics import Network
+import opics
 
 warnings.filterwarnings("ignore")
 

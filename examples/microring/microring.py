@@ -1,8 +1,8 @@
-
-from opics import c
-from opics import Network
-import opics, warnings
+import warnings
 import numpy as np
+from opics import Network
+from opics import c
+import opics
 
 warnings.filterwarnings("ignore")
 
