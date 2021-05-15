@@ -222,11 +222,12 @@ def LUT_processor(
     return (sdata, npz_file)
 
 
-def NetlistProcessor(spice_filepath, Network, libraries, c_, circuitData):
+def NetlistProcessor(spice_filepath, Network, libraries, c_, circuitData, verbose=True):
     """process a spice netlist to setup and simulate a circuit.
     """
-    for key, value in circuitData.items():
-        print(key, str(value))
+    if verbose:
+        for key, value in circuitData.items():
+            print(key, str(value))
 
     # create a circuit
     subckt = Network(circuitData["networkID"])
@@ -242,8 +243,8 @@ def NetlistProcessor(spice_filepath, Network, libraries, c_, circuitData):
     all_libraries = dict(inspect.getmembers(libraries, inspect.ismodule))
     libs_comps = {}
     for each_lib in list(set(circuitData["compLibs"])):
-        temp_comps = dict(inspect.getmembers(all_libraries[each_lib], inspect.isclass))
-        libs_comps[each_lib] = temp_comps
+        #temp_comps = dict(inspect.getmembers(all_libraries[each_lib], inspect.isclass))
+        libs_comps[each_lib] = all_libraries[each_lib].component_factory
 
     # add circuit components
     for i in range(len(circuitData["compModels"])):
@@ -345,6 +346,9 @@ class netlistParser:
 
                     elif seek_ona == 1:
                         # ONA related data
+                        if(len(temp_data)<3):
+                            temp_data = [0] + temp_data[-1].split("=")
+
                         if temp_data[1] == "orthogonal_identifier":
                             orthogonal_ID = int(temp_data[-1])
 
@@ -407,11 +411,11 @@ class netlistParser:
                                 # adapt opics models to accept this data
                                 # they are component parameters
                             elif "library" in temp_data[i]:
-                                print(temp_data[i])
+                                #print(temp_data[i])
                                 temp_lib = (
                                     temp_data[i].replace('"', "").split("=")[1].split()
                                 )
-                                componentLibs.append(temp_lib[-1].split("/")[-1])
+                                componentLibs.append(temp_lib[-1].split("/")[-1].lower())
                                 found_library = 1
 
                             elif "=" in temp_data[i] and found_library == 1:
