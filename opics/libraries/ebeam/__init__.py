@@ -312,6 +312,9 @@ component_factory = dict(
     TunableWG=TunableWG,
     Waveguide=Waveguide,
     Y=Y,
+    ebeam_y_1550=Y,
+    ebeam_gc_te1550=GC,
+    ebeam_wg_integral_1550=Waveguide
 )
 
 components_list = list(component_factory.keys())
@@ -325,3 +328,5 @@ if __name__ == "__main__":
     f = op.c / w
     c = BDC(f=f)
     s = c.get_data()
+
+    print(components_list)

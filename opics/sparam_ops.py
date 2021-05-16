@@ -67,10 +67,12 @@ def connect_s(
         C[:, nA:, nA:] = B.copy()
 
         # call innerconnect_s() on composit matrix C
-        return innerconnect_s(C, k, nA + l)
+        mat_result = innerconnect_s(C, k, nA + l)
+        return mat_result
     else:
         # call innerconnect_s() on non-composit matrix A
         return innerconnect_s(A, k, l)
+
 
 
 def innerconnect_s(A: ndarray, k: int, l: int) -> ndarray:
@@ -141,4 +143,9 @@ def innerconnect_s(A: ndarray, k: int, l: int) -> ndarray:
     C = np.delete(C, (k, l), 1)
     C = np.delete(C, (k, l), 2)
 
+    # ignore all from C[:,k,:], and C[:,l,:]
+    # ignore all from C[:,:,k], and C[:,:,l] 
+
     return C
+
+
