@@ -253,7 +253,7 @@ class Waveguide(componentModel):
             length (float): Length of the waveguide, in meters.
             data_folder (pathlib.Path): The location of the data folder containing waveguide data files and a look up table.
             filename (str): File name of the waveguide data file.
-            TE_loss (float): Value that defines the loss of the waveguide in dB/cm.
+            TE_loss (float): Value that defines the loss of the waveguide in dB/m.
         """
         self.ng_ = None
         self.alpha_ = None
