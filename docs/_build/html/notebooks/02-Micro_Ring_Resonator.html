@@ -3,9 +3,9 @@
 <!DOCTYPE html>
 <html class="writer-html5" lang="en" >
 <head>
-  <meta charset="utf-8">
+  <meta charset="utf-8" />
   
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   
   <title>Micro Ring Resonator (MRR) &mdash; OPICS  documentation</title>
   
@@ -17,7 +17,10 @@
 
   
   
+
   
+  
+
   
 
   
@@ -30,8 +33,9 @@
         <script src="../_static/jquery.js"></script>
         <script src="../_static/underscore.js"></script>
         <script src="../_static/doctools.js"></script>
-        <script src="../_static/language_data.js"></script>
         <script crossorigin="anonymous" integrity="sha256-Ae2Vz/4ePdIu6ZyI/5ZGsYnb+m0JlOmKPjt6XZ9JJkA=" src="https://cdnjs.cloudflare.com/ajax/libs/require.js/2.3.4/require.min.js"></script>
+        <script async="async" src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.7/latest.js?config=TeX-AMS-MML_HTMLorMML"></script>
+        <script type="text/x-mathjax-config">MathJax.Hub.Config({"tex2jax": {"inlineMath": [["\\(", "\\)"]], "displayMath": [["\\[", "\\]"]], "processRefs": false, "processEnvironments": false}})</script>
     
     <script type="text/javascript" src="../_static/js/theme.js"></script>
 
@@ -155,6 +159,8 @@
 
 
 
+
+
 <div role="navigation" aria-label="breadcrumbs navigation">
 
   <ul class="wy-breadcrumbs">
@@ -166,7 +172,7 @@
     
       <li class="wy-breadcrumbs-aside">
         
-            
+          
             <a href="../_sources/notebooks/02-Micro_Ring_Resonator.ipynb.txt" rel="nofollow"> View page source</a>
           
         
@@ -185,21 +191,35 @@
 /* CSS for nbsphinx extension */
 
 /* remove conflicting styling from Sphinx themes */
-div.nbinput.container,
-div.nbinput.container div.prompt,
-div.nbinput.container div.input_area,
-div.nbinput.container div[class*=highlight],
-div.nbinput.container div[class*=highlight] pre,
-div.nboutput.container,
-div.nboutput.container div.prompt,
-div.nboutput.container div.output_area,
-div.nboutput.container div[class*=highlight],
-div.nboutput.container div[class*=highlight] pre {
-    background: none;
+div.nbinput.container div.prompt *,
+div.nboutput.container div.prompt *,
+div.nbinput.container div.input_area pre,
+div.nboutput.container div.output_area pre,
+div.nbinput.container div.input_area .highlight,
+div.nboutput.container div.output_area .highlight {
     border: none;
-    padding: 0 0;
+    padding: 0;
     margin: 0;
     box-shadow: none;
+}
+
+div.nbinput.container > div[class*=highlight],
+div.nboutput.container > div[class*=highlight] {
+    margin: 0;
+}
+
+div.nbinput.container div.prompt *,
+div.nboutput.container div.prompt * {
+    background: none;
+}
+
+div.nboutput.container div.output_area .highlight,
+div.nboutput.container div.output_area pre {
+    background: unset;
+}
+
+div.nboutput.container div.output_area div.highlight {
+    color: unset;  /* override Pygments text color */
 }
 
 /* avoid gaps between output lines */
@@ -300,7 +320,7 @@ div.nboutput.container div.output_area {
 div.nbinput.container div.input_area {
     border: 1px solid #e0e0e0;
     border-radius: 2px;
-    background: #f5f5f5;
+    /*background: #f5f5f5;*/
 }
 
 /* override MathJax center alignment in output cells */
@@ -366,6 +386,7 @@ div.nboutput.container div.output_area.rendered_html,
 div.nboutput.container div.output_area > div.output_javascript,
 div.nboutput.container div.output_area:not(.rendered_html) > img{
     padding: 5px;
+    margin: 0;
 }
 
 /* fix copybtn overflow problem in chromium (needed for 'sphinx_copybutton') */
@@ -439,28 +460,33 @@ div.rendered_html tbody tr:hover {
 <h1>Micro Ring Resonator (MRR)<a class="headerlink" href="#Micro-Ring-Resonator-(MRR)" title="Permalink to this headline">¶</a></h1>
 <p><strong>We use SiEPIC EBeam library in this tutorial.</strong></p>
 <p>This notebook walks through the process of setting up and simulating a micro ring resonator device using the OPICS package.</p>
-<p>A ring resonator consists of an optical waveguide which is looped back on itself, such that a resonance occurs when the optical path length of the resonator is exactly a whole number of wavelengths. In simple terms, an all pass ring resonator can be thought of consisting input/output components, evanescent coupling region like a directional coupler, and a waveguide (as shown below). <img alt="9214e68731c840049c7270bf370dfbf4" src="../_images/mrr1.svg" /></p>
+<p>A ring resonator consists of an optical waveguide which is looped back on itself, such that a resonance occurs when the optical path length of the resonator is exactly a whole number of wavelengths. In simple terms, an all pass ring resonator can be thought of consisting input/output components, evanescent coupling region like a directional coupler, and a waveguide (as shown below). <img alt="7ffef446a30f481ba4fbaefcda4d7d7d" src="../_images/mrr1.svg" /></p>
 <div class="nbinput nblast docutils container">
-<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[1]:
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[8]:
 </pre></div>
 </div>
 <div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre>
-<span></span><span class="kn">import</span> <span class="nn">time</span><span class="o">,</span> <span class="nn">warnings</span>
+<span></span><span class="kn">import</span> <span class="nn">time</span>
+<span class="kn">import</span> <span class="nn">warnings</span>
 <span class="kn">import</span> <span class="nn">numpy</span> <span class="k">as</span> <span class="nn">np</span>
-<span class="kn">import</span> <span class="nn">matplotlib.pyplot</span> <span class="k">as</span> <span class="nn">plt</span>
-<span class="kn">import</span> <span class="nn">opics</span> <span class="k">as</span> <span class="nn">op</span>
+<span class="kn">from</span> <span class="nn">opics.globals</span> <span class="kn">import</span> <span class="n">c</span>
+<span class="kn">from</span> <span class="nn">opics</span> <span class="kn">import</span> <span class="n">Network</span>
+<span class="kn">import</span> <span class="nn">opics</span>
+
+<span class="n">freq</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">linspace</span><span class="p">(</span><span class="n">c</span> <span class="o">*</span> <span class="mf">1e6</span> <span class="o">/</span> <span class="mf">1.5</span><span class="p">,</span> <span class="n">c</span> <span class="o">*</span> <span class="mf">1e6</span> <span class="o">/</span> <span class="mf">1.6</span><span class="p">,</span> <span class="mi">2000</span><span class="p">)</span>
+
 </pre></div>
 </div>
 </div>
 <div class="section" id="Import-component-library">
 <h2>Import component library<a class="headerlink" href="#Import-component-library" title="Permalink to this headline">¶</a></h2>
-<p>Import <code class="docutils literal notranslate"><span class="pre">ebeam</span></code> library from <code class="docutils literal notranslate"><span class="pre">libs</span></code> module.</p>
+<p>Import <code class="docutils literal notranslate"><span class="pre">ebeam</span></code> library from <code class="docutils literal notranslate"><span class="pre">libraries</span></code> module.</p>
 <div class="nbinput nblast docutils container">
-<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[2]:
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[9]:
 </pre></div>
 </div>
 <div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre>
-<span></span><span class="n">ebeam</span> <span class="o">=</span> <span class="n">op</span><span class="o">.</span><span class="n">libs</span><span class="o">.</span><span class="n">ebeam</span>
+<span></span><span class="n">ebeam</span> <span class="o">=</span> <span class="n">opics</span><span class="o">.</span><span class="n">libraries</span><span class="o">.</span><span class="n">ebeam</span>
 </pre></div>
 </div>
 </div>
@@ -469,12 +495,12 @@ div.rendered_html tbody tr:hover {
 <h2>Define network<a class="headerlink" href="#Define-network" title="Permalink to this headline">¶</a></h2>
 <p>Create an instance of <code class="docutils literal notranslate"><span class="pre">Network</span></code> class, which is used to add, connect, and simulate circuit components.</p>
 <div class="nbinput nblast docutils container">
-<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[3]:
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[10]:
 </pre></div>
 </div>
 <div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre>
 <span></span><span class="n">circuit_name</span> <span class="o">=</span> <span class="s2">&quot;mrr&quot;</span>
-<span class="n">circuit</span> <span class="o">=</span> <span class="n">op</span><span class="o">.</span><span class="n">Network</span><span class="p">(</span><span class="n">circuit_name</span><span class="p">)</span>
+<span class="n">circuit</span> <span class="o">=</span> <span class="n">opics</span><span class="o">.</span><span class="n">Network</span><span class="p">(</span><span class="n">circuit_name</span><span class="p">)</span>
 </pre></div>
 </div>
 </div>
@@ -483,15 +509,15 @@ div.rendered_html tbody tr:hover {
 <h2>Add circuit components<a class="headerlink" href="#Add-circuit-components" title="Permalink to this headline">¶</a></h2>
 <p>Add grating couplers, evanescent coupler (e.g. directional coupler halfring), and a waveguide. You can define custom frequency data points for a component as well (see the example for output_GC).</p>
 <div class="nbinput nblast docutils container">
-<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[4]:
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[11]:
 </pre></div>
 </div>
 <div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre>
 
-<span></span><span class="n">input_gc</span> <span class="o">=</span> <span class="n">circuit</span><span class="o">.</span><span class="n">add_component</span><span class="p">(</span><span class="n">ebeam</span><span class="o">.</span><span class="n">GC</span><span class="p">())</span>
-<span class="n">output_gc</span> <span class="o">=</span> <span class="n">circuit</span><span class="o">.</span><span class="n">add_component</span><span class="p">(</span><span class="n">ebeam</span><span class="o">.</span><span class="n">GC</span><span class="p">())</span>
-<span class="n">wg</span> <span class="o">=</span> <span class="n">circuit</span><span class="o">.</span><span class="n">add_component</span><span class="p">(</span><span class="n">ebeam</span><span class="o">.</span><span class="n">Waveguide</span><span class="p">(</span><span class="n">length</span><span class="o">=</span><span class="n">np</span><span class="o">.</span><span class="n">pi</span><span class="o">*</span><span class="mf">5e-6</span><span class="p">))</span>
-<span class="n">dc_halfring</span> <span class="o">=</span> <span class="n">circuit</span><span class="o">.</span><span class="n">add_component</span><span class="p">(</span><span class="n">ebeam</span><span class="o">.</span><span class="n">DC_halfring</span><span class="p">())</span>
+<span></span><span class="n">input_gc</span> <span class="o">=</span> <span class="n">circuit</span><span class="o">.</span><span class="n">add_component</span><span class="p">(</span><span class="n">ebeam</span><span class="o">.</span><span class="n">GC</span><span class="p">(</span><span class="n">freq</span><span class="p">))</span>
+<span class="n">output_gc</span> <span class="o">=</span> <span class="n">circuit</span><span class="o">.</span><span class="n">add_component</span><span class="p">(</span><span class="n">ebeam</span><span class="o">.</span><span class="n">GC</span><span class="p">(</span><span class="n">freq</span><span class="p">))</span>
+<span class="n">wg</span> <span class="o">=</span> <span class="n">circuit</span><span class="o">.</span><span class="n">add_component</span><span class="p">(</span><span class="n">ebeam</span><span class="o">.</span><span class="n">Waveguide</span><span class="p">(</span><span class="n">freq</span><span class="p">,</span> <span class="n">np</span><span class="o">.</span><span class="n">pi</span><span class="o">*</span><span class="mf">5e-6</span><span class="p">))</span>
+<span class="n">dc_halfring</span> <span class="o">=</span> <span class="n">circuit</span><span class="o">.</span><span class="n">add_component</span><span class="p">(</span><span class="n">ebeam</span><span class="o">.</span><span class="n">DC_halfring</span><span class="p">(</span><span class="n">freq</span><span class="p">))</span>
 
 </pre></div>
 </div>
@@ -501,7 +527,7 @@ div.rendered_html tbody tr:hover {
 <h2>Define circuit connectivity<a class="headerlink" href="#Define-circuit-connectivity" title="Permalink to this headline">¶</a></h2>
 <p>In this section, we define the component connections. The connections are defined using <code class="docutils literal notranslate"><span class="pre">Network.connect</span></code>, e.g.<code class="docutils literal notranslate"><span class="pre">Network.connect(component1,</span> <span class="pre">component1_port,</span> <span class="pre">component2,</span> <span class="pre">component2_port)</span></code></p>
 <div class="nbinput nblast docutils container">
-<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[5]:
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[12]:
 </pre></div>
 </div>
 <div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre>
@@ -517,7 +543,7 @@ div.rendered_html tbody tr:hover {
 <div class="section" id="Simulate-the-circuit">
 <h2>Simulate the circuit<a class="headerlink" href="#Simulate-the-circuit" title="Permalink to this headline">¶</a></h2>
 <div class="nbinput docutils container">
-<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[6]:
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[13]:
 </pre></div>
 </div>
 <div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre>
@@ -537,14 +563,14 @@ div.rendered_html tbody tr:hover {
 </div>
 <div class="output_area docutils container">
 <div class="highlight"><pre>
-simulation finished in 0.04s
+simulation finished in 0.05s
 </pre></div></div>
 </div>
 </div>
 <div class="section" id="Visualize-the-simulation-result">
 <h2>Visualize the simulation result<a class="headerlink" href="#Visualize-the-simulation-result" title="Permalink to this headline">¶</a></h2>
 <div class="nbinput docutils container">
-<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[7]:
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[14]:
 </pre></div>
 </div>
 <div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre>
@@ -556,8 +582,7 @@ simulation finished in 0.04s
 <div class="prompt empty docutils container">
 </div>
 <div class="output_area docutils container">
-<img alt="../_images/notebooks_02-Micro_Ring_Resonator_13_0.png" src="../_images/notebooks_02-Micro_Ring_Resonator_13_0.png" />
-</div>
+<img alt="../_images/notebooks_02-Micro_Ring_Resonator_13_0.svg" src="../_images/notebooks_02-Micro_Ring_Resonator_13_0.svg" /></div>
 </div>
 </div>
 </div>
@@ -567,37 +592,29 @@ simulation finished in 0.04s
            
           </div>
           <footer>
-  
     <div class="rst-footer-buttons" role="navigation" aria-label="footer navigation">
-      
-        <a href="../authors.html" class="btn btn-neutral float-right" title="Credits" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right"></span></a>
-      
-      
-        <a href="01-Mach-Zehnder_Interferometer.html" class="btn btn-neutral float-left" title="Mach-Zehnder Interferometer (MZI)" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left"></span> Previous</a>
-      
+        <a href="../authors.html" class="btn btn-neutral float-right" title="Credits" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right" aria-hidden="true"></span></a>
+        <a href="01-Mach-Zehnder_Interferometer.html" class="btn btn-neutral float-left" title="Mach-Zehnder Interferometer (MZI)" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left" aria-hidden="true"></span> Previous</a>
     </div>
-  
 
   <hr/>
 
   <div role="contentinfo">
     <p>
-        
-        &copy; Copyright 2020, Jaspreet Jhoja
+        &#169; Copyright 2020, Jaspreet Jhoja.
 
     </p>
   </div>
     
     
     
-    Built with <a href="http://sphinx-doc.org/">Sphinx</a> using a
+    Built with <a href="https://www.sphinx-doc.org/">Sphinx</a> using a
     
-    <a href="https://github.com/rtfd/sphinx_rtd_theme">theme</a>
+    <a href="https://github.com/readthedocs/sphinx_rtd_theme">theme</a>
     
     provided by <a href="https://readthedocs.org">Read the Docs</a>. 
 
 </footer>
-
         </div>
       </div>
 

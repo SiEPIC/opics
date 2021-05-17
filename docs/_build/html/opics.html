@@ -3,9 +3,9 @@
 <!DOCTYPE html>
 <html class="writer-html5" lang="en" >
 <head>
-  <meta charset="utf-8">
+  <meta charset="utf-8" />
   
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   
   <title>Public API: opics package &mdash; OPICS  documentation</title>
   
@@ -17,7 +17,10 @@
 
   
   
+
   
+  
+
   
 
   
@@ -30,7 +33,6 @@
         <script src="_static/jquery.js"></script>
         <script src="_static/underscore.js"></script>
         <script src="_static/doctools.js"></script>
-        <script src="_static/language_data.js"></script>
         <script crossorigin="anonymous" integrity="sha256-Ae2Vz/4ePdIu6ZyI/5ZGsYnb+m0JlOmKPjt6XZ9JJkA=" src="https://cdnjs.cloudflare.com/ajax/libs/require.js/2.3.4/require.min.js"></script>
     
     <script type="text/javascript" src="_static/js/theme.js"></script>
@@ -153,6 +155,8 @@
 
 
 
+
+
 <div role="navigation" aria-label="breadcrumbs navigation">
 
   <ul class="wy-breadcrumbs">
@@ -164,7 +168,7 @@
     
       <li class="wy-breadcrumbs-aside">
         
-            
+          
             <a href="_sources/opics.rst.txt" rel="nofollow"> View page source</a>
           
         
@@ -228,12 +232,12 @@
 <span id="opics-components-module"></span><h2><code class="code docutils literal notranslate"><span class="pre">opics.components</span></code> module<a class="headerlink" href="#module-opics.components" title="Permalink to this headline">¶</a></h2>
 <dl class="py class">
 <dt id="opics.components.Waveguide">
-<em class="property">class </em><code class="sig-prename descclassname">opics.components.</code><code class="sig-name descname">Waveguide</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">f</span></em>, <em class="sig-param"><span class="n">length</span></em>, <em class="sig-param"><span class="n">data_folder</span></em>, <em class="sig-param"><span class="n">filename</span></em>, <em class="sig-param"><span class="n">TE_loss</span></em>, <em class="sig-param"><span class="o">**</span><span class="n">kwargs</span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/opics/components.html#Waveguide"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#opics.components.Waveguide" title="Permalink to this definition">¶</a></dt>
+<em class="property"><span class="pre">class</span> </em><code class="sig-prename descclassname"><span class="pre">opics.components.</span></code><code class="sig-name descname"><span class="pre">Waveguide</span></code><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">f</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">length</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">data_folder</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">filename</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">TE_loss</span></span></em>, <em class="sig-param"><span class="o"><span class="pre">**</span></span><span class="n"><span class="pre">kwargs</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/opics/components.html#Waveguide"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#opics.components.Waveguide" title="Permalink to this definition">¶</a></dt>
 <dd><p>Bases: <a class="reference internal" href="#opics.components.componentModel" title="opics.components.componentModel"><code class="xref py py-class docutils literal notranslate"><span class="pre">opics.components.componentModel</span></code></a></p>
 <p>Defines the properties of a waveguide component, can be used in the interconnected between components.</p>
 <dl class="py method">
 <dt id="opics.components.Waveguide.load_sparameters">
-<code class="sig-name descname">load_sparameters</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">length</span></em>, <em class="sig-param"><span class="n">data_folder</span></em>, <em class="sig-param"><span class="n">filename</span></em>, <em class="sig-param"><span class="n">TE_loss</span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/opics/components.html#Waveguide.load_sparameters"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#opics.components.Waveguide.load_sparameters" title="Permalink to this definition">¶</a></dt>
+<code class="sig-name descname"><span class="pre">load_sparameters</span></code><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">length</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">data_folder</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">filename</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">TE_loss</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/opics/components.html#Waveguide.load_sparameters"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#opics.components.Waveguide.load_sparameters" title="Permalink to this definition">¶</a></dt>
 <dd><p>read s_parameters</p>
 </dd></dl>
 
@@ -241,12 +245,12 @@
 
 <dl class="py class">
 <dt id="opics.components.componentModel">
-<em class="property">class </em><code class="sig-prename descclassname">opics.components.</code><code class="sig-name descname">componentModel</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">f</span></em>, <em class="sig-param"><span class="n">data_folder</span></em>, <em class="sig-param"><span class="n">filename</span></em>, <em class="sig-param"><span class="n">nports</span><span class="o">=</span><span class="default_value">0</span></em>, <em class="sig-param"><span class="n">sparam_attr</span><span class="o">=</span><span class="default_value">''</span></em>, <em class="sig-param"><span class="o">**</span><span class="n">kwargs</span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/opics/components.html#componentModel"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#opics.components.componentModel" title="Permalink to this definition">¶</a></dt>
+<em class="property"><span class="pre">class</span> </em><code class="sig-prename descclassname"><span class="pre">opics.components.</span></code><code class="sig-name descname"><span class="pre">componentModel</span></code><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">f</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">data_folder</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">filename</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">nports</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">0</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">sparam_attr</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">''</span></span></em>, <em class="sig-param"><span class="o"><span class="pre">**</span></span><span class="n"><span class="pre">kwargs</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/opics/components.html#componentModel"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#opics.components.componentModel" title="Permalink to this definition">¶</a></dt>
 <dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">object</span></code></p>
 <p>Defines the base component model class used to create new components for a library.</p>
 <dl class="py method">
 <dt id="opics.components.componentModel.get_data">
-<code class="sig-name descname">get_data</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">ports</span><span class="o">=</span><span class="default_value">None</span></em>, <em class="sig-param"><span class="n">xscale</span><span class="o">=</span><span class="default_value">'freq'</span></em>, <em class="sig-param"><span class="n">yscale</span><span class="o">=</span><span class="default_value">'log'</span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/opics/components.html#componentModel.get_data"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#opics.components.componentModel.get_data" title="Permalink to this definition">¶</a></dt>
+<code class="sig-name descname"><span class="pre">get_data</span></code><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">ports</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">xscale</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">'freq'</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">yscale</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">'log'</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/opics/components.html#componentModel.get_data"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#opics.components.componentModel.get_data" title="Permalink to this definition">¶</a></dt>
 <dd><p>Get the S-parameters data for specific [input,output] port combinations, to be used for plotting functionalities.
 (WARNING: unused, to be used in plot_sparameters)</p>
 <dl class="field-list simple">
@@ -265,7 +269,7 @@
 
 <dl class="py method">
 <dt id="opics.components.componentModel.interpolate_sparameters">
-<code class="sig-name descname">interpolate_sparameters</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">target_f</span></em>, <em class="sig-param"><span class="n">source_f</span></em>, <em class="sig-param"><span class="n">source_s</span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/opics/components.html#componentModel.interpolate_sparameters"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#opics.components.componentModel.interpolate_sparameters" title="Permalink to this definition">¶</a></dt>
+<code class="sig-name descname"><span class="pre">interpolate_sparameters</span></code><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">target_f</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">source_f</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">source_s</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/opics/components.html#componentModel.interpolate_sparameters"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#opics.components.componentModel.interpolate_sparameters" title="Permalink to this definition">¶</a></dt>
 <dd><p>Cubic interpolation of the component sparameter data to match the desired simulation frequency range.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters</dt>
@@ -283,7 +287,7 @@
 
 <dl class="py method">
 <dt id="opics.components.componentModel.load_sparameters">
-<code class="sig-name descname">load_sparameters</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">data_folder</span></em>, <em class="sig-param"><span class="n">filename</span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/opics/components.html#componentModel.load_sparameters"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#opics.components.componentModel.load_sparameters" title="Permalink to this definition">¶</a></dt>
+<code class="sig-name descname"><span class="pre">load_sparameters</span></code><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">data_folder</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">filename</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/opics/components.html#componentModel.load_sparameters"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#opics.components.componentModel.load_sparameters" title="Permalink to this definition">¶</a></dt>
 <dd><p>Decides whether to load sparameters from npz file or from a raw sparam file or from a look-up table (for tunable components with attributes).</p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters</dt>
@@ -300,7 +304,7 @@
 
 <dl class="py method">
 <dt id="opics.components.componentModel.plot_sparameters">
-<code class="sig-name descname">plot_sparameters</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">ports</span><span class="o">=</span><span class="default_value">None</span></em>, <em class="sig-param"><span class="n">show_freq</span><span class="o">=</span><span class="default_value">True</span></em>, <em class="sig-param"><span class="n">scale</span><span class="o">=</span><span class="default_value">'log'</span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/opics/components.html#componentModel.plot_sparameters"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#opics.components.componentModel.plot_sparameters" title="Permalink to this definition">¶</a></dt>
+<code class="sig-name descname"><span class="pre">plot_sparameters</span></code><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">ports</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">show_freq</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">True</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">scale</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">'log'</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/opics/components.html#componentModel.plot_sparameters"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#opics.components.componentModel.plot_sparameters" title="Permalink to this definition">¶</a></dt>
 <dd><p>Plot the component’s S-parameters.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters</dt>
@@ -315,7 +319,7 @@
 
 <dl class="py method">
 <dt id="opics.components.componentModel.write_sparameters">
-<code class="sig-name descname">write_sparameters</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">dirpath</span></em>, <em class="sig-param"><span class="n">filename</span></em>, <em class="sig-param"><span class="n">f_data</span></em>, <em class="sig-param"><span class="n">s_data</span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/opics/components.html#componentModel.write_sparameters"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#opics.components.componentModel.write_sparameters" title="Permalink to this definition">¶</a></dt>
+<code class="sig-name descname"><span class="pre">write_sparameters</span></code><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">dirpath</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">filename</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">f_data</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">s_data</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/opics/components.html#componentModel.write_sparameters"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#opics.components.componentModel.write_sparameters" title="Permalink to this definition">¶</a></dt>
 <dd><p>Export the simulated s-parameters to a file.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters</dt>
@@ -333,7 +337,7 @@
 
 <dl class="py class">
 <dt id="opics.components.compoundElement">
-<em class="property">class </em><code class="sig-prename descclassname">opics.components.</code><code class="sig-name descname">compoundElement</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">f</span></em>, <em class="sig-param"><span class="n">s</span></em>, <em class="sig-param"><span class="n">nets</span><span class="o">=</span><span class="default_value">None</span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/opics/components.html#compoundElement"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#opics.components.compoundElement" title="Permalink to this definition">¶</a></dt>
+<em class="property"><span class="pre">class</span> </em><code class="sig-prename descclassname"><span class="pre">opics.components.</span></code><code class="sig-name descname"><span class="pre">compoundElement</span></code><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">f</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">s</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">nets</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/opics/components.html#compoundElement"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#opics.components.compoundElement" title="Permalink to this definition">¶</a></dt>
 <dd><p>Bases: <a class="reference internal" href="#opics.components.componentModel" title="opics.components.componentModel"><code class="xref py py-class docutils literal notranslate"><span class="pre">opics.components.componentModel</span></code></a></p>
 <p>Defines the properties of a compound element or simulated component. A compound element is a collection of connected components, inherits componentModel OPICS class.</p>
 </dd></dl>
@@ -343,36 +347,36 @@
 <span id="opics-network-module"></span><h2>opics.network module<a class="headerlink" href="#module-opics.network" title="Permalink to this headline">¶</a></h2>
 <dl class="py class">
 <dt id="opics.network.Network">
-<em class="property">class </em><code class="sig-prename descclassname">opics.network.</code><code class="sig-name descname">Network</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">networkID</span><span class="o">=</span><span class="default_value">None</span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/opics/network.html#Network"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#opics.network.Network" title="Permalink to this definition">¶</a></dt>
+<em class="property"><span class="pre">class</span> </em><code class="sig-prename descclassname"><span class="pre">opics.network.</span></code><code class="sig-name descname"><span class="pre">Network</span></code><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">networkID</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/opics/network.html#Network"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#opics.network.Network" title="Permalink to this definition">¶</a></dt>
 <dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">object</span></code></p>
 <p>specifies the network</p>
 <dl class="py method">
 <dt id="opics.network.Network.add_component">
-<code class="sig-name descname">add_component</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">cls</span></em>, <em class="sig-param"><span class="n">componentID</span><span class="o">=</span><span class="default_value">None</span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/opics/network.html#Network.add_component"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#opics.network.Network.add_component" title="Permalink to this definition">¶</a></dt>
+<code class="sig-name descname"><span class="pre">add_component</span></code><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">cls</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">componentID</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/opics/network.html#Network.add_component"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#opics.network.Network.add_component" title="Permalink to this definition">¶</a></dt>
 <dd><p>add component to a network</p>
 </dd></dl>
 
 <dl class="py method">
 <dt id="opics.network.Network.connect">
-<code class="sig-name descname">connect</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">component_A</span></em>, <em class="sig-param"><span class="n">port_A</span></em>, <em class="sig-param"><span class="n">component_B</span></em>, <em class="sig-param"><span class="n">port_B</span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/opics/network.html#Network.connect"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#opics.network.Network.connect" title="Permalink to this definition">¶</a></dt>
+<code class="sig-name descname"><span class="pre">connect</span></code><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">component_A</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">port_A</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">component_B</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">port_B</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/opics/network.html#Network.connect"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#opics.network.Network.connect" title="Permalink to this definition">¶</a></dt>
 <dd><p>connect two components together</p>
 </dd></dl>
 
 <dl class="py method">
 <dt id="opics.network.Network.global_to_local_ports">
-<code class="sig-name descname">global_to_local_ports</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">net_id</span></em>, <em class="sig-param"><span class="n">nets</span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/opics/network.html#Network.global_to_local_ports"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#opics.network.Network.global_to_local_ports" title="Permalink to this definition">¶</a></dt>
+<code class="sig-name descname"><span class="pre">global_to_local_ports</span></code><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">net_id</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">nets</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/opics/network.html#Network.global_to_local_ports"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#opics.network.Network.global_to_local_ports" title="Permalink to this definition">¶</a></dt>
 <dd><p>returns which components the net_id refers to and their corresponding local ports</p>
 </dd></dl>
 
 <dl class="py method">
 <dt id="opics.network.Network.initiate_global_netlist">
-<code class="sig-name descname">initiate_global_netlist</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="_modules/opics/network.html#Network.initiate_global_netlist"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#opics.network.Network.initiate_global_netlist" title="Permalink to this definition">¶</a></dt>
+<code class="sig-name descname"><span class="pre">initiate_global_netlist</span></code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="_modules/opics/network.html#Network.initiate_global_netlist"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#opics.network.Network.initiate_global_netlist" title="Permalink to this definition">¶</a></dt>
 <dd><p>initiates a global netlist with negative indices, overwrite indices that are used in the circuit with positive values</p>
 </dd></dl>
 
 <dl class="py method">
 <dt id="opics.network.Network.simulate_network">
-<code class="sig-name descname">simulate_network</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="_modules/opics/network.html#Network.simulate_network"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#opics.network.Network.simulate_network" title="Permalink to this definition">¶</a></dt>
+<code class="sig-name descname"><span class="pre">simulate_network</span></code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="_modules/opics/network.html#Network.simulate_network"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#opics.network.Network.simulate_network" title="Permalink to this definition">¶</a></dt>
 <dd><p>function to trigger the simulation of the network</p>
 </dd></dl>
 
@@ -380,7 +384,7 @@
 
 <dl class="py function">
 <dt id="opics.network.interpolate">
-<code class="sig-prename descclassname">opics.network.</code><code class="sig-name descname">interpolate</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">output_freq</span><span class="o">=</span><span class="default_value">None</span></em>, <em class="sig-param"><span class="n">input_freq</span><span class="o">=</span><span class="default_value">None</span></em>, <em class="sig-param"><span class="n">s_parameters</span><span class="o">=</span><span class="default_value">None</span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/opics/network.html#interpolate"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#opics.network.interpolate" title="Permalink to this definition">¶</a></dt>
+<code class="sig-prename descclassname"><span class="pre">opics.network.</span></code><code class="sig-name descname"><span class="pre">interpolate</span></code><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">output_freq</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">input_freq</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">s_parameters</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/opics/network.html#interpolate"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#opics.network.interpolate" title="Permalink to this definition">¶</a></dt>
 <dd><p>interpolates s-parameters</p>
 </dd></dl>
 
@@ -389,7 +393,7 @@
 <span id="opics-sparam-ops-module"></span><h2>opics.sparam_ops module<a class="headerlink" href="#module-opics.sparam_ops" title="Permalink to this headline">¶</a></h2>
 <dl class="py function">
 <dt id="opics.sparam_ops.connect_s">
-<code class="sig-prename descclassname">opics.sparam_ops.</code><code class="sig-name descname">connect_s</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">A</span></em>, <em class="sig-param"><span class="n">k</span></em>, <em class="sig-param"><span class="n">B</span></em>, <em class="sig-param"><span class="n">l</span></em>, <em class="sig-param"><span class="n">create_composite_matrix</span><span class="o">=</span><span class="default_value">True</span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/opics/sparam_ops.html#connect_s"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#opics.sparam_ops.connect_s" title="Permalink to this definition">¶</a></dt>
+<code class="sig-prename descclassname"><span class="pre">opics.sparam_ops.</span></code><code class="sig-name descname"><span class="pre">connect_s</span></code><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">A</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">k</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">B</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">l</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">create_composite_matrix</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">True</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/opics/sparam_ops.html#connect_s"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#opics.sparam_ops.connect_s" title="Permalink to this definition">¶</a></dt>
 <dd><p>connect two n-port networks’ s-matrices together.</p>
 <p>specifically, connect port <cite>k</cite> on network <cite>A</cite> to port <cite>l</cite> on network
 <cite>B</cite>. The resultant network has nports = (A.rank + B.rank-2). This
@@ -415,9 +419,9 @@ details about the implementation</p>
 <div class="admonition seealso">
 <p class="admonition-title">See also</p>
 <dl class="simple">
-<dt><code class="xref py py-func docutils literal notranslate"><span class="pre">connect()</span></code></dt><dd><p>operates on <code class="xref py py-class docutils literal notranslate"><span class="pre">Network</span></code> types</p>
+<dt><code class="xref py py-obj docutils literal notranslate"><span class="pre">connect</span></code></dt><dd><p>operates on <code class="xref py py-class docutils literal notranslate"><span class="pre">Network</span></code> types</p>
 </dd>
-<dt><a class="reference internal" href="#opics.sparam_ops.innerconnect_s" title="opics.sparam_ops.innerconnect_s"><code class="xref py py-func docutils literal notranslate"><span class="pre">innerconnect_s()</span></code></a></dt><dd><p>function which implements the connection connection algorithm</p>
+<dt><a class="reference internal" href="#opics.sparam_ops.innerconnect_s" title="opics.sparam_ops.innerconnect_s"><code class="xref py py-obj docutils literal notranslate"><span class="pre">innerconnect_s</span></code></a></dt><dd><p>function which implements the connection connection algorithm</p>
 </dd>
 </dl>
 </div>
@@ -425,7 +429,7 @@ details about the implementation</p>
 
 <dl class="py function">
 <dt id="opics.sparam_ops.innerconnect_s">
-<code class="sig-prename descclassname">opics.sparam_ops.</code><code class="sig-name descname">innerconnect_s</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">A</span></em>, <em class="sig-param"><span class="n">k</span></em>, <em class="sig-param"><span class="n">l</span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/opics/sparam_ops.html#innerconnect_s"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#opics.sparam_ops.innerconnect_s" title="Permalink to this definition">¶</a></dt>
+<code class="sig-prename descclassname"><span class="pre">opics.sparam_ops.</span></code><code class="sig-name descname"><span class="pre">innerconnect_s</span></code><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">A</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">k</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">l</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/opics/sparam_ops.html#innerconnect_s"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#opics.sparam_ops.innerconnect_s" title="Permalink to this definition">¶</a></dt>
 <dd><p>connect two ports of a single n-port network’s s-matrix.</p>
 <p>Specifically, connect port <cite>k</cite> to port <cite>l</cite> on <cite>A</cite>. This results in
 a (n-2)-port network.  This     function operates on, and returns
@@ -463,25 +467,25 @@ describing the  algorithm is given in <a class="footnote-reference brackets" hre
 <span id="opics-utils-module"></span><h2>opics.utils module<a class="headerlink" href="#module-opics.utils" title="Permalink to this headline">¶</a></h2>
 <dl class="py function">
 <dt id="opics.utils.LUT_processor">
-<code class="sig-prename descclassname">opics.utils.</code><code class="sig-name descname">LUT_processor</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">filedir</span></em>, <em class="sig-param"><span class="n">lutfilename</span></em>, <em class="sig-param"><span class="n">lutdata</span></em>, <em class="sig-param"><span class="n">nports</span></em>, <em class="sig-param"><span class="n">sparam_attr</span></em>, <em class="sig-param"><span class="n">verbose</span><span class="o">=</span><span class="default_value">False</span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/opics/utils.html#LUT_processor"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#opics.utils.LUT_processor" title="Permalink to this definition">¶</a></dt>
+<code class="sig-prename descclassname"><span class="pre">opics.utils.</span></code><code class="sig-name descname"><span class="pre">LUT_processor</span></code><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">filedir</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">lutfilename</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">lutdata</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">nports</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">sparam_attr</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">verbose</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">False</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/opics/utils.html#LUT_processor"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#opics.utils.LUT_processor" title="Permalink to this definition">¶</a></dt>
 <dd><p>process look up table data</p>
 </dd></dl>
 
 <dl class="py function">
 <dt id="opics.utils.LUT_reader">
-<code class="sig-prename descclassname">opics.utils.</code><code class="sig-name descname">LUT_reader</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">filedir</span></em>, <em class="sig-param"><span class="n">lutfilename</span></em>, <em class="sig-param"><span class="n">lutdata</span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/opics/utils.html#LUT_reader"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#opics.utils.LUT_reader" title="Permalink to this definition">¶</a></dt>
+<code class="sig-prename descclassname"><span class="pre">opics.utils.</span></code><code class="sig-name descname"><span class="pre">LUT_reader</span></code><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">filedir</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">lutfilename</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">lutdata</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/opics/utils.html#LUT_reader"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#opics.utils.LUT_reader" title="Permalink to this definition">¶</a></dt>
 <dd><p>reads look up table data</p>
 </dd></dl>
 
 <dl class="py function">
 <dt id="opics.utils.NetlistProcessor">
-<code class="sig-prename descclassname">opics.utils.</code><code class="sig-name descname">NetlistProcessor</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">spice_filepath</span></em>, <em class="sig-param"><span class="n">Network</span></em>, <em class="sig-param"><span class="n">libraries</span></em>, <em class="sig-param"><span class="n">c_</span></em>, <em class="sig-param"><span class="n">circuitData</span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/opics/utils.html#NetlistProcessor"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#opics.utils.NetlistProcessor" title="Permalink to this definition">¶</a></dt>
+<code class="sig-prename descclassname"><span class="pre">opics.utils.</span></code><code class="sig-name descname"><span class="pre">NetlistProcessor</span></code><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">spice_filepath</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">Network</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">libraries</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">c_</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">circuitData</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/opics/utils.html#NetlistProcessor"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#opics.utils.NetlistProcessor" title="Permalink to this definition">¶</a></dt>
 <dd><p>process a spice netlist to setup and simulate a circuit.</p>
 </dd></dl>
 
 <dl class="py function">
 <dt id="opics.utils.fromSI">
-<code class="sig-prename descclassname">opics.utils.</code><code class="sig-name descname">fromSI</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">value_</span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/opics/utils.html#fromSI"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#opics.utils.fromSI" title="Permalink to this definition">¶</a></dt>
+<code class="sig-prename descclassname"><span class="pre">opics.utils.</span></code><code class="sig-name descname"><span class="pre">fromSI</span></code><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">value_</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/opics/utils.html#fromSI"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#opics.utils.fromSI" title="Permalink to this definition">¶</a></dt>
 <dd><p>converts from SI unit values to metric</p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters</dt>
@@ -495,19 +499,19 @@ describing the  algorithm is given in <a class="footnote-reference brackets" hre
 
 <dl class="py class">
 <dt id="opics.utils.netlistParser">
-<em class="property">class </em><code class="sig-prename descclassname">opics.utils.</code><code class="sig-name descname">netlistParser</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">mainfile_path</span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/opics/utils.html#netlistParser"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#opics.utils.netlistParser" title="Permalink to this definition">¶</a></dt>
+<em class="property"><span class="pre">class</span> </em><code class="sig-prename descclassname"><span class="pre">opics.utils.</span></code><code class="sig-name descname"><span class="pre">netlistParser</span></code><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">mainfile_path</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/opics/utils.html#netlistParser"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#opics.utils.netlistParser" title="Permalink to this definition">¶</a></dt>
 <dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">object</span></code></p>
 <p>A netlist parser to read spi files generated by SiEPIC tools</p>
 <dl class="py method">
 <dt id="opics.utils.netlistParser.readfile">
-<code class="sig-name descname">readfile</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="_modules/opics/utils.html#netlistParser.readfile"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#opics.utils.netlistParser.readfile" title="Permalink to this definition">¶</a></dt>
+<code class="sig-name descname"><span class="pre">readfile</span></code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="_modules/opics/utils.html#netlistParser.readfile"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#opics.utils.netlistParser.readfile" title="Permalink to this definition">¶</a></dt>
 <dd></dd></dl>
 
 </dd></dl>
 
 <dl class="py function">
 <dt id="opics.utils.universal_sparam_filereader">
-<code class="sig-prename descclassname">opics.utils.</code><code class="sig-name descname">universal_sparam_filereader</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">nports</span></em>, <em class="sig-param"><span class="n">sfilename</span></em>, <em class="sig-param"><span class="n">sfiledir</span></em>, <em class="sig-param"><span class="n">format_type</span><span class="o">=</span><span class="default_value">'auto'</span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/opics/utils.html#universal_sparam_filereader"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#opics.utils.universal_sparam_filereader" title="Permalink to this definition">¶</a></dt>
+<code class="sig-prename descclassname"><span class="pre">opics.utils.</span></code><code class="sig-name descname"><span class="pre">universal_sparam_filereader</span></code><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">nports</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">sfilename</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">sfiledir</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">format_type</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">'auto'</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/opics/utils.html#universal_sparam_filereader"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#opics.utils.universal_sparam_filereader" title="Permalink to this definition">¶</a></dt>
 <dd><p>Function to automatically detect the sparameter file format and use appropriate method to delimit and format sparam data</p>
 <p>This function is a unified version of sparameter reader function defined in <a class="reference external" href="https://github.com/BYUCamachoLab/simphony">https://github.com/BYUCamachoLab/simphony</a></p>
 </dd></dl>
@@ -520,35 +524,28 @@ describing the  algorithm is given in <a class="footnote-reference brackets" hre
            
           </div>
           <footer>
-  
     <div class="rst-footer-buttons" role="navigation" aria-label="footer navigation">
-      
-      
-        <a href="authors.html" class="btn btn-neutral float-left" title="Credits" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left"></span> Previous</a>
-      
+        <a href="authors.html" class="btn btn-neutral float-left" title="Credits" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left" aria-hidden="true"></span> Previous</a>
     </div>
-  
 
   <hr/>
 
   <div role="contentinfo">
     <p>
-        
-        &copy; Copyright 2020, Jaspreet Jhoja
+        &#169; Copyright 2020, Jaspreet Jhoja.
 
     </p>
   </div>
     
     
     
-    Built with <a href="http://sphinx-doc.org/">Sphinx</a> using a
+    Built with <a href="https://www.sphinx-doc.org/">Sphinx</a> using a
     
-    <a href="https://github.com/rtfd/sphinx_rtd_theme">theme</a>
+    <a href="https://github.com/readthedocs/sphinx_rtd_theme">theme</a>
     
     provided by <a href="https://readthedocs.org">Read the Docs</a>. 
 
 </footer>
-
         </div>
       </div>
 

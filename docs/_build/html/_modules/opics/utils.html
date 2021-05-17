@@ -3,9 +3,9 @@
 <!DOCTYPE html>
 <html class="writer-html5" lang="en" >
 <head>
-  <meta charset="utf-8">
+  <meta charset="utf-8" />
   
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   
   <title>opics.utils &mdash; OPICS  documentation</title>
   
@@ -17,7 +17,10 @@
 
   
   
+
   
+  
+
   
 
   
@@ -30,7 +33,6 @@
         <script src="../../_static/jquery.js"></script>
         <script src="../../_static/underscore.js"></script>
         <script src="../../_static/doctools.js"></script>
-        <script src="../../_static/language_data.js"></script>
         <script crossorigin="anonymous" integrity="sha256-Ae2Vz/4ePdIu6ZyI/5ZGsYnb+m0JlOmKPjt6XZ9JJkA=" src="https://cdnjs.cloudflare.com/ajax/libs/require.js/2.3.4/require.min.js"></script>
     
     <script type="text/javascript" src="../../_static/js/theme.js"></script>
@@ -145,6 +147,8 @@
 
 
 
+
+
 <div role="navigation" aria-label="breadcrumbs navigation">
 
   <ul class="wy-breadcrumbs">
@@ -172,7 +176,7 @@
 <span></span><span class="kn">import</span> <span class="nn">numpy</span> <span class="k">as</span> <span class="nn">np</span>
 <span class="kn">from</span> <span class="nn">pathlib</span> <span class="kn">import</span> <span class="n">Path</span>
 <span class="kn">import</span> <span class="nn">cmath</span> <span class="k">as</span> <span class="nn">cm</span>
-<span class="kn">import</span> <span class="nn">time</span><span class="o">,</span> <span class="nn">re</span><span class="o">,</span> <span class="nn">itertools</span><span class="o">,</span> <span class="nn">os</span><span class="o">,</span> <span class="nn">warnings</span>
+<span class="kn">import</span> <span class="nn">time</span><span class="o">,</span> <span class="nn">re</span><span class="o">,</span> <span class="nn">itertools</span><span class="o">,</span> <span class="nn">os</span><span class="o">,</span> <span class="nn">warnings</span><span class="o">,</span> <span class="nn">inspect</span>
 <span class="kn">import</span> <span class="nn">xml.etree.ElementTree</span> <span class="k">as</span> <span class="nn">ET</span>
 <span class="kn">from</span> <span class="nn">copy</span> <span class="kn">import</span> <span class="n">deepcopy</span>
 
@@ -185,7 +189,7 @@
 <span class="sd">    Returns:</span>
 <span class="sd">        float: the value in metric units.</span>
 <span class="sd">    &quot;&quot;&quot;</span>
-    <span class="k">return</span> <span class="n">value_</span><span class="o">.</span><span class="n">replace</span><span class="p">(</span><span class="s2">&quot;u&quot;</span><span class="p">,</span> <span class="s2">&quot;e-6&quot;</span><span class="p">)</span></div>
+    <span class="k">return</span> <span class="nb">float</span><span class="p">(</span><span class="n">value_</span><span class="o">.</span><span class="n">replace</span><span class="p">(</span><span class="s2">&quot;u&quot;</span><span class="p">,</span> <span class="s2">&quot;e-6&quot;</span><span class="p">))</span></div>
 
 <div class="viewcode-block" id="universal_sparam_filereader"><a class="viewcode-back" href="../../opics.html#opics.utils.universal_sparam_filereader">[docs]</a><span class="k">def</span> <span class="nf">universal_sparam_filereader</span><span class="p">(</span><span class="n">nports</span><span class="p">,</span> <span class="n">sfilename</span><span class="p">,</span> <span class="n">sfiledir</span><span class="p">,</span> <span class="n">format_type</span> <span class="o">=</span> <span class="s2">&quot;auto&quot;</span><span class="p">):</span>
     <span class="sd">&quot;&quot;&quot;</span>
@@ -387,20 +391,28 @@
     <span class="c1">#define frequency range and resolution</span>
     <span class="n">freq</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">linspace</span><span class="p">(</span><span class="n">c_</span><span class="o">/</span><span class="n">circuitData</span><span class="p">[</span><span class="s2">&quot;sim_params&quot;</span><span class="p">][</span><span class="mi">0</span><span class="p">],</span> <span class="n">c_</span><span class="o">/</span><span class="n">circuitData</span><span class="p">[</span><span class="s2">&quot;sim_params&quot;</span><span class="p">][</span><span class="mi">1</span><span class="p">],</span> <span class="n">circuitData</span><span class="p">[</span><span class="s2">&quot;sim_params&quot;</span><span class="p">][</span><span class="mi">2</span><span class="p">])</span>
 
+
+    <span class="c1">#get library</span>
+    <span class="n">all_libraries</span> <span class="o">=</span> <span class="nb">dict</span><span class="p">(</span><span class="n">inspect</span><span class="o">.</span><span class="n">getmembers</span><span class="p">(</span><span class="n">libraries</span><span class="p">,</span> <span class="n">inspect</span><span class="o">.</span><span class="n">ismodule</span><span class="p">))</span>
+    <span class="n">libs_comps</span> <span class="o">=</span> <span class="p">{}</span>
+    <span class="k">for</span> <span class="n">each_lib</span> <span class="ow">in</span> <span class="nb">list</span><span class="p">(</span><span class="nb">set</span><span class="p">(</span><span class="n">circuitData</span><span class="p">[</span><span class="s2">&quot;compLibs&quot;</span><span class="p">])):</span>
+        <span class="n">temp_comps</span> <span class="o">=</span> <span class="nb">dict</span><span class="p">(</span><span class="n">inspect</span><span class="o">.</span><span class="n">getmembers</span><span class="p">(</span><span class="n">all_libraries</span><span class="p">[</span><span class="n">each_lib</span><span class="p">],</span> <span class="n">inspect</span><span class="o">.</span><span class="n">isclass</span><span class="p">))</span>
+        <span class="n">libs_comps</span><span class="p">[</span><span class="n">each_lib</span><span class="p">]</span> <span class="o">=</span> <span class="n">temp_comps</span>
+   
     <span class="c1">#add circuit components</span>
     <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="nb">len</span><span class="p">(</span><span class="n">circuitData</span><span class="p">[</span><span class="s2">&quot;compModels&quot;</span><span class="p">])):</span>
 
         <span class="c1"># get component model</span>
-        <span class="n">comp_model</span> <span class="o">=</span> <span class="n">libraries</span><span class="p">[</span><span class="n">circuitData</span><span class="p">[</span><span class="s2">&quot;compLibs&quot;</span><span class="p">][</span><span class="n">i</span><span class="p">]][</span><span class="s1">&#39;components&#39;</span><span class="p">][</span><span class="n">circuitData</span><span class="p">[</span><span class="s2">&quot;compModels&quot;</span><span class="p">][</span><span class="n">i</span><span class="p">]]</span>
+        <span class="n">comp_model</span> <span class="o">=</span> <span class="n">libs_comps</span><span class="p">[</span><span class="n">circuitData</span><span class="p">[</span><span class="s2">&quot;compLibs&quot;</span><span class="p">][</span><span class="n">i</span><span class="p">]][</span><span class="n">circuitData</span><span class="p">[</span><span class="s2">&quot;compModels&quot;</span><span class="p">][</span><span class="n">i</span><span class="p">]]</span>
         <span class="c1"># clean attributes</span>
         <span class="n">cls_attrs</span> <span class="o">=</span> <span class="n">deepcopy</span><span class="p">(</span><span class="n">comp_model</span><span class="o">.</span><span class="n">cls_attrs</span><span class="p">)</span> <span class="c1">#class attributes</span>
         <span class="n">comp_attrs</span> <span class="o">=</span> <span class="n">circuitData</span><span class="p">[</span><span class="s2">&quot;compAttrs&quot;</span><span class="p">][</span><span class="n">i</span><span class="p">]</span> <span class="c1">#component attributes</span>
         <span class="c1"># clean up attributes</span>
         <span class="k">for</span> <span class="n">each_attrs</span> <span class="ow">in</span> <span class="n">cls_attrs</span><span class="o">.</span><span class="n">keys</span><span class="p">():</span>
             <span class="k">if</span><span class="p">(</span><span class="n">each_attrs</span> <span class="ow">in</span> <span class="n">comp_attrs</span><span class="o">.</span><span class="n">keys</span><span class="p">()):</span>
-                <span class="n">cls_attrs</span><span class="p">[</span><span class="n">each_attrs</span><span class="p">]</span> <span class="o">=</span> <span class="n">comp_attrs</span><span class="p">[</span><span class="n">each_attrs</span><span class="p">]</span>
+                <span class="n">cls_attrs</span><span class="p">[</span><span class="n">each_attrs</span><span class="p">]</span> <span class="o">=</span> <span class="n">fromSI</span><span class="p">(</span><span class="n">comp_attrs</span><span class="p">[</span><span class="n">each_attrs</span><span class="p">])</span>
 
-        <span class="n">subckt</span><span class="o">.</span><span class="n">add_component</span><span class="p">(</span><span class="n">libraries</span><span class="p">[</span><span class="n">circuitData</span><span class="p">[</span><span class="s2">&quot;compLibs&quot;</span><span class="p">][</span><span class="n">i</span><span class="p">]][</span><span class="s1">&#39;components&#39;</span><span class="p">][</span><span class="n">circuitData</span><span class="p">[</span><span class="s2">&quot;compModels&quot;</span><span class="p">][</span><span class="n">i</span><span class="p">]](</span><span class="n">freq</span><span class="p">,</span> <span class="o">**</span><span class="n">cls_attrs</span><span class="p">),</span> <span class="n">circuitData</span><span class="p">[</span><span class="s2">&quot;compLabels&quot;</span><span class="p">][</span><span class="n">i</span><span class="p">])</span>
+        <span class="n">subckt</span><span class="o">.</span><span class="n">add_component</span><span class="p">(</span><span class="n">libs_comps</span><span class="p">[</span><span class="n">circuitData</span><span class="p">[</span><span class="s2">&quot;compLibs&quot;</span><span class="p">][</span><span class="n">i</span><span class="p">]][</span><span class="n">circuitData</span><span class="p">[</span><span class="s2">&quot;compModels&quot;</span><span class="p">][</span><span class="n">i</span><span class="p">]](</span><span class="n">freq</span><span class="p">,</span> <span class="o">**</span><span class="n">cls_attrs</span><span class="p">),</span> <span class="n">circuitData</span><span class="p">[</span><span class="s2">&quot;compLabels&quot;</span><span class="p">][</span><span class="n">i</span><span class="p">])</span>
 
     <span class="c1">#add circuit netlist</span>
     <span class="n">subckt</span><span class="o">.</span><span class="n">global_netlist</span> <span class="o">=</span> <span class="n">circuitData</span><span class="p">[</span><span class="s2">&quot;circuitNets&quot;</span><span class="p">]</span>
@@ -530,7 +542,7 @@
                             <span class="k">elif</span><span class="p">(</span><span class="s2">&quot;library&quot;</span> <span class="ow">in</span> <span class="n">temp_data</span><span class="p">[</span><span class="n">i</span><span class="p">]):</span>
                                 <span class="nb">print</span><span class="p">(</span><span class="n">temp_data</span><span class="p">[</span><span class="n">i</span><span class="p">])</span>                           
                                 <span class="n">temp_lib</span> <span class="o">=</span> <span class="n">temp_data</span><span class="p">[</span><span class="n">i</span><span class="p">]</span><span class="o">.</span><span class="n">replace</span><span class="p">(</span><span class="s1">&#39;&quot;&#39;</span><span class="p">,</span><span class="s2">&quot;&quot;</span><span class="p">)</span><span class="o">.</span><span class="n">split</span><span class="p">(</span><span class="s2">&quot;=&quot;</span><span class="p">)[</span><span class="mi">1</span><span class="p">]</span><span class="o">.</span><span class="n">split</span><span class="p">()</span>
-                                <span class="n">componentLibs</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">temp_lib</span><span class="p">[</span><span class="o">-</span><span class="mi">1</span><span class="p">])</span>
+                                <span class="n">componentLibs</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">temp_lib</span><span class="p">[</span><span class="o">-</span><span class="mi">1</span><span class="p">]</span><span class="o">.</span><span class="n">split</span><span class="p">(</span><span class="s2">&quot;/&quot;</span><span class="p">)[</span><span class="o">-</span><span class="mi">1</span><span class="p">])</span>
                                 <span class="n">found_library</span> <span class="o">=</span> <span class="mi">1</span>
 
                             <span class="k">elif</span><span class="p">(</span><span class="s2">&quot;=&quot;</span> <span class="ow">in</span> <span class="n">temp_data</span><span class="p">[</span><span class="n">i</span><span class="p">]</span> <span class="ow">and</span> <span class="n">found_library</span><span class="o">==</span><span class="mi">1</span><span class="p">):</span>
@@ -556,28 +568,25 @@
            
           </div>
           <footer>
-  
 
   <hr/>
 
   <div role="contentinfo">
     <p>
-        
-        &copy; Copyright 2020, Jaspreet Jhoja
+        &#169; Copyright 2020, Jaspreet Jhoja.
 
     </p>
   </div>
     
     
     
-    Built with <a href="http://sphinx-doc.org/">Sphinx</a> using a
+    Built with <a href="https://www.sphinx-doc.org/">Sphinx</a> using a
     
-    <a href="https://github.com/rtfd/sphinx_rtd_theme">theme</a>
+    <a href="https://github.com/readthedocs/sphinx_rtd_theme">theme</a>
     
     provided by <a href="https://readthedocs.org">Read the Docs</a>. 
 
 </footer>
-
         </div>
       </div>
 
