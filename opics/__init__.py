@@ -11,7 +11,7 @@ import opics.libraries.ebeam as ebeam
 
 __author__ = "Jaspreet Jhoja"
 __email__ = "Jaspreet@siepic.com"
-__version__ = "0.1.8"
+__version__ = "0.1.9"
 
 # initialize OPICS package
 
