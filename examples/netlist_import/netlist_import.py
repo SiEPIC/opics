@@ -1,5 +1,6 @@
 import time
-import os, sys
+import os
+import sys
 from pathlib import Path
 from opics import libraries
 from opics.network import Network
@@ -10,11 +11,11 @@ from opics.globals import c as c_
 
 sim_start = time.time()
 
-#print(sys.argv[1])
+# print(sys.argv[1])
 # read netlist
-#print(Path(os.path.dirname(__file__) + r"\\test_mzi.spi"))
-#print(len(sys.argv))
-if(len(sys.argv)<2):
+# print(Path(os.path.dirname(__file__) + r"\\test_mzi.spi"))
+# print(len(sys.argv))
+if len(sys.argv) < 2:
     spice_filepath = Path(os.path.dirname(__file__) + r"\\test_mzi.spi")
 else:
     spice_filepath = sys.argv[1]
@@ -24,10 +25,12 @@ print(spice_filepath)
 # get netlist data
 circuitData = netlistParser(spice_filepath).readfile()
 
-#print(circuitData)
+# print(circuitData)
 
 # process netlist data
-subckt = NetlistProcessor(spice_filepath, Network, libraries, c_, circuitData, verbose=False)
+subckt = NetlistProcessor(
+    spice_filepath, Network, libraries, c_, circuitData, verbose=False
+)
 
 # simulate network
 subckt.simulate_network()
@@ -42,4 +45,3 @@ ports = [[each_output, inp_idx] for each_output in out_idx]
 subckt.sim_result.plot_sparameters(ports=ports)
 
 print(Path(__file__).parent.absolute())
-
