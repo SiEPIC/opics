@@ -71,7 +71,7 @@ Citing
 License
 ~~~~~~~
 
-Copyright © 2022, Jaspreet Jhoja, `MIT License <https://github.com/jaspreetj/opics/blob/master/LICENSE>`
+Copyright © 2022, Jaspreet Jhoja, `MIT License <https://github.com/jaspreetj/opics/blob/master/LICENSE>`__
 
 .. |image1| image:: https://img.shields.io/pypi/v/opics.svg
    :target: https://pypi.python.org/pypi/opics
