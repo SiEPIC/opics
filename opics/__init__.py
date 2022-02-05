@@ -7,10 +7,9 @@ from opics.utils import LUT_processor
 from opics.utils import LUT_reader
 from opics.utils import netlistParser
 from opics.globals import c, f
-import opics.libraries.ebeam as ebeam
 
 __author__ = "Jaspreet Jhoja"
-__email__ = "Jaspreet@siepic.com"
+__email__ = "jj@alumni.ubc.ca"
 __version__ = "0.1.9"
 
 # initialize OPICS package
@@ -21,7 +20,6 @@ __all__ = [
     "Network",
     "libraries",
     "globals",
-    "ebeam",
     "LUT_processor",
     "LUT_reader",
     "netlistParser",
