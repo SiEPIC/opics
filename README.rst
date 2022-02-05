@@ -81,5 +81,6 @@ Copyright © 2022, Jaspreet Jhoja, `MIT License <https://github.com/jaspreetj/op
           :target: https://pypi.python.org/pypi/opics
 .. |license| image:: https://img.shields.io/badge/License-MIT-yellow.svg
             :target: https://github.com/jaspreetj/opics/blob/master/LICENSE
-.. |build_badge| image:: https://github.com/jaspreetj/opics/actions/workflows/pythonapp.yml/badge.svg
-                 :target: https://github.com/jaspreetj/opics/actions/workflows/pythonapp.yml
+.. |build_badge| image:: https://github.com/jaspreetj/opics/actions/workflows/CI.yml/badge.svg
+                 :target: https://github.com/jaspreetj/opics/actions/workflows/CI.yml
+                
