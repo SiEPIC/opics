@@ -73,16 +73,13 @@ License
 
 Copyright © 2022, Jaspreet Jhoja, `MIT License <https://github.com/jaspreetj/opics/blob/master/LICENSE>`__
 
-.. |image1| image:: https://img.shields.io/pypi/v/opics.svg
-   :target: https://pypi.python.org/pypi/opics
-.. |image2| image:: https://img.shields.io/travis/siepic/opics.svg
-   :target: https://travis-ci.com/mustafacc/opics
-.. |Documentation Status| image:: https://readthedocs.org/projects/opics/badge/?version=latest
-   :target: https://opics.readthedocs.io/en/latest/?badge=latest
+
 
 .. |opics_logo| image:: /docs/_static/opics_logo.png
 
 .. |pypi| image:: https://badgen.net/pypi/v/opics?maxAge=2592000
+          :target: https://pypi.python.org/pypi/opics
 .. |license| image:: https://badgen.net/pypi/license/opics
+            :target: https://github.com/jaspreetj/opics/blob/master/LICENSE
 .. |build_badge| image:: https://github.com/jaspreetj/opics/actions/workflows/pythonapp.yml/badge.svg
                  :target: https://github.com/jaspreetj/opics/actions/workflows/pythonapp.yml
