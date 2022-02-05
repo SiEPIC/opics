@@ -8,7 +8,7 @@ from copy import deepcopy
 import numpy as np
 from numpy import ndarray
 from pathlib import PosixPath
-from defusedxml.ElementTree import parse, Element, ElementTree
+from defusedxml.ElementTree import parse
 
 
 def fromSI(value_: str) -> float:
@@ -160,11 +160,8 @@ def universal_sparam_filereader(nports, sfilename, sfiledir, format_type="auto")
         return (np.array(F), S)
 
 
-def LUT_reader(
-    filedir: PosixPath, lutfilename: str, lutdata: List[List[str]]
-) -> Tuple[List[str], ElementTree, Element]:
-    """reads look up table data
-    """
+def LUT_reader(filedir: PosixPath, lutfilename: str, lutdata: List[List[str]]):
+    """reads look up table data"""
     xml = parse(filedir / lutfilename)
     root = xml.getroot()
 
@@ -184,8 +181,7 @@ def LUT_processor(
     sparam_attr: str,
     verbose: bool = False,
 ) -> Tuple[Tuple[ndarray, ndarray], str]:
-    """process look up table data
-    """
+    """process look up table data"""
     start = time.time()
     sparam_file, xml, node = LUT_reader(filedir, lutfilename, lutdata)
 
@@ -222,8 +218,7 @@ def LUT_processor(
 
 
 def NetlistProcessor(spice_filepath, Network, libraries, c_, circuitData, verbose=True):
-    """process a spice netlist to setup and simulate a circuit.
-    """
+    """process a spice netlist to setup and simulate a circuit."""
     if verbose:
         for key, value in circuitData.items():
             print(key, str(value))
@@ -345,7 +340,7 @@ class netlistParser:
 
                     elif seek_ona == 1:
                         # ONA related data
-                        if(len(temp_data) < 3):
+                        if len(temp_data) < 3:
                             temp_data = [0] + temp_data[-1].split("=")
 
                         if temp_data[1] == "orthogonal_identifier":
@@ -414,7 +409,9 @@ class netlistParser:
                                 temp_lib = (
                                     temp_data[i].replace('"', "").split("=")[1].split()
                                 )
-                                componentLibs.append(temp_lib[-1].split("/")[-1].lower())
+                                componentLibs.append(
+                                    temp_lib[-1].split("/")[-1].lower()
+                                )
                                 found_library = 1
 
                             elif "=" in temp_data[i] and found_library == 1:
