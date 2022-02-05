@@ -67,7 +67,6 @@ Citing
      howpublished = {\url{https://github.com/SiEPIC-Kits/OPICS}}
    }
 
-|dog_gif|
 
 .. |image1| image:: https://img.shields.io/pypi/v/opics.svg
    :target: https://pypi.python.org/pypi/opics
@@ -78,7 +77,6 @@ Citing
 
 .. |opics_logo| image:: /docs/_static/opics_logo.png
 
-.. |dog_gif| image:: https://media.giphy.com/media/Y0G6gc8CJu1ynAZ1nr/giphy.gif
 .. |last_commit| image:: https://badgen.net/github/last-commit/siepic/opics
 .. |pypi| image:: https://badgen.net/pypi/v/opics?maxAge=2592000
 .. |license| image:: https://badgen.net/pypi/license/opics
