@@ -7,7 +7,7 @@ on: [pull_request, push]
   #    - cron: '0 2 * * *' # run at 2 AM UTC
 
 jobs:
-  Lint and test check:
+  Lint_and_test_check:
     runs-on: ubuntu-latest
     strategy:
       max-parallel: 2
