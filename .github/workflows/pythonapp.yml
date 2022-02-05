@@ -10,9 +10,9 @@ jobs:
   Lint_and_test_check:
     runs-on: ubuntu-latest
     strategy:
-      max-parallel: 2
+      max-parallel: 1
       matrix:
-        python-version: [3.8, 3.10]
+        python-version: [3.8]
 
     steps:
     - uses: actions/checkout@v2
@@ -27,8 +27,8 @@ jobs:
     #    make install
     #- name: Test with tox
     #  run: tox -e py
-    - name: Bandit Check
-      uses: jpetrucciani/bandit-check@1.6.2
+    #- name: Bandit Check
+    #  uses: jpetrucciani/bandit-check@1.6.2
       
     - name: Install flake8
       run: pip install flake8

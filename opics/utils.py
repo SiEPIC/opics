@@ -8,8 +8,7 @@ from copy import deepcopy
 import numpy as np
 from numpy import ndarray
 from pathlib import PosixPath
-import xml.etree.ElementTree as ET
-from xml.etree.ElementTree import Element, ElementTree
+from defusedxml.ElementTree import parse, Element, ElementTree
 
 
 def fromSI(value_: str) -> float:
@@ -166,7 +165,7 @@ def LUT_reader(
 ) -> Tuple[List[str], ElementTree, Element]:
     """reads look up table data
     """
-    xml = ET.parse(filedir / lutfilename)
+    xml = parse(filedir / lutfilename)
     root = xml.getroot()
 
     for node in root.iter("association"):
