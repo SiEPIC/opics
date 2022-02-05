@@ -410,7 +410,7 @@ class netlistParser:
                                 # adapt opics models to accept this data
                                 # they are component parameters
                             elif "library" in temp_data[i]:
-                                # print(temp_data[i])
+                                # cprint(temp_data[i])
                                 temp_lib = (
                                     temp_data[i].replace('"', "").split("=")[1].split()
                                 )

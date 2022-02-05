@@ -74,7 +74,6 @@ def connect_s(
         return innerconnect_s(A, k, l)
 
 
-
 def innerconnect_s(A: ndarray, k: int, l: int) -> ndarray:
     """
     connect two ports of a single n-port network's s-matrix.
@@ -144,8 +143,6 @@ def innerconnect_s(A: ndarray, k: int, l: int) -> ndarray:
     C = np.delete(C, (k, l), 2)
 
     # ignore all from C[:,k,:], and C[:,l,:]
-    # ignore all from C[:,:,k], and C[:,:,l] 
+    # ignore all from C[:,:,k], and C[:,:,l]
 
     return C
-
-
