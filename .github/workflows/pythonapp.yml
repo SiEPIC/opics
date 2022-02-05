@@ -1,4 +1,4 @@
-name: Lint and test check
+name: Build
 
 on: [pull_request, push]
   #pull_request:
@@ -7,7 +7,7 @@ on: [pull_request, push]
   #    - cron: '0 2 * * *' # run at 2 AM UTC
 
 jobs:
-  build:
+  Lint and test check:
     runs-on: ubuntu-latest
     strategy:
       max-parallel: 2
