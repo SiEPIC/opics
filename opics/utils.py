@@ -242,7 +242,7 @@ def NetlistProcessor(spice_filepath, Network, libraries, c_, circuitData, verbos
     all_libraries = dict(inspect.getmembers(libraries, inspect.ismodule))
     libs_comps = {}
     for each_lib in list(set(circuitData["compLibs"])):
-        #temp_comps = dict(inspect.getmembers(all_libraries[each_lib], inspect.isclass))
+        # temp_comps = dict(inspect.getmembers(all_libraries[each_lib], inspect.isclass))
         libs_comps[each_lib] = all_libraries[each_lib].component_factory
 
     # add circuit components
@@ -345,7 +345,7 @@ class netlistParser:
 
                     elif seek_ona == 1:
                         # ONA related data
-                        if(len(temp_data)<3):
+                        if(len(temp_data) < 3):
                             temp_data = [0] + temp_data[-1].split("=")
 
                         if temp_data[1] == "orthogonal_identifier":
@@ -410,7 +410,7 @@ class netlistParser:
                                 # adapt opics models to accept this data
                                 # they are component parameters
                             elif "library" in temp_data[i]:
-                                #print(temp_data[i])
+                                # print(temp_data[i])
                                 temp_lib = (
                                     temp_data[i].replace('"', "").split("=")[1].split()
                                 )
