@@ -1,4 +1,5 @@
-|last_commit| |license| |pypi|
+
+|build_badge| |license| |pypi|
 ==============================================
 
 |opics_logo|
@@ -77,6 +78,7 @@ Citing
 
 .. |opics_logo| image:: /docs/_static/opics_logo.png
 
-.. |last_commit| image:: https://badgen.net/github/last-commit/siepic/opics
 .. |pypi| image:: https://badgen.net/pypi/v/opics?maxAge=2592000
 .. |license| image:: https://badgen.net/pypi/license/opics
+.. |build_badge| image:: https://github.com/jaspreetj/opics/actions/workflows/pythonapp.yml/badge.svg
+                 :target: https://github.com/jaspreetj/opics/actions/workflows/pythonapp.yml
