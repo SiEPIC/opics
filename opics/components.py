@@ -8,8 +8,7 @@ from typing import Dict, List, Optional, Union
 
 
 class componentModel:
-    """Defines the base component model class used to create new components for a library.
-    """
+    """Defines the base component model class used to create new components for a library."""
 
     def __init__(
         self,
@@ -29,6 +28,7 @@ class componentModel:
             nports (int, optional): Number of ports in the component. Defaults to 0.
             sparam_attr (str, optional): XML LUT attribute for the s-parameter data file name. Defaults to "".
         """
+
         self.f = f
         self.c = 299792458
         self.s = np.array((2, 2))
@@ -36,6 +36,7 @@ class componentModel:
         self.componentParameters = []
         self.componentID = ""
         self.nports = nports
+        self.port_references = [i for i in range(self.nports)]
         self.sparam_attr = sparam_attr
         self.sparam_file = ""
         for key, value in kwargs.items():
@@ -212,8 +213,7 @@ class componentModel:
 
 
 class compoundElement(componentModel):
-    """Defines the properties of a compound element or simulated component. A compound element is a collection of connected components, inherits componentModel OPICS class.
-    """
+    """Defines the properties of a compound element or simulated component. A compound element is a collection of connected components, inherits componentModel OPICS class."""
 
     def __init__(
         self, f: ndarray, s: ndarray, nets: Optional[List[List[int]]] = None
@@ -234,8 +234,7 @@ class compoundElement(componentModel):
 
 
 class Waveguide(componentModel):
-    """Defines the properties of a waveguide component, can be used in the interconnected between components.
-    """
+    """Defines the properties of a waveguide component, can be used in the interconnected between components."""
 
     def __init__(
         self,
@@ -264,6 +263,8 @@ class Waveguide(componentModel):
         self.componentID = ""
         self.c = 299792458
         self.sparam_file = ""
+        self.nports = 2
+        self.port_references = [i for i in range(self.nports)]
         self.lambda_ = self.c * 1e6 / self.f
         self.componentParameters = []
         for key, value in kwargs.items():
@@ -274,8 +275,7 @@ class Waveguide(componentModel):
     def load_sparameters(
         self, length: float, data_folder: PosixPath, filename: str, TE_loss: int
     ) -> ndarray:
-        """read s_parameters
-        """
+        """read s_parameters"""
 
         sfilename, _, _ = LUT_reader(data_folder, filename, self.componentParameters)
         self.sparam_file = sfilename[-1]
@@ -285,10 +285,8 @@ class Waveguide(componentModel):
         with open(filepath, "r") as f:
             coeffs = f.readline().split()
 
-        nports = 2
-
         # Initialize array to hold s-params
-        temp_s_ = np.zeros((len(self.f), nports, nports), dtype=complex)
+        temp_s_ = np.zeros((len(self.f), self.nports, self.nports), dtype=complex)
 
         alpha = TE_loss / (20 * np.log10(np.exp(1)))
 
@@ -310,7 +308,7 @@ class Waveguide(componentModel):
         K = (
             2 * np.pi * ne / lam0
             + (ng / self.c) * (w - w0)
-            - (nd * lam0 ** 2 / (4 * np.pi * self.c)) * ((w - w0) ** 2)
+            - (nd * lam0**2 / (4 * np.pi * self.c)) * ((w - w0) ** 2)
         )
 
         # compute s-matrix from K and waveguide length

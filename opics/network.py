@@ -1,11 +1,10 @@
-from typing import List, Optional, Union
+from typing import List, Optional
 from scipy.interpolate import interp1d
 from copy import deepcopy
 import os
 import binascii
 from opics.components import compoundElement
 from opics.sparam_ops import connect_s
-from opics.libraries.ebeam import GC, Waveguide, Y
 
 
 def interpolate(output_freq=None, input_freq=None, s_parameters=None):
@@ -15,8 +14,7 @@ def interpolate(output_freq=None, input_freq=None, s_parameters=None):
 
 
 class Network:
-    """ specifies the network
-    """
+    """specifies the network"""
 
     def __init__(self, networkID: Optional[str] = None) -> None:
         self.networkID = (
@@ -25,13 +23,12 @@ class Network:
         self.current_components = []
         self.current_connections = []
         self.global_netlist = []
+        self.port_references = {}
+        self.idx_to_references = {}
         self.sim_result = None
 
-    def add_component(
-        self, cls: Union[Y, GC, Waveguide], componentID: Optional[str] = None
-    ) -> Union[Y, GC, Waveguide]:
-        """add component to a network
-        """
+    def add_component(self, cls, componentID=None):
+        """add component to a network"""
         count = 0
         for each in self.current_components:
             if type(cls) == type(each):
@@ -44,8 +41,7 @@ class Network:
         return cls
 
     def connect(self, component_A, port_A, component_B, port_B):
-        """connect two components together
-        """
+        """connect two components together"""
         self.current_connections.append(
             [
                 self.current_components.index(component_A),
@@ -56,8 +52,7 @@ class Network:
         )
 
     def initiate_global_netlist(self):
-        """initiates a global netlist with negative indices, overwrite indices that are used in the circuit with positive values
-        """
+        """initiates a global netlist with negative indices, overwrite indices that are used in the circuit with positive values"""
         gnetlist = []
         net_start = 0
         for component_idx in range(len(self.current_components)):
@@ -65,6 +60,10 @@ class Network:
             for i in range(self.current_components[component_idx].s.shape[-1]):
                 net_start -= 1
                 temp_net.append(net_start)
+                if self.current_components[component_idx].port_references[i] != i:
+                    self.port_references[net_start] = self.current_components[
+                        component_idx
+                    ].port_references[i]
             gnetlist.append(temp_net)
 
         for i in range(len(self.current_connections)):
@@ -90,8 +89,7 @@ class Network:
         return [filtered_nets[0], net_idx[0], filtered_nets[1], net_idx[1]]
 
     def simulate_network(self) -> compoundElement:
-        """ function to trigger the simulation of the network
-        """
+        """function to trigger the simulation of the network"""
 
         if self.global_netlist == []:
             self.initiate_global_netlist()
@@ -145,5 +143,12 @@ class Network:
                 )
                 t_nets.append(new_net)
 
-        self.sim_result = t_components[0]
-        return t_components[0]
+        self.sim_result = t_components[-1]
+
+        i = 0
+        for each_net in t_nets:
+            for each_port in each_net:
+                self.idx_to_references[i] = each_port
+                i += 1
+
+        return t_components[-1]
