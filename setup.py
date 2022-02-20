@@ -34,6 +34,6 @@ setup(
     install_requires=get_install_requires(),
     test_suite="tests",
     url="https://github.com/siepic/opics",
-    version="0.1.9",
+    version="0.2.1",
     zip_safe=False,
 )
