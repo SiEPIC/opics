@@ -1,10 +1,10 @@
-from typing import List, Optional
-from scipy.interpolate import interp1d
-from copy import deepcopy
 import os
 import binascii
-from opics.components import compoundElement
+from copy import deepcopy
+from typing import List, Optional
 from opics.sparam_ops import connect_s
+from scipy.interpolate import interp1d
+from opics.components import compoundElement
 
 
 def interpolate(output_freq=None, input_freq=None, s_parameters=None):
@@ -42,6 +42,11 @@ class Network:
 
     def connect(self, component_A, port_A, component_B, port_B):
         """connect two components together"""
+        if type(port_A) == str:
+            port_A = self.current_components.index(component_A)[port_A]
+        if type(port_B) == str:
+            port_B = self.current_components.index(component_B)[port_B]
+
         self.current_connections.append(
             [
                 self.current_components.index(component_A),
@@ -57,13 +62,16 @@ class Network:
         net_start = 0
         for component_idx in range(len(self.current_components)):
             temp_net = []
-            for i in range(self.current_components[component_idx].s.shape[-1]):
+            for each_port in range(self.current_components[component_idx].s.shape[-1]):
                 net_start -= 1
                 temp_net.append(net_start)
-                if self.current_components[component_idx].port_references[i] != i:
+                if (
+                    self.current_components[component_idx].port_references[each_port]
+                    != each_port
+                ):
                     self.port_references[net_start] = self.current_components[
                         component_idx
-                    ].port_references[i]
+                    ].port_references[each_port]
             gnetlist.append(temp_net)
 
         for i in range(len(self.current_connections)):
@@ -143,12 +151,23 @@ class Network:
                 )
                 t_nets.append(new_net)
 
-        self.sim_result = t_components[-1]
+        if len(t_nets) == 1:
 
-        i = 0
-        for each_net in t_nets:
-            for each_port in each_net:
-                self.idx_to_references[i] = each_port
-                i += 1
+            self.sim_result = t_components[-1]
+            self.current_components.clear()
+            self.current_components = t_components
+            self.global_netlist = t_nets
 
-        return t_components[-1]
+            for each_net in t_nets:
+                i = 0
+                for each_port in each_net:
+                    self.idx_to_references[i] = each_port
+                    i += 1
+
+            return t_components[-1]
+
+        else:
+            self.current_components = t_components
+            self.current_connections = []
+            self.global_netlist = t_nets
+            return t_components

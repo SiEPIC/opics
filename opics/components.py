@@ -36,7 +36,10 @@ class componentModel:
         self.componentParameters = []
         self.componentID = ""
         self.nports = nports
-        self.port_references = [i for i in range(self.nports)]
+        self.port_references = {}
+        for _ in range(self.nports):
+            self.port_references[_] = _
+
         self.sparam_attr = sparam_attr
         self.sparam_file = ""
         for key, value in kwargs.items():
@@ -72,6 +75,15 @@ class componentModel:
             return self.interpolate_sparameters(
                 self.f, componentData[0], componentData[1]
             )
+
+    def set_port_reference(self, port_number: int, port_name: str):
+        """Allows for custom naming of component ports
+
+        Args:
+            port_number (int): port number to name.
+            port_name (str): custom port name.
+        """
+        self.port_references[port_number] = port_name
 
     def interpolate_sparameters(
         self, target_f: ndarray, source_f: ndarray, source_s: ndarray
@@ -264,7 +276,10 @@ class Waveguide(componentModel):
         self.c = 299792458
         self.sparam_file = ""
         self.nports = 2
-        self.port_references = [i for i in range(self.nports)]
+        self.port_references = {}
+        for _ in range(self.nports):
+            self.port_references[_] = _
+
         self.lambda_ = self.c * 1e6 / self.f
         self.componentParameters = []
         for key, value in kwargs.items():

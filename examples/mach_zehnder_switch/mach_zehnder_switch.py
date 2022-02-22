@@ -12,7 +12,7 @@ warnings.filterwarnings("ignore")
 freq = np.linspace(c * 1e6 / 1.5, c * 1e6 / 1.6, 2000)
 
 # import component library
-library = opics.libs.ebeam
+library = opics.libraries.ebeam
 
 power_values = [0, 3e-3, 9e-3, 12e-3]
 
@@ -42,8 +42,8 @@ for power_sweep in power_values:
     circuit.simulate_network()
 
     plt.plot(
-        circuit.sim_result.c / circuit.sim_result.f_ * 1e6,
-        20 * np.log10(circuit.sim_result.s_[:, 1, 0]),
+        circuit.sim_result.c / circuit.sim_result.f * 1e6,
+        20 * np.log10(circuit.sim_result.s[:, 1, 0]),
     )
 
 plt.title("MZI power sweep w/ tunable WG component")
@@ -51,7 +51,7 @@ plt.legend(["%s W" % (each) for each in [0, 22e-3, 24e-3, 26e-3]])
 plt.ylabel("dB")
 plt.xlabel("um")
 plt.xlim(
-    np.min(circuit.sim_result.c / circuit.sim_result.f_ * 1e6),
-    np.max(circuit.sim_result.c / circuit.sim_result.f_ * 1e6),
+    np.min(circuit.sim_result.c / circuit.sim_result.f * 1e6),
+    np.max(circuit.sim_result.c / circuit.sim_result.f * 1e6),
 )
 plt.show()

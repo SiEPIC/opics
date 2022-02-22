@@ -23,20 +23,24 @@ if __name__ == "__main__":
     circuit = Network()
 
     # define component instances
-    gc_ = circuit.add_component(ebeam.GC(freq))
-    y_ = circuit.add_component(ebeam.Y(freq))
-    wg2 = circuit.add_component(ebeam.Waveguide(freq, 0e-6))
-    wg1 = circuit.add_component(ebeam.Waveguide(freq, 15e-6))
-    y2_ = circuit.add_component(ebeam.Y(freq))
-    gc2_ = circuit.add_component(ebeam.GC(freq))
+    gc = circuit.add_component(ebeam.GC(freq))
+    y = circuit.add_component(ebeam.Y(freq))
+    wg2 = circuit.add_component(ebeam.Waveguide(freq, length=0e-6))
+    wg1 = circuit.add_component(ebeam.Waveguide(freq, length=15e-6))
+    y2 = circuit.add_component(ebeam.Y(freq))
+    gc2 = circuit.add_component(ebeam.GC(freq))
+
+    # specify custom port names
+    gc.set_port_reference(0, "input_port")
+    gc2.set_port_reference(0, "output_port")
 
     # define circuit connectivity
-    circuit.connect(gc_, 1, y_, 0)
-    circuit.connect(y_, 1, wg1, 0)
-    circuit.connect(y_, 2, wg2, 0)
-    circuit.connect(y2_, 0, gc2_, 1)
-    circuit.connect(wg1, 1, y2_, 1)
-    circuit.connect(wg2, 1, y2_, 2)
+    circuit.connect(gc, 1, y, 0)
+    circuit.connect(y, 1, wg1, 0)
+    circuit.connect(y, 2, wg2, 0)
+    circuit.connect(y2, 0, gc2, 1)
+    circuit.connect(wg1, 1, y2, 1)
+    circuit.connect(wg2, 1, y2, 2)
 
     # simulate network
     circuit.simulate_network()
