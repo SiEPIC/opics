@@ -3,7 +3,7 @@
 from opics import libraries
 from opics.network import Network
 from opics.utils import netlistParser
-from opics.globals import c, f
+from opics.globals import C, F
 
 __author__ = "Jaspreet Jhoja"
 __email__ = "jj@alumni.ubc.ca"
@@ -18,8 +18,8 @@ __all__ = [
     "libraries",
     "globals",
     "netlistParser",
-    "c",
-    "f",
+    "C",
+    "F",
 ]
 
 print(

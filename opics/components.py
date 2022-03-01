@@ -30,9 +30,9 @@ class componentModel:
         """
 
         self.f = f
-        self.c = 299792458
+        self.C = 299792458
         self.s = np.array((2, 2))
-        self.lambda_ = self.c * 1e6 / self.f
+        self.lambda_ = self.C * 1e6 / self.f
         self.componentParameters = []
         self.componentID = ""
         self.nports = nports
@@ -148,7 +148,7 @@ class componentModel:
             x_data = self.f
             xlabel = "Frequency (Hz)"
         else:
-            x_data = self.c * 1e6 / self.f
+            x_data = self.C * 1e6 / self.f
             xlabel = "Wavelength (um)"
 
         temp_data["xdata"] = x_data
@@ -193,7 +193,7 @@ class componentModel:
             x_data = self.f
             xlabel = "Frequency (Hz)"
         else:
-            x_data = self.c * 1e6 / self.f
+            x_data = self.C * 1e6 / self.f
             xlabel = "Wavelength (um)"
 
         if ports is None:
@@ -238,8 +238,8 @@ class compoundElement(componentModel):
             nets (list, optional): List of nets available in the compound element. Defaults to None.
         """
         self.f = f
-        self.c = 299792458
-        self.lambda_ = self.c * 1e6 / self.f
+        self.C = 299792458
+        self.lambda_ = self.C * 1e6 / self.f
         self.s = s
         self.nets = [i for i in s.shape] if nets is None else nets
         # components_loaded.append(self)
@@ -273,14 +273,14 @@ class Waveguide(componentModel):
         self.f = f
         self.length = length
         self.componentID = ""
-        self.c = 299792458
+        self.C = 299792458
         self.sparam_file = ""
         self.nports = 2
         self.port_references = {}
         for _ in range(self.nports):
             self.port_references[_] = _
 
-        self.lambda_ = self.c * 1e6 / self.f
+        self.lambda_ = self.C * 1e6 / self.f
         self.componentParameters = []
         for key, value in kwargs.items():
             self.componentParameters.append([key, str(value)])
@@ -317,13 +317,13 @@ class Waveguide(componentModel):
         )
 
         # calculate angular center frequency
-        w0 = (2 * np.pi * self.c) / lam0
+        w0 = (2 * np.pi * self.C) / lam0
 
         # calculation of K
         K = (
             2 * np.pi * ne / lam0
-            + (ng / self.c) * (w - w0)
-            - (nd * lam0**2 / (4 * np.pi * self.c)) * ((w - w0) ** 2)
+            + (ng / self.C) * (w - w0)
+            - (nd * lam0**2 / (4 * np.pi * self.C)) * ((w - w0) ** 2)
         )
 
         # compute s-matrix from K and waveguide length

@@ -6,7 +6,7 @@ import warnings
 import time
 import numpy as np
 from opics.network import Network
-from opics.globals import c
+from opics.globals import C
 import opics
 
 
@@ -19,7 +19,7 @@ for i in range(10):
     sim_start = time.time()
 
     # define frequency range and resolution
-    freq = np.linspace(c * 1e6 / 1.5, c * 1e6 / 1.6, 2000)
+    freq = np.linspace(C * 1e6 / 1.5, C * 1e6 / 1.6, 2000)
 
     components = opics.libraries.ebeam
 

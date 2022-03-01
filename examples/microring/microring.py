@@ -1,14 +1,14 @@
 import warnings
 import numpy as np
 from opics import Network
-from opics import c
+from opics import C
 import opics
 
 warnings.filterwarnings("ignore")
 
 
 # define frequency range and resolution
-freq = np.linspace(c * 1e6 / 1.5, c * 1e6 / 1.6, 2000)
+freq = np.linspace(C * 1e6 / 1.5, C * 1e6 / 1.6, 2000)
 
 ebeam = opics.libraries.ebeam
 

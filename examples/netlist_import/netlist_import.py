@@ -5,7 +5,7 @@ from pathlib import Path
 from opics import libraries
 from opics.network import Network
 from opics.utils import netlistParser, NetlistProcessor
-from opics.globals import c as c_
+from opics.globals import C as c_
 
 # warnings.filterwarnings('ignore') #ignore all/complex number warnings from numpy or scipy
 
