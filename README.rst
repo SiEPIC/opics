@@ -74,7 +74,7 @@ Copyright © 2022, Jaspreet Jhoja, `MIT License <https://github.com/jaspreetj/op
 
 
 
-.. |opics_logo| image:: /docs/_static/opics_logo.png
+.. |opics_logo| image:: /docs/_static/images/opics_logo.png
 
 .. |pypi| image:: https://img.shields.io/pypi/v/opics?color=blue
           :target: https://pypi.python.org/pypi/opics
