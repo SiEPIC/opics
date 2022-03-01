@@ -9,18 +9,12 @@ Public API: opics package
 
 .. autosummary::
    components.componentModel
-   components.compoundElement
-   components.Waveguide
-
-
-
 
 :code:`opics.components` module
 -------------------------------
 
 .. automodule:: opics.components
    :members:
-   :undoc-members:
    :show-inheritance:
 
 opics.network module

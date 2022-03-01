@@ -12,11 +12,10 @@
 # All configuration values have a default; values that are commented out
 # serve to show the default.
 
-import sys, os
-
-current_dir = os.path.dirname(__file__)
-target_dir = os.path.abspath(os.path.join(current_dir, "../../opics"))
-sys.path.insert(0, target_dir)
+# import sys, os
+# current_dir = os.path.dirname(__file__)
+# target_dir = os.path.abspath(os.path.join(current_dir, "../../opics"))
+# sys.path.insert(0, target_dir)
 
 # If extensions (or modules to document with autodoc) are in another directory,
 # add these directories to sys.path here. If the directory is relative to the
@@ -40,11 +39,23 @@ extensions = [
     "sphinx.ext.viewcode",
     "nbsphinx",
     "sphinx_autodoc_typehints",
-    "myst_parser",
+    "myst_nb",
+    "sphinx_contributors",
+]
+
+intersphinx_mapping = {
+    "python": ("https://docs.python.org/3/", None),
+    "numpy": ("https://numpy.org/doc/stable/", None),
+    "scipy": ("https://docs.scipy.org/doc/scipy-1.8.0/html-scipyorg/", None),
+}
+
+suppress_warnings = [
+    "ref.citation",  # Many duplicated citations in numpy/scipy docstrings.
+    "ref.footnote",  # Many unreferenced footnotes in numpy/scipy docstrings
 ]
 
 # Napoleon settings
-napoleon_google_docstring = True
+""" napoleon_google_docstring = True
 napoleon_numpy_docstring = True
 napoleon_include_private_with_doc = False
 napoleon_include_special_with_doc = True
@@ -53,14 +64,20 @@ napoleon_use_admonition_for_notes = False
 napoleon_use_admonition_for_references = False
 napoleon_use_ivar = False
 napoleon_use_param = True
+autosummary_generate = True """
+
+
+pygments_style = None
+
+
 autosummary_generate = True
-napoleon_use_rtype = False
+napolean_use_rtype = False
 
 # Add any paths that contain templates here, relative to this directory.
 templates_path = ["_templates"]
 
 # The suffix of source filenames.
-source_suffix = ".rst"
+source_suffix = [".rst", ".ipynb", ".md"]
 
 # The encoding of source files.
 # source_encoding = 'utf-8-sig'
@@ -69,8 +86,8 @@ source_suffix = ".rst"
 master_doc = "index"
 
 # General information about the project.
-project = u"OPICS"
-copyright = u"2020, Jaspreet Jhoja"
+project = "OPICS"
+copyright = "2022, Jaspreet Jhoja"
 author = "Jaspreet Jhoja"
 # The version info for the project you're documenting, acts as replacement for
 # |version| and |release|, also used in various other places throughout the
@@ -124,12 +141,15 @@ pygments_style = "sphinx"
 
 # The theme to use for HTML and HTML Help pages.  See the documentation for
 # a list of builtin themes.
-html_theme = "sphinx_rtd_theme"
+html_theme = "sphinx_book_theme"
 
 # Theme options are theme-specific and customize the look and feel of a theme
 # further.  For a list of options available for each theme, see the
 # documentation.
-html_theme_options = {"logo_only": True}
+html_theme_options = {
+    "logo_only": True,
+    "show_toc_level": 2,
+}
 
 
 # Add any paths that contain custom themes here, relative to this directory.
@@ -210,18 +230,18 @@ htmlhelp_basename = "OPICSdoc"
 
 latex_elements = {
     # The paper size ('letterpaper' or 'a4paper').
-    #'papersize': 'letterpaper',
+    # 'papersize': 'letterpaper',
     # The font size ('10pt', '11pt' or '12pt').
-    #'pointsize': '10pt',
+    # 'pointsize': '10pt',
     # Additional stuff for the LaTeX preamble.
-    #'preamble': '',
+    # 'preamble': '',
 }
 
 # Grouping the document tree into LaTeX files. List of tuples
 # (source start file, target name, title,
 #  author, documentclass [howto, manual, or own class]).
 latex_documents = [
-    (master_doc, "OPICS.tex", u"OPICS Documentation", author),
+    (master_doc, "OPICS.tex", "OPICS Documentation", author),
 ]
 
 # The name of an image file (relative to this directory) to place at the top of

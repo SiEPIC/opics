@@ -9,13 +9,7 @@ For an introduction to OPICS, start at the
    :maxdepth: 2
    :caption: Quickstart
 
-   install
-
-.. toctree::
-   :maxdepth: 2
-   :caption: Libraries
-
-   opics.lib.ebeam
+   quickstart
 
 .. toctree::
    :maxdepth: 2
@@ -25,13 +19,13 @@ For an introduction to OPICS, start at the
    notebooks/02-Micro_Ring_Resonator
 
 .. toctree::
-   :maxdepth: 2
-   :caption: Notes
+   :maxdepth: 0
+   :caption: Contributors
 
-   authors
+   contributors
 
 .. toctree::
-   :maxdepth: 3
+   :maxdepth: 6
    :caption: API documentation
 
    opics

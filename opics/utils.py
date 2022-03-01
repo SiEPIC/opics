@@ -11,23 +11,31 @@ from pathlib import PosixPath
 from defusedxml.ElementTree import parse
 
 
-def fromSI(value_: str) -> float:
+def fromSI(value: str) -> float:
     """converts from SI unit values to metric
 
     Args:
-        value_ (str): a value in SI units, e.g. 1.3u
+        value (str): a value in SI units, e.g. 1.3u
 
     Returns:
         float: the value in metric units.
     """
-    return float(value_.replace("u", "e-6"))
+    return float(value.replace("u", "e-6"))
 
 
-def universal_sparam_filereader(nports, sfilename, sfiledir, format_type="auto"):
+def universal_sparam_filereader(
+    nports: int, sfilename: str, sfiledir: PosixPath, format_type: str = "auto"
+) -> Tuple[ndarray, ndarray]:
     """
     Function to automatically detect the sparameter file format and use appropriate method to delimit and format sparam data
 
     This function is a unified version of sparameter reader function defined in https://github.com/BYUCamachoLab/simphony
+
+    Args:
+        nports: Number of ports
+        sfilename: XML look-up-table filename
+        sfiledir: Path to the directory containing the XML file
+        format_type: Format type. For more information: https://support.lumerical.com/hc/en-us/articles/360036618513-S-parameter-file-formats
     """
     numports = nports
     filename = sfiledir / sfilename
@@ -161,7 +169,14 @@ def universal_sparam_filereader(nports, sfilename, sfiledir, format_type="auto")
 
 
 def LUT_reader(filedir: PosixPath, lutfilename: str, lutdata: List[List[str]]):
-    """reads look up table data"""
+    """
+    Reads look up table data.
+
+    Args:
+        filedir: Directory of the XML look-up-table file.
+        lutfilename: Look-up-table filename.
+        lutdata: Look-up-table arguments.
+    """
     xml = parse(filedir / lutfilename)
     root = xml.getroot()
 
@@ -218,7 +233,14 @@ def LUT_processor(
 
 
 def NetlistProcessor(spice_filepath, Network, libraries, c_, circuitData, verbose=True):
-    """process a spice netlist to setup and simulate a circuit."""
+    """
+    Processes a spice netlist to setup and simulate a circuit.
+
+    Args:
+        spice_filepath: Path to the spice netlist file.
+        Network:
+
+    """
     if verbose:
         for key, value in circuitData.items():
             print(key, str(value))

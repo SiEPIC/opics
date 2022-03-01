@@ -3,22 +3,20 @@ import binascii
 from copy import deepcopy
 from typing import List, Optional
 from opics.sparam_ops import connect_s
-from scipy.interpolate import interp1d
-from opics.components import compoundElement
-
-
-def interpolate(output_freq=None, input_freq=None, s_parameters=None):
-    """interpolates s-parameters"""
-    func = interp1d(input_freq, s_parameters, kind="cubic", axis=0)
-    return [output_freq, func(output_freq)]
+from opics.components import componentModel
 
 
 class Network:
-    """specifies the network"""
+    """
+    Specifies the network.
 
-    def __init__(self, networkID: Optional[str] = None) -> None:
-        self.networkID = (
-            networkID if networkID else str(binascii.hexlify(os.urandom(4)))[2:-1]
+    Args:
+        network_id: Define the network name.
+    """
+
+    def __init__(self, network_id: Optional[str] = None) -> None:
+        self.network_id = (
+            network_id if network_id else str(binascii.hexlify(os.urandom(4)))[2:-1]
         )
         self.current_components = []
         self.current_connections = []
@@ -27,21 +25,44 @@ class Network:
         self.idx_to_references = {}
         self.sim_result = None
 
-    def add_component(self, cls, componentID=None):
-        """add component to a network"""
+    def add_component(self, cls: componentModel, component_id: Optional[str] = None):
+        """
+        Adds component to a network.
+
+        Args:
+            cls: An instance of componentModel class.
+            component_id: Custom component id tag.
+        """
         count = 0
         for each in self.current_components:
             if type(cls) == type(each):
                 count += 1
 
-        cls.componentID = (
-            cls.componentID + "_" + str(count) if componentID is None else componentID
+        cls.component_id = (
+            cls.component_id + "_" + str(count)
+            if component_id is None
+            else component_id
         )
         self.current_components.append(cls)
+
         return cls
 
-    def connect(self, component_A, port_A, component_B, port_B):
-        """connect two components together"""
+    def connect(
+        self,
+        component_A: componentModel,
+        port_A: int,
+        component_B: componentModel,
+        port_B: int,
+    ):
+        """
+        Connects two components together.
+
+        Args:
+            component_A: An instance of componentModel class.
+            port_A: Port number of component_A
+            component_B: An instance of componentModel class.
+            port_B: Port number of component_B
+        """
         if type(port_A) == str:
             port_A = self.current_components.index(component_A)[port_A]
         if type(port_B) == str:
@@ -57,7 +78,12 @@ class Network:
         )
 
     def initiate_global_netlist(self):
-        """initiates a global netlist with negative indices, overwrite indices that are used in the circuit with positive values"""
+        """
+        Initiates a global netlist with negative indices, \
+            overwrite indices that are used in the circuit\
+                 with positive values.
+        """
+
         gnetlist = []
         net_start = 0
         for component_idx in range(len(self.current_components)):
@@ -83,7 +109,11 @@ class Network:
 
     def global_to_local_ports(self, net_id: int, nets: List[List[int]]) -> List[int]:
         """
-        returns which components the net_id refers to and their corresponding local ports
+        Maps the net_id to components and their local port numbers.
+
+        Args:
+            net_id: Net id reference.
+            nets: Nets
         """
         filtered_nets = [
             nets.index(each_net) for each_net in nets if net_id in each_net
@@ -96,8 +126,11 @@ class Network:
 
         return [filtered_nets[0], net_idx[0], filtered_nets[1], net_idx[1]]
 
-    def simulate_network(self) -> compoundElement:
-        """function to trigger the simulation of the network"""
+    def simulate_network(self) -> componentModel:
+        """
+        Triggers the simulation
+
+        """
 
         if self.global_netlist == []:
             self.initiate_global_netlist()
@@ -147,7 +180,7 @@ class Network:
                     del t_components[ntp[2]], t_nets[ntp[2]]
 
                 t_components.append(
-                    compoundElement(combination_f, combination_s, t_nets)
+                    componentModel(f=combination_f, s=combination_s, nets=t_nets)
                 )
                 t_nets.append(new_net)
 

@@ -5,7 +5,6 @@ from pathlib import Path
 from opics import libraries
 from opics.network import Network
 from opics.utils import netlistParser, NetlistProcessor
-from opics.globals import C as c_
 
 # warnings.filterwarnings('ignore') #ignore all/complex number warnings from numpy or scipy
 
@@ -29,7 +28,7 @@ circuitData = netlistParser(spice_filepath).readfile()
 
 # process netlist data
 subckt = NetlistProcessor(
-    spice_filepath, Network, libraries, c_, circuitData, verbose=False
+    spice_filepath, Network, libraries, circuitData, verbose=False
 )
 
 # simulate network
