@@ -1,7 +1,7 @@
 import time
 import warnings
 import numpy as np
-from opics.globals import c
+from opics.globals import C
 from opics import Network
 import opics
 
@@ -14,7 +14,7 @@ if __name__ == "__main__":
     sim_start = time.time()
 
     # define frequency range and resolution
-    freq = np.linspace(c * 1e6 / 1.5, c * 1e6 / 1.6, 2000)
+    freq = np.linspace(C * 1e6 / 1.5, C * 1e6 / 1.6, 2000)
 
     # import component library
     ebeam = opics.libraries.ebeam
@@ -48,3 +48,7 @@ if __name__ == "__main__":
     print("simulation finished in %ss" % (str(round(time.time() - sim_start, 2))))
 
     circuit.sim_result.plot_sparameters(show_freq=False, scale="log")
+
+    data1 = circuit.sim_result.get_data([[1, 0]])
+
+    print("done")
