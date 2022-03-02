@@ -6,13 +6,13 @@ For an introduction to OPICS, start at the
 
 
 .. toctree::
-   :maxdepth: 2
+   :maxdepth: 4
    :caption: Quickstart
 
-   quickstart
+   notebooks/00-Quickstart
 
 .. toctree::
-   :maxdepth: 2
+   :maxdepth: 4
    :caption: Tutorials
 
    notebooks/01-Mach-Zehnder_Interferometer

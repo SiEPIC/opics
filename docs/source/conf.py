@@ -66,6 +66,7 @@ napoleon_use_ivar = False
 napoleon_use_param = True
 autosummary_generate = True """
 
+jupyter_execute_notebooks = "force"
 
 pygments_style = None
 

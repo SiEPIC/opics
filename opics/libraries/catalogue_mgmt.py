@@ -78,16 +78,19 @@ def download_library(library_name="", library_url="", library_path=""):
     if not _os.path.exists(library_path):
         _os.makedirs(library_path)
 
+    # read _yaml file for available libraries in the catalogue
+    with open(curr_dir / "catalogue.yaml", "r") as stream:
+        lib_catalogue = _yaml.safe_load(stream)
+
+    if lib_catalogue[f"{library_name}"]["installed"] is True:
+        return True
+
     # download and extract the library to the folder, returns the dirpath with the extract foldername appended to the _Path
     library_dirpath = download_and_extract(library_url, library_path)
 
     if library_dirpath is False:
         print("library download failed.")
         return False
-
-    # read _yaml file for available libraries in the catalogue
-    with open(curr_dir / "catalogue.yaml", "r") as stream:
-        lib_catalogue = _yaml.safe_load(stream)
 
     lib_catalogue[library_name]["installed"] = True
     lib_catalogue[library_name]["library_path"] = library_dirpath
