@@ -8,7 +8,7 @@ Open Photonic Integrated Circuit Simulator (OPICS)
 ==================================================
 
 **OPICS** is an S-parameter based photonic integrated circuit simulator. To know more,
-refer to OPICS  `Documentation <https://siepic.github.io/opics>`__
+refer to OPICS  `Documentation <https://jaspreetj.github.io/opics/html/index.html>`__
 
 Requirements
 ~~~~~~~~~~~~
