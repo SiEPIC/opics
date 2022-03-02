@@ -256,7 +256,13 @@ def NetlistProcessor(spice_filepath, Network, libraries, c_, circuitData, verbos
     )
 
     # get library
-    all_libraries = dict(inspect.getmembers(libraries, inspect.ismodule))
+    all_libraries = dict(
+        [
+            each
+            for each in inspect.getmembers(libraries, inspect.ismodule)
+            if each[0][0] != "_"
+        ]
+    )
     libs_comps = {}
     for each_lib in list(set(circuitData["compLibs"])):
         # temp_comps = dict(inspect.getmembers(all_libraries[each_lib], inspect.isclass))
