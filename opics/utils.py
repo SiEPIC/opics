@@ -245,9 +245,6 @@ def NetlistProcessor(spice_filepath, Network, libraries, c_, circuitData, verbos
         for key, value in circuitData.items():
             print(key, str(value))
 
-    # create a circuit
-    subckt = Network(circuitData["networkID"])
-
     # define frequency range and resolution
     freq = np.linspace(
         c_ / circuitData["sim_params"][0],
@@ -255,6 +252,9 @@ def NetlistProcessor(spice_filepath, Network, libraries, c_, circuitData, verbos
         circuitData["sim_params"][2],
     )
 
+
+    # create a circuit
+    subckt = Network(network_id=circuitData["networkID"], f=freq)
     # get library
     all_libraries = dict(
         [
@@ -284,10 +284,7 @@ def NetlistProcessor(spice_filepath, Network, libraries, c_, circuitData, verbos
                 cls_attrs[each_attrs] = fromSI(comp_attrs[each_attrs])
 
         subckt.add_component(
-            libs_comps[circuitData["compLibs"][i]][circuitData["compModels"][i]](
-                freq, **cls_attrs
-            ),
-            circuitData["compLabels"][i],
+            libs_comps[circuitData["compLibs"][i]][circuitData["compModels"][i]], params=cls_attrs, component_id= circuitData["compLabels"][i]
         )
 
     # add circuit netlist
