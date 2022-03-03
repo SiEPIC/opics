@@ -320,6 +320,7 @@ class netlistParser:
         circuitNets = []
         componentLibs = []
         componentAttrs = []
+        component_locations = []
 
         temp_file = open(filepath, "r")
         temp_lines = temp_file.readlines()
@@ -350,6 +351,8 @@ class netlistParser:
                 temp_data = each_line.split(" ")
 
                 if len(temp_data) > 1:  # if line is not an empty one
+
+                    MC_location = []
 
                     if temp_data[0] == ".subckt":
                         circuitID = temp_data[1]
@@ -428,7 +431,11 @@ class netlistParser:
                                 found_ports = -1
 
                             elif "lay" in temp_data[i] or "sch" in temp_data[i]:
-                                continue
+                                if "lay" in temp_data[i]:
+                                    MC_location.append(
+                                        fromSI(temp_data[i].split("=")[-1]) * 1e6
+                                    )
+
                                 # ignore layout and schematic position data for now.
                                 # adapt opics models to accept this data
                                 # they are component parameters
@@ -451,6 +458,8 @@ class netlistParser:
 
                         componentAttrs.append(temp_cls_atrr)
                         circuitNets.append(temp_ports)
+                        if bool(MC_location):
+                            component_locations.append(MC_location)
 
         circuitConns = list(set(list(itertools.chain(*circuitNets))))
         # remove IOs from component connections' list
@@ -464,6 +473,7 @@ class netlistParser:
             "compModels": circuitModels,
             "compLabels": circuitLabels,
             "compAttrs": componentAttrs,
+            "compLocs": component_locations,
             "networkID": circuitID,
             "inp_net": inp_net,
             "out_net": out_net,
