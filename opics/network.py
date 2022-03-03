@@ -1,9 +1,11 @@
 import os
 import binascii
 from copy import deepcopy
-from typing import List, Optional
+from typing import List, Optional, Dict
+from numpy import ndarray
 from opics.sparam_ops import connect_s
 from opics.components import componentModel
+from opics.globals import F
 
 
 class Network:
@@ -12,9 +14,16 @@ class Network:
 
     Args:
         network_id: Define the network name.
+        f: frequency data points.
     """
 
-    def __init__(self, network_id: Optional[str] = None) -> None:
+    def __init__(
+        self, network_id: Optional[str] = None, f: Optional[ndarray] = None
+    ) -> None:
+        self.f = f
+        if self.f is None:
+            self.f = F
+
         self.network_id = (
             network_id if network_id else str(binascii.hexlify(os.urandom(4)))[2:-1]
         )
@@ -25,27 +34,39 @@ class Network:
         self.idx_to_references = {}
         self.sim_result = None
 
-    def add_component(self, cls: componentModel, component_id: Optional[str] = None):
+    def add_component(
+        self,
+        component: componentModel,
+        params: Dict = {},
+        component_id: Optional[str] = None,
+    ):
         """
         Adds component to a network.
 
         Args:
-            cls: An instance of componentModel class.
+            component: An instance of componentModel class.
+            params: Component parameter values.
             component_id: Custom component id tag.
         """
         count = 0
         for each in self.current_components:
-            if type(cls) == type(each):
+            if type(component) == type(each):
                 count += 1
 
-        cls.component_id = (
-            cls.component_id + "_" + str(count)
+        if "f" not in params:
+            params["f"] = self.f
+
+        temp_component = component(**params)
+
+        temp_component.component_id = (
+            temp_component.component_id + "_" + str(count)
             if component_id is None
             else component_id
         )
-        self.current_components.append(cls)
 
-        return cls
+        self.current_components.append(temp_component)
+
+        return temp_component
 
     def connect(
         self,

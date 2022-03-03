@@ -20,15 +20,15 @@ if __name__ == "__main__":
     ebeam = opics.libraries.ebeam
 
     # initialize an empty circuit
-    circuit = Network()
+    circuit = Network(f=freq)
 
     # define component instances
-    gc = circuit.add_component(ebeam.GC(freq))
-    y = circuit.add_component(ebeam.Y(freq))
-    wg2 = circuit.add_component(ebeam.Waveguide(freq, length=0e-6))
-    wg1 = circuit.add_component(ebeam.Waveguide(freq, length=15e-6))
-    y2 = circuit.add_component(ebeam.Y(freq))
-    gc2 = circuit.add_component(ebeam.GC(freq))
+    gc = circuit.add_component(ebeam.GC)
+    y = circuit.add_component(ebeam.Y)
+    wg2 = circuit.add_component(ebeam.Waveguide, params={"length": 0e-6})
+    wg1 = circuit.add_component(ebeam.Waveguide, params={"length": 15e-6})
+    y2 = circuit.add_component(ebeam.Y)
+    gc2 = circuit.add_component(ebeam.GC)
 
     # specify custom port names
     gc.set_port_reference(0, "input_port")

@@ -14,10 +14,10 @@ ebeam = opics.libraries.ebeam
 
 circuit = Network()
 
-input_gc = circuit.add_component(ebeam.GC(freq))
-output_gc = circuit.add_component(ebeam.GC(freq))
-wg = circuit.add_component(ebeam.Waveguide(freq, np.pi * 5e-6))
-dc_halfring = circuit.add_component(ebeam.DC_halfring(freq))
+input_gc = circuit.add_component(ebeam.GC)
+output_gc = circuit.add_component(ebeam.GC)
+wg = circuit.add_component(ebeam.Waveguide, params={"length": np.pi * 5e-6})
+dc_halfring = circuit.add_component(ebeam.DC_halfring)
 
 
 # connect components

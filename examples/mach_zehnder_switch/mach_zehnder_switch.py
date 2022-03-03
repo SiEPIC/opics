@@ -23,12 +23,14 @@ for power_sweep in power_values:
     circuit = Network()
 
     # define component instances
-    gc_ = circuit.add_component(library.GC(freq))
-    y_ = circuit.add_component(library.Y(freq))
-    wg2 = circuit.add_component(library.TunableWG(freq, 150e-6, power_sweep))
-    wg1 = circuit.add_component(library.Waveguide(freq, 50e-6))
-    y2_ = circuit.add_component(library.Y(freq))
-    gc2_ = circuit.add_component(library.GC(freq))
+    gc_ = circuit.add_component(library.GC)
+    y_ = circuit.add_component(library.Y)
+    wg1 = circuit.add_component(library.Waveguide, params={"length": 50e-6})
+    wg2 = circuit.add_component(
+        library.TunableWG, params={"length": 150e-6, "power": power_sweep}
+    )
+    y2_ = circuit.add_component(library.Y)
+    gc2_ = circuit.add_component(library.GC)
 
     # connect components
     circuit.connect(gc_, 1, y_, 0)

@@ -5,7 +5,7 @@ from .utils import LUT_processor
 from numpy import ndarray
 from pathlib import PosixPath
 from typing import Dict, List, Union
-from opics.globals import F
+from opics.globals import F, C
 
 
 class componentModel:
@@ -26,7 +26,7 @@ class componentModel:
 
     def __init__(
         self,
-        f: ndarray = F,
+        f: ndarray = None,
         nports: int = 2,
         s: ndarray = None,
         data_folder: PosixPath = None,
@@ -36,11 +36,14 @@ class componentModel:
     ) -> None:
 
         self.f = f
-        self.C = 299792458
+        if self.f is None:
+            self.f = F
+
+        self.C = C
+
+        self.s = s
         if s is None:
             self.s = np.array((nports, nports))
-        else:
-            self.s = s
 
         self.lambda_ = self.C * 1e6 / self.f
         self.componentParameters = []
