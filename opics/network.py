@@ -156,6 +156,16 @@ class Network:
         if self.global_netlist == []:
             self.initiate_global_netlist()
 
+        # check if all the components are connected
+        _not_connected = set()
+        for i, each_net in enumerate(self.global_netlist):
+            if sum(each_net) < min(each_net):
+                _not_connected.add(self.current_components[i])
+
+        if bool(_not_connected):
+            self.global_netlist = []
+            raise RuntimeError("Some components are not connected.")
+
         t_components = deepcopy(self.current_components)
         t_nets = deepcopy(self.global_netlist)
         t_connections = [i for i in set(sum(t_nets, [])) if i >= 0]
