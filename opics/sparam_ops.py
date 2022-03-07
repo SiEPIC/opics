@@ -62,7 +62,7 @@ def connect_s(
         nC = nA + nB  # num ports on C
 
         # create composite matrix, appending each sub-matrix diagonally
-        C = np.zeros((nf, nC, nC), dtype="complex")
+        C = np.zeros((nf, nC, nC), dtype=np.complex128)
         C[:, :nA, :nA] = A.copy()
         C[:, nA:, nA:] = B.copy()
 
@@ -124,7 +124,9 @@ def innerconnect_s(A: ndarray, k: int, l: int) -> ndarray:
     nA = A.shape[1]  # num of ports on input s-matrix
 
     # create an empty s-matrix, to store the result
-    C = np.zeros(shape=A.shape, dtype="complex")
+    C = np.zeros(shape=A.shape, dtype=np.complex128)
+
+    # A[:, i,j] = (2000, 2,2)
 
     # loop through ports and calulates resultant s-parameters
     for i in range(nA):
@@ -137,6 +139,79 @@ def innerconnect_s(A: ndarray, k: int, l: int) -> ndarray:
                 - A[:, i, l] * A[:, l, j] * A[:, k, k]
                 + A[:, l, j] * A[:, i, k] * (A[:, k, l] - 1)
             ) / (A[:, l, l] * A[:, k, k] - (A[:, l, k] - 1) * (A[:, k, l] - 1))
+
+    # remove ports that were `connected`
+    C = np.delete(C, (k, l), 1)
+    C = np.delete(C, (k, l), 2)
+
+    # ignore all from C[:,k,:], and C[:,l,:]
+    # ignore all from C[:,:,k], and C[:,:,l]
+
+    return C
+
+
+def v_broadcast_sim(A: np.ndarray, k: int, l: int) -> np.ndarray:
+
+    if k > A.shape[-1] - 1 or l > A.shape[-1] - 1:
+        raise (ValueError("port indices are out of range"))
+
+    nA = A.shape[1]  # num of ports on input s-matrix
+
+    # create an empty s-matrix, to store the result
+    C = np.zeros(shape=A.shape, dtype=np.complex128)
+
+    # fundamental elements to broadcast
+    _terms = {
+        "a": A[:, l, l],
+        "b": A[:, k, k],
+        "c": A[:, l, k] - 1,
+        "d": A[:, k, l] - 1,
+        "e": np.full(
+            (A.shape[0], nA, nA), np.reshape(A[:, k, :nA], (A.shape[0], 1, nA))
+        ),
+        "f": np.full(
+            (A.shape[0], nA, nA), np.reshape(A[:, :nA, l], (A.shape[0], nA, 1))
+        ),
+        "g": np.full(
+            (A.shape[0], nA, nA), np.reshape(A[:, :nA, k], (A.shape[0], nA, 1))
+        ),
+        "h": np.full(
+            (A.shape[0], nA, nA), np.reshape(A[:, l, :nA], (A.shape[0], 1, nA))
+        ),
+    }
+
+    _interm_terms = {
+        "term1": np.full(
+            (A.shape[0], nA, nA),
+            np.reshape(
+                (_terms["a"] * _terms["b"] - (_terms["c"] * _terms["d"])),
+                (A.shape[0], 1, 1),
+            ),
+        ),
+        "term2": _terms["e"]
+        * _terms["f"]
+        * np.full((A.shape[0], nA, nA), np.reshape(_terms["c"], (A.shape[0], 1, 1))),
+        "term3": _terms["e"]
+        * _terms["g"]
+        * np.full((A.shape[0], nA, nA), np.reshape(_terms["a"], (A.shape[0], 1, 1))),
+        "term4": _terms["f"]
+        * _terms["h"]
+        * np.full((A.shape[0], nA, nA), np.reshape(_terms["b"], (A.shape[0], 1, 1))),
+        "term5": _terms["h"]
+        * _terms["g"]
+        * np.full((A.shape[0], nA, nA), np.reshape(_terms["d"], (A.shape[0], 1, 1))),
+    }
+
+    # A[:, i,j] = (2000, 2,2)
+
+    # loop through ports and calulates resultant s-parameters
+    C = (
+        A * _interm_terms["term1"]
+        + _interm_terms["term2"]
+        - _interm_terms["term3"]
+        - _interm_terms["term4"]
+        + _interm_terms["term5"]
+    ) / _interm_terms["term1"]
 
     # remove ports that were `connected`
     C = np.delete(C, (k, l), 1)

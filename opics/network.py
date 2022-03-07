@@ -1,11 +1,50 @@
 import os
 import binascii
-from copy import deepcopy
 from typing import List, Optional, Dict
 from numpy import ndarray
 from opics.sparam_ops import connect_s
 from opics.components import componentModel
 from opics.globals import F
+import multiprocessing as mp
+
+
+def solve_tasks(data: list):
+    components, ntp, nets = data
+    # If pin occurances are in the same component:
+    if ntp[0] == ntp[2]:
+        # print(t_components[ca].s.shape)
+        new_s = connect_s(
+            components[0].s,
+            ntp[1],
+            None,
+            ntp[3],
+            create_composite_matrix=False,
+        )
+        components[0].s = new_s
+        new_component = components[0]
+
+        new_net = nets[0]
+        p1, p2 = new_net[ntp[1]], new_net[ntp[3]]
+
+        # delete both port references
+        new_net.remove(p1)
+        new_net.remove(p2)
+
+        return new_component, new_net
+
+    # If pin occurances are in different components:
+    else:
+        combination_f = F
+        combination_s = connect_s(components[0].s, ntp[1], components[1].s, ntp[3])
+
+        # nets of the new component
+        net1, net2 = nets[0], nets[1]
+        del net1[ntp[1]], net2[ntp[3]]
+        new_net = net1 + net2
+
+        # create new component
+        new_component = componentModel(f=combination_f, s=combination_s, nets=new_net)
+        return new_component, new_net
 
 
 class Network:
@@ -48,18 +87,15 @@ class Network:
             params: Component parameter values.
             component_id: Custom component id tag.
         """
-        count = 0
-        for each in self.current_components:
-            if type(component) == type(each):
-                count += 1
-
         if "f" not in params:
             params["f"] = self.f
 
         temp_component = component(**params)
 
         temp_component.component_id = (
-            temp_component.component_id + "_" + str(count)
+            temp_component.component_id
+            + "_"
+            + str(binascii.hexlify(os.urandom(4)))[2:-1]
             if component_id is None
             else component_id
         )
@@ -150,9 +186,9 @@ class Network:
     def simulate_network(self) -> componentModel:
         """
         Triggers the simulation
-
         """
 
+        # create global netlist
         if self.global_netlist == []:
             self.initiate_global_netlist()
 
@@ -166,72 +202,115 @@ class Network:
             self.global_netlist = []
             raise RuntimeError("Some components are not connected.")
 
-        t_components = deepcopy(self.current_components)
-        t_nets = deepcopy(self.global_netlist)
+        t_components = self.current_components
+        t_nets = self.global_netlist
         t_connections = [i for i in set(sum(t_nets, [])) if i >= 0]
 
-        for n in t_connections:
-            # print("sim_network current connection", self.current_connections)
-            # component A id, port id, component B id, port id
-            ntp = self.global_to_local_ports(n, t_nets)  # nets to ports
+        _connections_in_use = set()
+        while len(t_connections) > 0:
 
-            # If pin occurances are in the same component:
-            if ntp[0] == ntp[2]:
-                # print(t_components[ca].s.shape)
-                new_s = connect_s(
-                    t_components[ntp[0]].s,
-                    ntp[1],
-                    None,
-                    ntp[3],
-                    create_composite_matrix=False,
-                )
-                t_components[ntp[0]].s = new_s
-                del t_nets[ntp[0]][ntp[1]]
-                if (
-                    ntp[1] < ntp[3]
-                ):  # if the current index occurs before the second one, shifting all nets to the left
-                    del t_nets[ntp[2]][ntp[3] - 1]
-                else:
-                    del t_nets[ntp[2]][ntp[3]]
+            # track components and connections in use
+            _components_in_use = set()
+            _nets_in_use = []
+            _task_bundle = []
 
-            # If pin occurances are in different components:
-            else:
-                combination_f = t_components[0].f
-                combination_s = connect_s(
-                    t_components[ntp[0]].s, ntp[1], t_components[ntp[2]].s, ntp[3]
-                )
-                # nets of newest component
-                del t_nets[ntp[0]][ntp[1]], t_nets[ntp[2]][ntp[3]]
-                new_net = t_nets[ntp[0]] + t_nets[ntp[2]]
+            # ------------ Step 1: Create Task Bundles------------------
+            # for loop to iterate over connections
+            for _connection in t_connections:
+                if _connection not in _connections_in_use:
+                    # get components and port indexes
+                    net_to_port = self.global_to_local_ports(_connection, t_nets)
 
-                del t_components[ntp[0]], t_nets[ntp[0]]
-                if ntp[0] < ntp[2]:
-                    del t_components[ntp[2] - 1], t_nets[ntp[2] - 1]
-                else:
-                    del t_components[ntp[2]], t_nets[ntp[2]]
+                    # components are already being used in another net, skip this connection
+                    if (
+                        t_components[net_to_port[0]].component_id in _components_in_use
+                        or t_components[net_to_port[2]].component_id
+                        in _components_in_use
+                    ):
+                        continue
 
-                t_components.append(
-                    componentModel(f=combination_f, s=combination_s, nets=t_nets)
-                )
-                t_nets.append(new_net)
+                    # lock components, nets, and connections to prevent from being used in other threads
+                    _connections_in_use.add(_connection)
+                    _components_in_use.add(t_components[net_to_port[0]].component_id)
+                    _components_in_use.add(t_components[net_to_port[2]].component_id)
+                    _nets_in_use.append(t_nets[net_to_port[0]])
+                    _nets_in_use.append(t_nets[net_to_port[2]])
 
-        if len(t_nets) == 1:
+                    # -------- Step 2: add components to tasks bundles -----------
+                    if net_to_port[0] == net_to_port[2]:
+                        # if the both components are the same
+                        _task_bundle.append(
+                            [
+                                [t_components[net_to_port[0]], None],
+                                net_to_port,
+                                [t_nets[net_to_port[0]], t_nets[net_to_port[2]]],
+                            ]
+                        )
 
-            self.sim_result = t_components[-1]
-            self.current_components.clear()
-            self.current_components = t_components
-            self.global_netlist = t_nets
+                        """
+                        _task_bundle.append({"components": [t_components[net_to_port[0]],
+                                                            None],
+                                             "ntp": net_to_port,
+                                             "nets": [t_nets[net_to_port[0]],
+                                                      t_nets[net_to_port[2]]]
+                                             })
+                        """
 
-            for each_net in t_nets:
-                i = 0
-                for each_port in each_net:
-                    self.idx_to_references[i] = each_port
-                    i += 1
+                    else:
+                        _task_bundle.append(
+                            [
+                                [
+                                    t_components[net_to_port[0]],
+                                    t_components[net_to_port[2]],
+                                ],
+                                net_to_port,
+                                [t_nets[net_to_port[0]], t_nets[net_to_port[2]]],
+                            ]
+                        )
+                        """
+                        _task_bundle.append({"components": [t_components[net_to_port[0]],
+                                                            t_components[net_to_port[2]]],
+                                             "ntp": net_to_port,
+                                             "nets": [t_nets[net_to_port[0]],
+                                                      t_nets[net_to_port[2]]]})
+                        """
 
-            return t_components[-1]
+            # ------- Step 3: Remove components, nets, connection ids ----------
+            _temp_components = []
 
-        else:
-            self.current_components = t_components
-            self.current_connections = []
-            self.global_netlist = t_nets
-            return t_components
+            for _ in range(len(t_components)):
+                _each_components = t_components[_]
+                if _each_components.component_id not in _components_in_use:
+                    _temp_components.append(_each_components)
+            t_components = _temp_components
+            t_nets = [each_net for each_net in t_nets if each_net not in _nets_in_use]
+            t_connections = [
+                each_conn
+                for each_conn in t_connections
+                if each_conn not in _connections_in_use
+            ]
+
+            # ------- solve tasks and merge results -----------
+            """
+            for _each_task in _task_bundle:
+                result = solve_tasks(**_each_task)
+                t_components.append(result[0])
+                t_nets.append(result[1])
+
+            for _each_task in _task_bundle:
+                result = solve_tasks(_each_task)
+                t_components.append(result[0])
+                t_nets.append(result[1])
+            """
+            with mp.Pool() as pool:
+                results = pool.map(solve_tasks, _task_bundle)
+            # merge results
+            for each_result in results:
+                t_components.append(each_result[0])
+                t_nets.append(each_result[1])
+
+        self.current_components = t_components
+        self.sim_result = t_components[-1]
+        self.current_connections = []
+        self.global_netlist = t_nets
+        return t_components[-1]
