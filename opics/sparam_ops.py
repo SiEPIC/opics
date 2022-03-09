@@ -7,15 +7,15 @@ from numpy import ndarray
 
 def connect_s(
     A: ndarray,
-    k: int,
+    port_idx_A: int,
     B: Optional[ndarray],
-    l: int,
+    port_idx_B: int,
     create_composite_matrix: bool = True,
 ) -> ndarray:
     """
     connect two n-port networks' s-matrices together.
 
-    specifically, connect port `k` on network `A` to port `l` on network
+    specifically, connect port `port_idx_A` on network `A` to port `port_idx_B` on network
     `B`. The resultant network has nports = (A.rank + B.rank-2). This
     function operates on, and returns s-matrices. The function
     :func:`connect` operates on :class:`Network` types.
@@ -24,11 +24,11 @@ def connect_s(
     -----------
     A : :class:`numpy.ndarray`
             S-parameter matrix of `A`, shape is fxnxn
-    k : int
+    port_idx_A : int
             port index on `A` (port indices start from 0)
     B : :class:`numpy.ndarray`
             S-parameter matrix of `B`, shape is fxnxn
-    l : int
+    port_idx_B : int
             port index on `B`
 
     Returns
@@ -53,7 +53,7 @@ def connect_s(
     """
 
     if create_composite_matrix:
-        if k > A.shape[-1] - 1 or l > B.shape[-1] - 1:
+        if port_idx_A > A.shape[-1] - 1 or port_idx_B > B.shape[-1] - 1:
             raise (ValueError("port indices are out of range"))
 
         nf = A.shape[0]  # num frequency points
@@ -67,18 +67,18 @@ def connect_s(
         C[:, nA:, nA:] = B.copy()
 
         # call innerconnect_s() on composit matrix C
-        mat_result = innerconnect_s(C, k, nA + l)
+        mat_result = innerconnect_s(C, port_idx_A, nA + port_idx_B)
         return mat_result
     else:
         # call innerconnect_s() on non-composit matrix A
-        return innerconnect_s(A, k, l)
+        return innerconnect_s(A, port_idx_A, port_idx_B)
 
 
-def innerconnect_s(A: ndarray, k: int, l: int) -> ndarray:
+def innerconnect_s(A: ndarray, port_idx_A: int, port_idx_B: int) -> ndarray:
     """
     connect two ports of a single n-port network's s-matrix.
 
-    Specifically, connect port `k` to port `l` on `A`. This results in
+    Specifically, connect port `port_idx_A` to port `port_idx_B` on `A`. This results in
     a (n-2)-port network.  This     function operates on, and returns
     s-matrices. The function :func:`innerconnect` operates on
     :class:`Network` types.
@@ -87,9 +87,9 @@ def innerconnect_s(A: ndarray, k: int, l: int) -> ndarray:
     -----------
     A : :class:`numpy.ndarray`
         S-parameter matrix of `A`, shape is fxnxn
-    k : int
+    port_idx_A : int
         port index on `A` (port indices start from 0)
-    l : int
+    port_idx_B : int
         port index on `A`
 
     Returns
@@ -118,7 +118,7 @@ def innerconnect_s(A: ndarray, k: int, l: int) -> ndarray:
     http://ieeexplore.ieee.org/stamp/stamp.jsp?tp=&arnumber=4131699&isnumber=4131585
     """
 
-    if k > A.shape[-1] - 1 or l > A.shape[-1] - 1:
+    if port_idx_A > A.shape[-1] - 1 or port_idx_B > A.shape[-1] - 1:
         raise (ValueError("port indices are out of range"))
 
     nA = A.shape[1]  # num of ports on input s-matrix
@@ -133,26 +133,42 @@ def innerconnect_s(A: ndarray, k: int, l: int) -> ndarray:
         for j in range(nA):
             C[:, i, j] = (
                 A[:, i, j]
-                * (A[:, l, l] * A[:, k, k] - (A[:, l, k] - 1) * (A[:, k, l] - 1))
-                + A[:, k, j] * A[:, i, l] * (A[:, l, k] - 1)
-                - A[:, k, j] * A[:, i, k] * A[:, l, l]
-                - A[:, i, l] * A[:, l, j] * A[:, k, k]
-                + A[:, l, j] * A[:, i, k] * (A[:, k, l] - 1)
-            ) / (A[:, l, l] * A[:, k, k] - (A[:, l, k] - 1) * (A[:, k, l] - 1))
+                * (
+                    A[:, port_idx_B, port_idx_B] * A[:, port_idx_A, port_idx_A]
+                    - (A[:, port_idx_B, port_idx_A] - 1)
+                    * (A[:, port_idx_A, port_idx_B] - 1)
+                )
+                + A[:, port_idx_A, j]
+                * A[:, i, port_idx_B]
+                * (A[:, port_idx_B, port_idx_A] - 1)
+                - A[:, port_idx_A, j]
+                * A[:, i, port_idx_A]
+                * A[:, port_idx_B, port_idx_B]
+                - A[:, i, port_idx_B]
+                * A[:, port_idx_B, j]
+                * A[:, port_idx_A, port_idx_A]
+                + A[:, port_idx_B, j]
+                * A[:, i, port_idx_A]
+                * (A[:, port_idx_A, port_idx_B] - 1)
+            ) / (
+                A[:, port_idx_B, port_idx_B] * A[:, port_idx_A, port_idx_A]
+                - (A[:, port_idx_B, port_idx_A] - 1)
+                * (A[:, port_idx_A, port_idx_B] - 1)
+            )
 
     # remove ports that were `connected`
-    C = np.delete(C, (k, l), 1)
-    C = np.delete(C, (k, l), 2)
+    C = np.delete(C, (port_idx_A, port_idx_B), 1)
+    C = np.delete(C, (port_idx_A, port_idx_B), 2)
 
-    # ignore all from C[:,k,:], and C[:,l,:]
-    # ignore all from C[:,:,k], and C[:,:,l]
+    # ignore all from C[:,port_idx_A,:], and C[:,port_idx_B,:]
+    # ignore all from C[:,:,port_idx_A], and C[:,:,port_idx_B]
 
     return C
 
 
-def v_broadcast_sim(A: np.ndarray, k: int, l: int) -> np.ndarray:
+def v_broadcast_sim(A: np.ndarray, port_idx_A: int, port_idx_B: int) -> np.ndarray:
 
-    if k > A.shape[-1] - 1 or l > A.shape[-1] - 1:
+    if port_idx_A > A.shape[-1] - 1 or port_idx_B > A.shape[-1] - 1:
         raise (ValueError("port indices are out of range"))
 
     nA = A.shape[1]  # num of ports on input s-matrix
@@ -162,21 +178,21 @@ def v_broadcast_sim(A: np.ndarray, k: int, l: int) -> np.ndarray:
 
     # fundamental elements to broadcast
     _terms = {
-        "a": A[:, l, l],
-        "b": A[:, k, k],
-        "c": A[:, l, k] - 1,
-        "d": A[:, k, l] - 1,
+        "a": A[:, port_idx_B, port_idx_B],
+        "b": A[:, port_idx_A, port_idx_A],
+        "c": A[:, port_idx_B, port_idx_A] - 1,
+        "d": A[:, port_idx_A, port_idx_B] - 1,
         "e": np.full(
-            (A.shape[0], nA, nA), np.reshape(A[:, k, :nA], (A.shape[0], 1, nA))
+            (A.shape[0], nA, nA), np.reshape(A[:, port_idx_A, :nA], (A.shape[0], 1, nA))
         ),
         "f": np.full(
-            (A.shape[0], nA, nA), np.reshape(A[:, :nA, l], (A.shape[0], nA, 1))
+            (A.shape[0], nA, nA), np.reshape(A[:, :nA, port_idx_B], (A.shape[0], nA, 1))
         ),
         "g": np.full(
-            (A.shape[0], nA, nA), np.reshape(A[:, :nA, k], (A.shape[0], nA, 1))
+            (A.shape[0], nA, nA), np.reshape(A[:, :nA, port_idx_A], (A.shape[0], nA, 1))
         ),
         "h": np.full(
-            (A.shape[0], nA, nA), np.reshape(A[:, l, :nA], (A.shape[0], 1, nA))
+            (A.shape[0], nA, nA), np.reshape(A[:, port_idx_B, :nA], (A.shape[0], 1, nA))
         ),
     }
 
@@ -214,10 +230,10 @@ def v_broadcast_sim(A: np.ndarray, k: int, l: int) -> np.ndarray:
     ) / _interm_terms["term1"]
 
     # remove ports that were `connected`
-    C = np.delete(C, (k, l), 1)
-    C = np.delete(C, (k, l), 2)
+    C = np.delete(C, (port_idx_A, port_idx_B), 1)
+    C = np.delete(C, (port_idx_A, port_idx_B), 2)
 
-    # ignore all from C[:,k,:], and C[:,l,:]
-    # ignore all from C[:,:,k], and C[:,:,l]
+    # ignore all from C[:,port_idx_A,:], and C[:,port_idx_B,:]
+    # ignore all from C[:,:,port_idx_A], and C[:,:,port_idx_B]
 
     return C
