@@ -210,7 +210,11 @@ class componentModel:
         return temp_data
 
     def plot_sparameters(
-        self, ports: List[List[int]] = None, show_freq: bool = True, scale: str = "log"
+        self,
+        ports: List[List[int]] = None,
+        show_freq: bool = True,
+        scale: str = "log",
+        interactive: bool = False,
     ):
         """Plot the component's S-parameters.
 
@@ -222,6 +226,7 @@ class componentModel:
                  with respect to frequency or wavelength. Defaults to True.
             scale: Plotting y axis scale, options available:\
                  ["log", "abs", "abs_sq"]. Defaults to "log".
+            interactive: Make the plots interactive or not.
         """
 
         ports_ = []  # ports the plot
@@ -241,21 +246,58 @@ class componentModel:
         else:
             ports_ = ["S_%d_%d" % (each[0], each[1]) for each in ports]
 
-        for each_port in ports_:
-            _, i, j = each_port.split("_")
-            if scale == "log":
-                plt.plot(
-                    x_data, 10 * np.log10(np.square(np.abs(self.s[:, int(i), int(j)])))
-                )
-                plt.ylabel("Transmission (dB)")
-            elif scale == "abs":
-                plt.plot(x_data, np.abs(self.s[:, int(i), int(j)]))
-                plt.ylabel("Transmission (normalized)")
-            elif scale == "abs_sq":
-                plt.plot(x_data, np.square(np.abs(self.s[:, int(i), int(j)])))
-                plt.ylabel("Transmission (normalized^2)")
-        plt.xlabel(xlabel)
-        plt.xlim(left=np.min(x_data), right=np.max(x_data))
-        plt.tight_layout()
-        plt.legend(ports_)
-        plt.show()
+        if not interactive:
+            for each_port in ports_:
+                _, i, j = each_port.split("_")
+                if scale == "log":
+                    plt.plot(
+                        x_data,
+                        10 * np.log10(np.square(np.abs(self.s[:, int(i), int(j)]))),
+                    )
+                    plt.ylabel("Transmission (dB)")
+                elif scale == "abs":
+                    plt.plot(x_data, np.abs(self.s[:, int(i), int(j)]))
+                    plt.ylabel("Transmission (normalized)")
+                elif scale == "abs_sq":
+                    plt.plot(x_data, np.square(np.abs(self.s[:, int(i), int(j)])))
+                    plt.ylabel("Transmission (normalized^2)")
+            plt.xlabel(xlabel)
+            plt.xlim(left=np.min(x_data), right=np.max(x_data))
+            plt.tight_layout()
+            plt.legend(ports_)
+            plt.show()
+        else:
+            import holoviews as hv
+            import pandas as pd
+            from bokeh.plotting import show
+
+            hv.extension("bokeh")
+            temp_data = self.get_data(ports=ports, xscale="lambda", yscale=scale)
+            filtered_s = dict(
+                [[key, temp_data[key]] for key in temp_data.keys() if "unit" not in key]
+            )
+            df = pd.DataFrame.from_dict(filtered_s)
+            master_plot = None
+            for each_ydata in ports_:
+                if master_plot is None:
+                    master_plot = hv.Curve(
+                        df, "xdata", each_ydata, label=each_ydata
+                    ).opts(tools=["hover"])
+                else:
+                    curve = hv.Curve(df, "xdata", each_ydata, label=each_ydata).opts(
+                        tools=["hover"]
+                    )
+                    master_plot = master_plot * curve
+
+            master_plot.opts(
+                ylabel=temp_data["yunit"],
+                xlabel=temp_data["xunit"],
+                responsive=True,
+                min_height=400,
+                min_width=600,
+                fontscale=1.5,
+                max_width=800,
+                max_height=600,
+            )
+
+            show(hv.render(master_plot))

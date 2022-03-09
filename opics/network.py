@@ -9,9 +9,7 @@ import multiprocessing as mp
 
 
 def solve_tasks(
-    data: List[
-        List[componentModel, Union[componentModel, None]],
-    ]
+    data: List,
 ):
     """
     Simulates a connection, either shared by two different components or by the same component.
