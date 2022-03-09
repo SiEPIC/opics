@@ -33,7 +33,7 @@ setup(
     packages=find_packages(),
     install_requires=get_install_requires(),
     test_suite="tests",
-    url="https://github.com/siepic/opics",
-    version="0.2.1",
+    url="https://github.com/jaspreetj/opics",
+    version="0.3.1",
     zip_safe=False,
 )

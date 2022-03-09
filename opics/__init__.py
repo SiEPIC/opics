@@ -7,7 +7,7 @@ from opics.globals import C, F
 
 __author__ = "Jaspreet Jhoja"
 __email__ = "jj@alumni.ubc.ca"
-__version__ = "0.2.1"
+__version__ = "0.3.1"
 
 # initialize OPICS package
 

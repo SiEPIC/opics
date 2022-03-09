@@ -101,6 +101,7 @@ class componentModel:
             port_number: Port number.
             port_name: Custom port name.
         """
+        self.port_references[port_name] = port_number
         self.port_references[port_number] = port_name
 
     def interpolate_sparameters(

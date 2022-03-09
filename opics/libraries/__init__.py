@@ -1,7 +1,8 @@
 import yaml as _yaml
 import pathlib as _pathlib
-from importlib import util as _util
+from importlib import import_module
 from .catalogue_mgmt import download_library, remove_library
+import sys
 
 _curr_dir = _pathlib.Path(__file__).parent.resolve()
 
@@ -10,23 +11,15 @@ with open(_curr_dir / "catalogue.yaml", "r") as _stream:
     library_catalogue = _yaml.safe_load(_stream)
 
 
-def _module_from_file(module_name, file_path):
-    spec = _util.spec_from_file_location(module_name, file_path)
-    module = _util.module_from_spec(spec)
-    spec.loader.exec_module(module)
-    return module
-
-
 def _import_external_libraries(library_catalogue):
     installed_libraries = []
 
     for each_lib in library_catalogue.keys():
+
         if library_catalogue[each_lib]["installed"]:
+            sys.path.append(f"{library_catalogue[each_lib]['library_path']}")
             installed_libraries.append(each_lib)
-            globals()[each_lib] = _module_from_file(
-                each_lib,
-                f"{library_catalogue[each_lib]['library_path']}/{library_catalogue[each_lib]['name']}/__init__.py",
-            )
+            globals()[each_lib] = import_module(each_lib)
 
     return installed_libraries
 
