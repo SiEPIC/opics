@@ -6,6 +6,8 @@ from numpy import ndarray
 from pathlib import PosixPath
 from typing import Dict, List, Union
 from opics.globals import F, C
+import os
+import binascii
 
 
 class componentModel:
@@ -47,7 +49,7 @@ class componentModel:
 
         self.lambda_ = self.C * 1e6 / self.f
         self.componentParameters = []
-        self.componentID = ""
+        self.component_id = str(binascii.hexlify(os.urandom(4)))[2:-1]
         self.nports = nports
 
         self.port_references = {}
@@ -99,6 +101,7 @@ class componentModel:
             port_number: Port number.
             port_name: Custom port name.
         """
+        self.port_references[port_name] = port_number
         self.port_references[port_number] = port_name
 
     def interpolate_sparameters(
