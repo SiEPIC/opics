@@ -24,7 +24,7 @@ setup(
         "Programming Language :: Python :: 3.7",
         "Programming Language :: Python :: 3.8",
     ],
-    description="Open-source frequency domain solver for photonic integrated circuits.",
+    description="Open-source frequency domain circuit simulator for photonic integrated circuits.",
     license="MIT license",
     long_description=readme,
     include_package_data=True,
