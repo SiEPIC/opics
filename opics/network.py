@@ -41,6 +41,12 @@ def solve_tasks(
         new_net.remove(p1)
         new_net.remove(p2)
 
+        new_component.nports = len(new_net)
+        port_references = {}
+        for _ in range(new_component.nports):
+            port_references[_] = _
+        new_component.port_references = port_references
+
         return new_component, new_net
 
     # If pin occurances are in different components:
@@ -54,7 +60,9 @@ def solve_tasks(
         new_net = net1 + net2
 
         # create new component
-        new_component = componentModel(f=combination_f, s=combination_s, nets=new_net)
+        new_component = componentModel(
+            f=combination_f, s=combination_s, nets=new_net, nports=len(new_net)
+        )
         return new_component, new_net
 
 
@@ -109,6 +117,7 @@ class Network:
                 self.pool = mp.Pool()
             else:
                 self.pool = mp.Pool(processes=self.mp_config["proc_count"])
+            print("OPICS multiprocessing is enabled.")
 
     def add_component(
         self,
@@ -124,6 +133,11 @@ class Network:
             params: Component parameter values.
             component_id: Custom component id tag.
         """
+
+        if isinstance(component, componentModel):
+            self.current_components[component.component_id] = component
+            return component
+
         if "f" not in params:
             params["f"] = self.f
 
@@ -253,7 +267,8 @@ class Network:
 
         for _ in _component_names:
             _temp_component_pins = self.global_netlist[_]
-            if sum(_temp_component_pins) < min(_temp_component_pins):
+            _temp_component_pins = [each_pin >= 0 for each_pin in _temp_component_pins]
+            if True not in _temp_component_pins:
                 _not_connected.add(_)
 
         if bool(_not_connected):
@@ -348,9 +363,39 @@ class Network:
                 self.pool.close()
                 self.pool.join()
 
+        t_components[list(t_components.keys())[-1]].component_id = self.network_id
         self.sim_result = t_components[list(t_components.keys())[-1]]
         self.current_connections = []
         return t_components[list(t_components.keys())[-1]]
+
+    def enable_mp(self, process_count: int = 0, close_pool: bool = True):
+        """
+        Enables OPICS multiprocessing
+
+        Args:
+            process_count: Number of processes to start. Leave the default value if not sure (let the system decide). Otherwise, use `multiprocessing.cpu_count()` to know the maximum number of processes that can be run safely.
+            close_pool: Whether to terminate all the processes after the simulation is done.
+        """
+        if not self.mp_config["enabled"]:
+            self.mp_config["enabled"] = True
+            self.mp_config["proc_count"] = process_count
+            self.mp_config["close_pool"] = close_pool
+            if self.mp_config["proc_count"] == 0:
+                self.pool = mp.Pool()
+            else:
+                self.pool = mp.Pool(processes=self.mp_config["proc_count"])
+            print("OPICS multiprocessing is enabled.")
+
+    def disable_mp(self):
+        """
+        Disables OPICS multiprocessing
+        """
+        if self.mp_config["enabled"]:
+            # close all processes.
+            self.pool.close()
+            self.pool.join()
+            self.mp_config["enabled"] = False
+            print("OPICS multiprocessing is disabled.")
 
 
 # mp helper functions

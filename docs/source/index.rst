@@ -10,6 +10,8 @@ For an introduction to OPICS, start at the
    :caption: Quickstart
 
    notebooks/00-Quickstart
+   notebooks/03-Multiprocessing
+   notebooks/04-Network_concatenation
 
 .. toctree::
    :maxdepth: 4
