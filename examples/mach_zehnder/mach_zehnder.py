@@ -1,24 +1,19 @@
 import time
-import warnings
+import opics
 import numpy as np
 from opics.globals import C
 from opics import Network
 
-# from opics.libraries import ebeam
-
-import sys
-
-sys.path.append(r"C:\Users\jeida\Desktop\delete\opics_ebeam-0.3.34")
-
 
 def mzi_example():
-    import ebeam
+
+    sim_start = time.perf_counter()
 
     # define frequency range and resolution
     freq = np.linspace(C * 1e6 / 1.5, C * 1e6 / 1.6, 2000)
 
     # import component library
-
+    ebeam = opics.libraries.ebeam
     # initialize an empty circuit
     circuit = Network(f=freq)
 
@@ -42,21 +37,17 @@ def mzi_example():
     circuit.connect(wg1, 1, y2, 1)
     circuit.connect(wg2, 1, y2, 2)
 
-    sim_start = time.perf_counter()
     # simulate network
-
     circuit.simulate_network()
 
     print("simulation finished in %ss" % (str(time.perf_counter() - sim_start)))
 
-    circuit.sim_result.plot_sparameters(show_freq=False, scale="log")
+    circuit.sim_result.plot_sparameters(show_freq=False, scale="log", interactive=True)
 
     print("done")
 
 
 if __name__ == "__main__":
-    warnings.filterwarnings(
-        "ignore"
-    )  # ignore all/complex number warnings from numpy or scipy
-
     mzi_example()
+
+    print("done")
