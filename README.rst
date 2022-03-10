@@ -1,3 +1,15 @@
+|build_badge| |license| |pypi|
+==============================================
+
+|opics_logo|
+
+Open Photonic Integrated Circuit Simulator (OPICS)
+==================================================
+
+**OPICS** is an S-parameter based photonic integrated circuit simulator. To know more,
+refer to OPICS  `Documentation <https://jaspreetj.github.io/opics/html/index.html>`__
+
+
 OPICS Quickstart
 ================
 
@@ -298,7 +310,7 @@ Plot the simulated response
 
 
 
-.. image:: notebooks/_static/00-Quickstart_files%5C00-Quickstart_30_0.png
+.. image:: /notebooks/_static/00-Quickstart_files/00-Quickstart_30_0.png
 
 
 An interactive plot can be spawned by enabling the interactive option.
@@ -410,3 +422,35 @@ An interactive plot can be spawned by enabling the interactive option.
 
 
     <div class="bk-root" id="adec95e7-a32f-409f-b9d3-8b619f0fb385" data-root-id="1258"></div>
+    
+Citing
+~~~~~~
+
+``OPICS`` is written by Jaspreet Jhoja. You can cite the package as
+
+::
+
+   @misc{jhoja-2020-opics,
+     author = {Jaspreet Jhoja},
+     title = {OPICS: An Open Photonic Integrated Circuit Solver},
+     year = {2020},
+     publisher = {GitHub},
+     journal = {GitHub repository},
+     howpublished = {\url{https://github.com/SiEPIC-Kits/OPICS}}
+   }
+
+License
+~~~~~~~
+
+Copyright © 2022, Jaspreet Jhoja, `MIT License <https://github.com/jaspreetj/opics/blob/master/LICENSE>`__
+
+
+
+.. |opics_logo| image:: /docs/source/_static/_images/opics_logo.png
+
+.. |pypi| image:: https://img.shields.io/pypi/v/opics?color=blue
+          :target: https://pypi.python.org/pypi/opics
+.. |license| image:: https://img.shields.io/badge/License-MIT-yellow.svg
+            :target: https://github.com/jaspreetj/opics/blob/master/LICENSE
+.. |build_badge| image:: https://github.com/jaspreetj/opics/actions/workflows/CI.yml/badge.svg?branch=master
+                 :target: https://github.com/jaspreetj/opics/actions/workflows/CI.yml
