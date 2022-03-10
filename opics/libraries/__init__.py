@@ -1,7 +1,7 @@
 import yaml as _yaml
 import pathlib as _pathlib
 from importlib import import_module
-from .catalogue_mgmt import download_library, remove_library
+from opics.libraries.catalogue_mgmt import download_library, remove_library
 import sys
 
 _curr_dir = _pathlib.Path(__file__).parent.resolve()
