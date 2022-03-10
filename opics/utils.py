@@ -8,27 +8,34 @@ from copy import deepcopy
 import numpy as np
 from numpy import ndarray
 from pathlib import PosixPath
-import xml.etree.ElementTree as ET
-from xml.etree.ElementTree import Element, ElementTree
+from defusedxml.ElementTree import parse
 
 
-def fromSI(value_: str) -> float:
+def fromSI(value: str) -> float:
     """converts from SI unit values to metric
 
     Args:
-        value_ (str): a value in SI units, e.g. 1.3u
+        value (str): a value in SI units, e.g. 1.3u
 
     Returns:
         float: the value in metric units.
     """
-    return float(value_.replace("u", "e-6"))
+    return float(value.replace("u", "e-6"))
 
 
-def universal_sparam_filereader(nports, sfilename, sfiledir, format_type="auto"):
+def universal_sparam_filereader(
+    nports: int, sfilename: str, sfiledir: PosixPath, format_type: str = "auto"
+) -> Tuple[ndarray, ndarray]:
     """
     Function to automatically detect the sparameter file format and use appropriate method to delimit and format sparam data
 
     This function is a unified version of sparameter reader function defined in https://github.com/BYUCamachoLab/simphony
+
+    Args:
+        nports: Number of ports
+        sfilename: XML look-up-table filename
+        sfiledir: Path to the directory containing the XML file
+        format_type: Format type. For more information: https://support.lumerical.com/hc/en-us/articles/360036618513-S-parameter-file-formats
     """
     numports = nports
     filename = sfiledir / sfilename
@@ -161,12 +168,16 @@ def universal_sparam_filereader(nports, sfilename, sfiledir, format_type="auto")
         return (np.array(F), S)
 
 
-def LUT_reader(
-    filedir: PosixPath, lutfilename: str, lutdata: List[List[str]]
-) -> Tuple[List[str], ElementTree, Element]:
-    """reads look up table data
+def LUT_reader(filedir: PosixPath, lutfilename: str, lutdata: List[List[str]]):
     """
-    xml = ET.parse(filedir / lutfilename)
+    Reads look up table data.
+
+    Args:
+        filedir: Directory of the XML look-up-table file.
+        lutfilename: Look-up-table filename.
+        lutdata: Look-up-table arguments.
+    """
+    xml = parse(filedir / lutfilename)
     root = xml.getroot()
 
     for node in root.iter("association"):
@@ -185,8 +196,7 @@ def LUT_processor(
     sparam_attr: str,
     verbose: bool = False,
 ) -> Tuple[Tuple[ndarray, ndarray], str]:
-    """process look up table data
-    """
+    """process look up table data"""
     start = time.time()
     sparam_file, xml, node = LUT_reader(filedir, lutfilename, lutdata)
 
@@ -223,14 +233,17 @@ def LUT_processor(
 
 
 def NetlistProcessor(spice_filepath, Network, libraries, c_, circuitData, verbose=True):
-    """process a spice netlist to setup and simulate a circuit.
+    """
+    Processes a spice netlist to setup and simulate a circuit.
+
+    Args:
+        spice_filepath: Path to the spice netlist file.
+        Network:
+
     """
     if verbose:
         for key, value in circuitData.items():
             print(key, str(value))
-
-    # create a circuit
-    subckt = Network(circuitData["networkID"])
 
     # define frequency range and resolution
     freq = np.linspace(
@@ -239,11 +252,19 @@ def NetlistProcessor(spice_filepath, Network, libraries, c_, circuitData, verbos
         circuitData["sim_params"][2],
     )
 
+    # create a circuit
+    subckt = Network(network_id=circuitData["networkID"], f=freq)
     # get library
-    all_libraries = dict(inspect.getmembers(libraries, inspect.ismodule))
+    all_libraries = dict(
+        [
+            each
+            for each in inspect.getmembers(libraries, inspect.ismodule)
+            if each[0][0] != "_"
+        ]
+    )
     libs_comps = {}
     for each_lib in list(set(circuitData["compLibs"])):
-        #temp_comps = dict(inspect.getmembers(all_libraries[each_lib], inspect.isclass))
+        # temp_comps = dict(inspect.getmembers(all_libraries[each_lib], inspect.isclass))
         libs_comps[each_lib] = all_libraries[each_lib].component_factory
 
     # add circuit components
@@ -262,10 +283,9 @@ def NetlistProcessor(spice_filepath, Network, libraries, c_, circuitData, verbos
                 cls_attrs[each_attrs] = fromSI(comp_attrs[each_attrs])
 
         subckt.add_component(
-            libs_comps[circuitData["compLibs"][i]][circuitData["compModels"][i]](
-                freq, **cls_attrs
-            ),
-            circuitData["compLabels"][i],
+            libs_comps[circuitData["compLibs"][i]][circuitData["compModels"][i]],
+            params=cls_attrs,
+            component_id=circuitData["compLabels"][i],
         )
 
     # add circuit netlist
@@ -298,6 +318,7 @@ class netlistParser:
         circuitNets = []
         componentLibs = []
         componentAttrs = []
+        component_locations = []
 
         temp_file = open(filepath, "r")
         temp_lines = temp_file.readlines()
@@ -329,6 +350,8 @@ class netlistParser:
 
                 if len(temp_data) > 1:  # if line is not an empty one
 
+                    MC_location = []
+
                     if temp_data[0] == ".subckt":
                         circuitID = temp_data[1]
                         inp = temp_data[2]
@@ -346,7 +369,7 @@ class netlistParser:
 
                     elif seek_ona == 1:
                         # ONA related data
-                        if(len(temp_data)<3):
+                        if len(temp_data) < 3:
                             temp_data = [0] + temp_data[-1].split("=")
 
                         if temp_data[1] == "orthogonal_identifier":
@@ -406,16 +429,22 @@ class netlistParser:
                                 found_ports = -1
 
                             elif "lay" in temp_data[i] or "sch" in temp_data[i]:
-                                continue
+                                if "lay" in temp_data[i]:
+                                    MC_location.append(
+                                        fromSI(temp_data[i].split("=")[-1]) * 1e6
+                                    )
+
                                 # ignore layout and schematic position data for now.
                                 # adapt opics models to accept this data
                                 # they are component parameters
                             elif "library" in temp_data[i]:
-                                #print(temp_data[i])
+                                # cprint(temp_data[i])
                                 temp_lib = (
                                     temp_data[i].replace('"', "").split("=")[1].split()
                                 )
-                                componentLibs.append(temp_lib[-1].split("/")[-1].lower())
+                                componentLibs.append(
+                                    temp_lib[-1].split("/")[-1].lower()
+                                )
                                 found_library = 1
 
                             elif "=" in temp_data[i] and found_library == 1:
@@ -427,6 +456,8 @@ class netlistParser:
 
                         componentAttrs.append(temp_cls_atrr)
                         circuitNets.append(temp_ports)
+                        if bool(MC_location):
+                            component_locations.append(MC_location)
 
         circuitConns = list(set(list(itertools.chain(*circuitNets))))
         # remove IOs from component connections' list
@@ -440,6 +471,7 @@ class netlistParser:
             "compModels": circuitModels,
             "compLabels": circuitLabels,
             "compAttrs": componentAttrs,
+            "compLocs": component_locations,
             "networkID": circuitID,
             "inp_net": inp_net,
             "out_net": out_net,

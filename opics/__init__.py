@@ -2,16 +2,12 @@
 
 from opics import libraries
 from opics.network import Network
-from opics.utils import universal_sparam_filereader
-from opics.utils import LUT_processor
-from opics.utils import LUT_reader
 from opics.utils import netlistParser
-from opics.globals import c, f
-import opics.libraries.ebeam as ebeam
+from opics.globals import C, F
 
 __author__ = "Jaspreet Jhoja"
-__email__ = "Jaspreet@siepic.com"
-__version__ = "0.1.9"
+__email__ = "jj@alumni.ubc.ca"
+__version__ = "0.3.1"
 
 # initialize OPICS package
 
@@ -21,14 +17,18 @@ __all__ = [
     "Network",
     "libraries",
     "globals",
-    "ebeam",
-    "LUT_processor",
-    "LUT_reader",
     "netlistParser",
-    "universal_sparam_filereader",
-    "c",
-    "f",
+    "C",
+    "F",
 ]
 
-
+print(
+    r"""
+   ____  ____  _______________
+  / __ \/ __ \/  _/ ____/ ___/
+ / / / / /_/ // // /    \__ \
+/ /_/ / ____// // /___ ___/ /
+\____/_/   /___/\____//____/
+"""
+)
 print("OPICS version", __version__)

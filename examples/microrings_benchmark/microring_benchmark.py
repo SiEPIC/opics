@@ -2,71 +2,87 @@
 This example is a benchmark test to evaluate the runtime of OPICS
 Benchmark circuit is 100 microring resonators connected in series
 """
-import warnings
+
 import time
 import numpy as np
-from opics.network import Network
-from opics.globals import c
+from opics.network import Network, bulk_add_component
+import multiprocessing as mp
 import opics
 
 
-warnings.filterwarnings("ignore")
+def routine():
 
-benchmark = []
+    benchmark = []
 
-for i in range(10):
+    for i in range(1):
 
-    sim_start = time.time()
+        components = opics.libraries.ebeam
 
-    # define frequency range and resolution
-    freq = np.linspace(c * 1e6 / 1.5, c * 1e6 / 1.6, 2000)
+        sim_start = time.perf_counter()
+        circuit = Network(
+            mp_config={
+                "enabled": True,
+                "proc_count": mp.cpu_count() - 1,
+                "close_pool": False,
+            }
+        )
 
-    components = opics.libraries.ebeam
+        count = 0
 
-    circuit = Network()
+        n_rings = 100
 
-    input_gc = circuit.add_component(components.GC(freq))
-    output_gc = circuit.add_component(components.GC(freq))
-    count = 0
+        _components_data = []
 
-    n_rings = 200
+        while count < n_rings:
+            _components_data.append(
+                {
+                    "component": components.DC_halfring,
+                    "params": {"f": circuit.f},
+                    "component_id": f"dc_{count}",
+                }
+            )
 
-    while count < n_rings:
-        if count == 0:
-            dc_halfring = circuit.add_component(components.DC_halfring(freq))
-            wg = circuit.add_component(components.Waveguide(freq, np.pi * 5e-6))
-            circuit.connect(input_gc, 1, dc_halfring, 0)
-            circuit.connect(dc_halfring, 1, wg, 0)
-            circuit.connect(wg, 1, dc_halfring, 3)
-            prev_comp = dc_halfring
+            _components_data.append(
+                {
+                    "component": components.Waveguide,
+                    "params": {"f": circuit.f, "length": np.pi * 5e-6},
+                    "component_id": f"wg_{count}",
+                }
+            )
+            count += 1
 
-        elif count >= 1:
-            dc_halfring = circuit.add_component(components.DC_halfring(freq))
-            wg = circuit.add_component(components.Waveguide(freq, np.pi * 5e-6))
-            circuit.connect(prev_comp, 2, dc_halfring, 0)
-            circuit.connect(dc_halfring, 1, wg, 0)
-            circuit.connect(wg, 1, dc_halfring, 3)
-            prev_comp = dc_halfring
+        bulk_add_component(circuit, _components_data)
 
-        count += 1
-    # connect components
+        circuit.add_component(components.GC, component_id="input")
+        circuit.add_component(components.GC, component_id="output")
 
-    circuit.connect(dc_halfring, 2, output_gc, 1)
+        # bulk connect
+        count = 0
+        prev_comp = ""
+        while count < n_rings:
+            if count == 0:
+                circuit.connect("input", 1, f"dc_{count}", 0)
+                circuit.connect(f"dc_{count}", 1, f"wg_{count}", 0)
+                circuit.connect(f"wg_{count}", 1, f"dc_{count}", 3)
+                prev_comp = "dc_0"
 
-    circuit.simulate_network()
+            elif count >= 1:
+                circuit.connect(prev_comp, 2, f"dc_{count}", 0)
+                circuit.connect(f"dc_{count}", 1, f"wg_{count}", 0)
+                circuit.connect(f"wg_{count}", 1, f"dc_{count}", 3)
+                prev_comp = f"dc_{count}"
+            count += 1
 
-    sim_time = round(time.time() - sim_start, 2)
-    print("simulation finished in %ss" % (str(sim_time)))
+        circuit.connect(prev_comp, 2, "output", 1)
 
-    benchmark.append(sim_time)
+        circuit.simulate_network()
+        sim_time = round(time.perf_counter() - sim_start, 2)
+        benchmark.append(sim_time)
+        circuit.sim_result.plot_sparameters(interactive=True, show_freq=False)
+        print(f"simulation finished in {sim_time*1000} ms")
 
-# circuit.sim_result.plot_sparameters(show_freq = False, scale="log", ports = [[1,0], [0,0]])
-"""
-x = 0
-for i in circuit.current_components:
-    x+=1
-print(x)"""
-"""for each in circuit.current_components:
-    each.plot_sparameters(show_freq=False, scale="abs_sq")"""
+    print(np.mean(benchmark), "s average time taken")
 
-print(np.mean(benchmark), "s average time taken")
+
+if __name__ == "__main__":
+    routine()

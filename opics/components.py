@@ -1,58 +1,79 @@
 import numpy as np
 from scipy.interpolate import interp1d
 import matplotlib.pyplot as plt
-from .utils import LUT_reader, LUT_processor
+from .utils import LUT_processor
 from numpy import ndarray
 from pathlib import PosixPath
-from typing import Dict, List, Optional, Union
+from typing import Dict, List, Union
+from opics.globals import F, C
+import os
+import binascii
 
 
 class componentModel:
-    """Defines the base component model class used to create new components for a library.
+    """
+    Defines the base component model class used to create new components\
+            for a library.
+
+    Args:
+        f (numpy.ndarray): Frequency datapoints.
+        nports (int): Number of ports in the component. Defaults to 2.
+        s (numpy.ndarray, optional): S-parameter data. Defaults to None.
+        data_folder (pathlib.Path): The location of the data folder\
+            containing s-parameter data files and the XML look-up-table.
+        filename (str): Name of the XML look-up-table file.
+        sparam_attr (str, optional): Look-up-table attribute\
+                Defaults to None.
     """
 
     def __init__(
         self,
-        f: ndarray,
-        data_folder: PosixPath,
-        filename: str,
-        nports: int = 0,
-        sparam_attr: str = "",
+        f: ndarray = None,
+        nports: int = 2,
+        s: ndarray = None,
+        data_folder: PosixPath = None,
+        filename: str = None,
+        sparam_attr: str = None,
         **kwargs
     ) -> None:
-        """Defines the base component model class used to create new components for a library.
 
-        Args:
-            f (numpy.ndarray): Frequency datapoints.
-            data_folder (pathlib.Path): The location of the data folder containing s-parameter data files and a look up table.
-            filename (str): File name of the component.
-            nports (int, optional): Number of ports in the component. Defaults to 0.
-            sparam_attr (str, optional): XML LUT attribute for the s-parameter data file name. Defaults to "".
-        """
         self.f = f
-        self.c = 299792458
-        self.s = np.array((2, 2))
-        self.lambda_ = self.c * 1e6 / self.f
+        if self.f is None:
+            self.f = F
+
+        self.C = C
+
+        self.s = s
+        if s is None:
+            self.s = np.array((nports, nports))
+
+        self.lambda_ = self.C * 1e6 / self.f
         self.componentParameters = []
-        self.componentID = ""
+        self.component_id = str(binascii.hexlify(os.urandom(4)))[2:-1]
         self.nports = nports
+
+        self.port_references = {}
+        for _ in range(self.nports):
+            self.port_references[_] = _
+
         self.sparam_attr = sparam_attr
-        self.sparam_file = ""
+        self.sparam_file = filename
+
         for key, value in kwargs.items():
             self.componentParameters.append([key, str(value)])
 
-        # add component to the loaded components' list
-        # components_loaded.append(self)
-
     def load_sparameters(self, data_folder: PosixPath, filename: str) -> ndarray:
-        """Decides whether to load sparameters from npz file or from a raw sparam file or from a look-up table (for tunable components with attributes).
+        """
+        Loads sparameters either from an npz file or from a raw sparam\
+             file using a look-up table.
 
         Args:
-            data_folder (pathlib.Path): The location of the data folder containing s-parameter data files and a look up table.
-            filename (str): File name of the component.
+            data_folder: Directory path of the data folder containing\
+                 s-parameter data files and a look up table.
+            filename: Name of the XML look-up-table file.
 
         Returns:
-            sparameters (numpy.ndarray): Array of the component's s-parameters.
+            sparameters: Array of the component's s-parameters.
         """
 
         if ".npz" in filename:
@@ -72,31 +93,50 @@ class componentModel:
                 self.f, componentData[0], componentData[1]
             )
 
+    def set_port_reference(self, port_number: int, port_name: str) -> None:
+        """
+        Allows for custom naming of component ports
+
+        Args:
+            port_number: Port number.
+            port_name: Custom port name.
+        """
+        self.port_references[port_name] = port_number
+        self.port_references[port_number] = port_name
+
     def interpolate_sparameters(
         self, target_f: ndarray, source_f: ndarray, source_s: ndarray
     ) -> ndarray:
-        """Cubic interpolation of the component sparameter data to match the desired simulation frequency range.
+        """
+        Cubic interpolation of the component sparameter data to match the\
+             desired simulation frequency range.
 
         Args:
-            target_f (numpy.ndarray): The target frequency range onto which the s-parameters will be interpereted on.
-            source_f (numpy.ndarray): The source frequency range that the component data has stored.
-            source_s (numpy.ndarray): The source s-parameters that the component data has stored.
+            target_f: The target frequency range onto which\
+                 the s-parameters will be interpereted on.
+            source_f: The source frequency range that the\
+                 component data has stored.
+            source_s: The source s-parameters that the\
+                 component data has stored.
 
         Returns:
-            sparameters (numpy.ndarray): Interpolated s-parameters value over the target frequency range.
+            sparameters: Interpolated s-parameters value\
+                 over the target frequency range.
         """
 
         func = interp1d(source_f, source_s, kind="cubic", axis=0)
         return func(target_f)
 
-    def write_sparameters(self, dirpath, filename, f_data, s_data):
+    def write_sparameters(
+        self, dirpath: PosixPath, filename: str, f_data: ndarray, s_data: ndarray
+    ) -> None:
         """Export the simulated s-parameters to a file.
 
         Args:
-            dirpath (pathlib.Path): Directory of the filed to be saved.
-            filename (str): Name of the file to be saved.
-            f_data (numpy.ndarray): Frequency range data to be exported.
-            s_data (numpy.ndarray): S-parameter data to be exported.
+            dirpath: Directory path.
+            filename: Name of the file.
+            f_data: Frequency data.
+            s_data: S-parameter data.
         """
         with open(dirpath / filename, "w") as datafile_id:
             datalen = s_data.shape[0]
@@ -114,18 +154,22 @@ class componentModel:
                     np.savetxt(datafile_id, data, fmt=["%d", "%f", "%f"])
 
     def get_data(
-        self, ports: None = None, xscale: str = "freq", yscale: str = "log"
+        self, ports: List[List[int]] = None, xscale: str = "freq", yscale: str = "log"
     ) -> Dict[str, Union[ndarray, str]]:
-        """Get the S-parameters data for specific [input,output] port combinations, to be used for plotting functionalities.
+        """Get the S-parameters data for specific [input,output] port\
+             combinations, to be used for plotting functionalities.
         (WARNING: unused, to be used in plot_sparameters)
 
         Args:
-            ports (list, optional): List of lists that contains the desired S-parameters, e.g., [[1,1],[1,2],[2,1],[2,2]]. Defaults to None.
-            xscale (str, optional): Plotting x axis label. Defaults to "freq".
-            yscale (str, optional): Plotting Y axis label. Defaults to "log".
+            ports: List of lists that contains the desired\
+                 S-parameters, e.g., [[1,1],[1,2],[2,1],[2,2]].\
+                     Defaults to None.
+            xscale: Plotting x axis label. Defaults to "freq".
+            yscale: Plotting Y axis label. Defaults to "log".
 
         Returns:
-            temp_data (dict): Dictionary containing the plotting information to be used, including S-parameters data and plotting labels.
+            temp_data: Dictionary containing the plotting information\
+                 to be used, including S-parameters data and plotting labels.
         """
         temp_data = {}  # reformat data in an array
 
@@ -135,7 +179,7 @@ class componentModel:
             x_data = self.f
             xlabel = "Frequency (Hz)"
         else:
-            x_data = self.c * 1e6 / self.f
+            x_data = self.C * 1e6 / self.f
             xlabel = "Wavelength (um)"
 
         temp_data["xdata"] = x_data
@@ -165,13 +209,24 @@ class componentModel:
 
         return temp_data
 
-    def plot_sparameters(self, ports=None, show_freq=True, scale="log"):
+    def plot_sparameters(
+        self,
+        ports: List[List[int]] = None,
+        show_freq: bool = True,
+        scale: str = "log",
+        interactive: bool = False,
+    ):
         """Plot the component's S-parameters.
 
         Args:
-            ports (list, optional): List of lists that contains the desired S-parameters, e.g., [[1,1],[1,2],[2,1],[2,2]]. Defaults to None.
-            show_freq (bool, optional): Flag to determine whether to plot with respect to frequency or wavelength. Defaults to True.
-            scale (str, optional): Plotting y axis scale, options available: ["log", "abs", "abs_sq"]. Defaults to "log".
+            ports: List of lists that contains the desired\
+                 S-parameters, e.g., [[1,1],[1,2],[2,1],[2,2]].\
+                      Defaults to None.
+            show_freq: Flag to determine whether to plot\
+                 with respect to frequency or wavelength. Defaults to True.
+            scale: Plotting y axis scale, options available:\
+                 ["log", "abs", "abs_sq"]. Defaults to "log".
+            interactive: Make the plots interactive or not.
         """
 
         ports_ = []  # ports the plot
@@ -180,7 +235,7 @@ class componentModel:
             x_data = self.f
             xlabel = "Frequency (Hz)"
         else:
-            x_data = self.c * 1e6 / self.f
+            x_data = self.C * 1e6 / self.f
             xlabel = "Wavelength (um)"
 
         if ports is None:
@@ -191,137 +246,58 @@ class componentModel:
         else:
             ports_ = ["S_%d_%d" % (each[0], each[1]) for each in ports]
 
-        for each_port in ports_:
-            _, i, j = each_port.split("_")
-            if scale == "log":
-                plt.plot(
-                    x_data, 10 * np.log10(np.square(np.abs(self.s[:, int(i), int(j)])))
-                )
-                plt.ylabel("Transmission (dB)")
-            elif scale == "abs":
-                plt.plot(x_data, np.abs(self.s[:, int(i), int(j)]))
-                plt.ylabel("Transmission (normalized)")
-            elif scale == "abs_sq":
-                plt.plot(x_data, np.square(np.abs(self.s[:, int(i), int(j)])))
-                plt.ylabel("Transmission (normalized^2)")
-        plt.xlabel(xlabel)
-        plt.xlim(left=np.min(x_data), right=np.max(x_data))
-        plt.tight_layout()
-        plt.legend(ports_)
-        plt.show()
+        if not interactive:
+            for each_port in ports_:
+                _, i, j = each_port.split("_")
+                if scale == "log":
+                    plt.plot(
+                        x_data,
+                        10 * np.log10(np.square(np.abs(self.s[:, int(i), int(j)]))),
+                    )
+                    plt.ylabel("Transmission (dB)")
+                elif scale == "abs":
+                    plt.plot(x_data, np.abs(self.s[:, int(i), int(j)]))
+                    plt.ylabel("Transmission (normalized)")
+                elif scale == "abs_sq":
+                    plt.plot(x_data, np.square(np.abs(self.s[:, int(i), int(j)])))
+                    plt.ylabel("Transmission (normalized^2)")
+            plt.xlabel(xlabel)
+            plt.xlim(left=np.min(x_data), right=np.max(x_data))
+            plt.tight_layout()
+            plt.legend(ports_)
+            plt.show()
+        else:
+            import holoviews as hv
+            import pandas as pd
+            from bokeh.plotting import show
 
+            hv.extension("bokeh")
+            temp_data = self.get_data(ports=ports, xscale="lambda", yscale=scale)
+            filtered_s = dict(
+                [[key, temp_data[key]] for key in temp_data.keys() if "unit" not in key]
+            )
+            df = pd.DataFrame.from_dict(filtered_s)
+            master_plot = None
+            for each_ydata in ports_:
+                if master_plot is None:
+                    master_plot = hv.Curve(
+                        df, "xdata", each_ydata, label=each_ydata
+                    ).opts(tools=["hover"])
+                else:
+                    curve = hv.Curve(df, "xdata", each_ydata, label=each_ydata).opts(
+                        tools=["hover"]
+                    )
+                    master_plot = master_plot * curve
 
-class compoundElement(componentModel):
-    """Defines the properties of a compound element or simulated component. A compound element is a collection of connected components, inherits componentModel OPICS class.
-    """
+            master_plot.opts(
+                ylabel=temp_data["yunit"],
+                xlabel=temp_data["xunit"],
+                responsive=True,
+                min_height=400,
+                min_width=600,
+                fontscale=1.5,
+                max_width=800,
+                max_height=600,
+            )
 
-    def __init__(
-        self, f: ndarray, s: ndarray, nets: Optional[List[List[int]]] = None
-    ) -> None:
-        """Defines the properties of a compound element or simulated component. A compound element is a collection of connected components, inherits componentModel OPICS class.
-
-        Args:
-            f (numpy.ndarray): Frequency range data of the compound element.
-            s (numpy.ndarray): S-parameters data of the compound element.
-            nets (list, optional): List of nets available in the compound element. Defaults to None.
-        """
-        self.f = f
-        self.c = 299792458
-        self.lambda_ = self.c * 1e6 / self.f
-        self.s = s
-        self.nets = [i for i in s.shape] if nets is None else nets
-        # components_loaded.append(self)
-
-
-class Waveguide(componentModel):
-    """Defines the properties of a waveguide component, can be used in the interconnected between components.
-    """
-
-    def __init__(
-        self,
-        f: ndarray,
-        length: float,
-        data_folder: PosixPath,
-        filename: str,
-        TE_loss: int,
-        **kwargs
-    ) -> None:
-        """Defines the properties of a waveguide component, can be used in the interconnected between components.
-
-        Args:
-            f (numpy.ndarray): Frequency range data of the waveguide element.
-            length (float): Length of the waveguide, in meters.
-            data_folder (pathlib.Path): The location of the data folder containing waveguide data files and a look up table.
-            filename (str): File name of the waveguide data file.
-            TE_loss (float): Value that defines the loss of the waveguide in dB/m.
-        """
-        self.ng_ = None
-        self.alpha_ = None
-        self.ne_ = None
-        self.nd_ = None
-        self.f = f
-        self.length = length
-        self.componentID = ""
-        self.c = 299792458
-        self.sparam_file = ""
-        self.lambda_ = self.c * 1e6 / self.f
-        self.componentParameters = []
-        for key, value in kwargs.items():
-            self.componentParameters.append([key, str(value)])
-
-        # components_loaded.append(self)
-
-    def load_sparameters(
-        self, length: float, data_folder: PosixPath, filename: str, TE_loss: int
-    ) -> ndarray:
-        """read s_parameters
-        """
-
-        sfilename, _, _ = LUT_reader(data_folder, filename, self.componentParameters)
-        self.sparam_file = sfilename[-1]
-        filepath = data_folder / sfilename[-1]
-
-        # Read info from waveguide s-param file
-        with open(filepath, "r") as f:
-            coeffs = f.readline().split()
-
-        nports = 2
-
-        # Initialize array to hold s-params
-        temp_s_ = np.zeros((len(self.f), nports, nports), dtype=complex)
-
-        alpha = TE_loss / (20 * np.log10(np.exp(1)))
-
-        # calculate angular frequency from frequency
-        w = np.asarray(self.f) * 2 * np.pi
-
-        # calculate center wavelength, effective index, group index, group dispersion
-        lam0, ne, ng, nd = (
-            float(coeffs[0]),
-            float(coeffs[1]),
-            float(coeffs[3]),
-            float(coeffs[5]),
-        )
-
-        # calculate angular center frequency
-        w0 = (2 * np.pi * self.c) / lam0
-
-        # calculation of K
-        K = (
-            2 * np.pi * ne / lam0
-            + (ng / self.c) * (w - w0)
-            - (nd * lam0 ** 2 / (4 * np.pi * self.c)) * ((w - w0) ** 2)
-        )
-
-        # compute s-matrix from K and waveguide length
-        temp_s_[:, 0, 1] = temp_s_[:, 1, 0] = np.exp(
-            -alpha * length + (K * length * 1j)
-        )
-
-        s = temp_s_
-        self.ng_ = ng
-        self.alpha_ = alpha
-        self.ne_ = ne
-        self.nd_ = nd
-
-        return s
+            show(hv.render(master_plot))

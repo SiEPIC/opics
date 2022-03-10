@@ -1,20 +1,21 @@
 import time
-import os, sys
+import os
+import sys
 from pathlib import Path
 from opics import libraries
 from opics.network import Network
 from opics.utils import netlistParser, NetlistProcessor
-from opics.globals import c as c_
+from opics.globals import C as c_
 
 # warnings.filterwarnings('ignore') #ignore all/complex number warnings from numpy or scipy
 
 sim_start = time.time()
 
-#print(sys.argv[1])
+# print(sys.argv[1])
 # read netlist
-#print(Path(os.path.dirname(__file__) + r"\\test_mzi.spi"))
-#print(len(sys.argv))
-if(len(sys.argv)<2):
+# print(Path(os.path.dirname(__file__) + r"\\test_mzi.spi"))
+# print(len(sys.argv))
+if len(sys.argv) < 2:
     spice_filepath = Path(os.path.dirname(__file__) + r"\\test_mzi.spi")
 else:
     spice_filepath = sys.argv[1]
@@ -24,17 +25,19 @@ print(spice_filepath)
 # get netlist data
 circuitData = netlistParser(spice_filepath).readfile()
 
-#print(circuitData)
+# print(circuitData)
 
 # process netlist data
-subckt = NetlistProcessor(spice_filepath, Network, libraries, c_, circuitData, verbose=False)
+subckt = NetlistProcessor(
+    spice_filepath, Network, libraries, c_, circuitData, verbose=False
+)
 
 # simulate network
 subckt.simulate_network()
 
 # get input and output net labels
-inp_idx = subckt.sim_result.nets[0].index(circuitData["inp_net"])
-out_idx = [subckt.sim_result.nets[0].index(each) for each in circuitData["out_net"]]
+inp_idx = subckt.global_netlist[0].index(circuitData["inp_net"])
+out_idx = [subckt.global_netlist[0].index(each) for each in circuitData["out_net"]]
 
 ports = [[each_output, inp_idx] for each_output in out_idx]
 
@@ -42,4 +45,3 @@ ports = [[each_output, inp_idx] for each_output in out_idx]
 subckt.sim_result.plot_sparameters(ports=ports)
 
 print(Path(__file__).parent.absolute())
-

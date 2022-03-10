@@ -1,23 +1,23 @@
 import warnings
 import numpy as np
 from opics import Network
-from opics import c
+from opics import C
 import opics
 
 warnings.filterwarnings("ignore")
 
 
 # define frequency range and resolution
-freq = np.linspace(c * 1e6 / 1.5, c * 1e6 / 1.6, 2000)
+freq = np.linspace(C * 1e6 / 1.5, C * 1e6 / 1.6, 2000)
 
 ebeam = opics.libraries.ebeam
 
 circuit = Network()
 
-input_gc = circuit.add_component(ebeam.GC(freq))
-output_gc = circuit.add_component(ebeam.GC(freq))
-wg = circuit.add_component(ebeam.Waveguide(freq, np.pi * 5e-6))
-dc_halfring = circuit.add_component(ebeam.DC_halfring(freq))
+input_gc = circuit.add_component(ebeam.GC)
+output_gc = circuit.add_component(ebeam.GC)
+wg = circuit.add_component(ebeam.Waveguide, params={"length": np.pi * 5e-6})
+dc_halfring = circuit.add_component(ebeam.DC_halfring)
 
 
 # connect components
