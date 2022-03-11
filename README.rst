@@ -42,6 +42,13 @@ Install the OPICS package using ``pip``.
 
    pip install -e ./opics
 
+and upgrade using
+
+.. code:: console
+
+
+   pip install opics --upgrade
+
 Once the package is installed, it can be imported using:
 
 .. code:: ipython3
