@@ -446,7 +446,7 @@ Citing
    }
 
 License
-~~~~~~~
+~~~~~~~ 
 
 Copyright © 2022, Jaspreet Jhoja, `MIT License <https://github.com/jaspreetj/opics/blob/master/LICENSE>`__
 
