@@ -36,8 +36,8 @@ subckt = NetlistProcessor(
 subckt.simulate_network()
 
 # get input and output net labels
-inp_idx = subckt.global_netlist[0].index(circuitData["inp_net"])
-out_idx = [subckt.global_netlist[0].index(each) for each in circuitData["out_net"]]
+inp_idx = subckt.global_netlist[next(iter(subckt.global_netlist))].index(circuitData["inp_net"])
+out_idx = [subckt.global_netlist[next(iter(subckt.global_netlist))].index(each) for each in circuitData["out_net"]]
 
 ports = [[each_output, inp_idx] for each_output in out_idx]
 
